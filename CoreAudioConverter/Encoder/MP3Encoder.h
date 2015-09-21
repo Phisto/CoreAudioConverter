@@ -10,17 +10,44 @@
 
 @protocol MP3EncoderDelegate <NSObject>
 
-typedef enum : NSUInteger {
-    LAME_BITRATE_VERY_HIGH = 320,
-    LAME_BITRATE_HIGH = 256,
-    LAME_BITRATE_GOOD = 192,
-    LAME_BITRATE_LOW = 128
-} LAME_CONSTANT_BITRATE;
+/*!
+ * @typedef LAME_CONSTANT_BITRATE
+ * @brief The constant bitrate which lame should use to encode the mp3 file.
+ * @constant LAME_BITRATE_VERY_HIGH: 320 kbit/s
+ * @constant LAME_BITRATE_HIGH: 256 kbit/s
+ * @constant LAME_BITRATE_GOOD: 192 kbit/s
+ * @constant LAME_BITRATE_GOOD: 128 kbit/s
+ */
+enum {
+    
+    ///320 kbit/s
+    LAME_CONSTANT_BITRATE_VERY_HIGH = 320,
+    ///256 kbit/s
+    LAME_CONSTANT_BITRATE_HIGH = 256,
+    ///192 kbit/s
+    LAME_CONSTANT_BITRATE_GOOD = 192,
+    ///128 kbit/s
+    LAME_CONSTANT_BITRATE_LOW = 128
+    
+};
+typedef int LAME_CONSTANT_BITRATE;
 
+/**
+ @typedef LAME_ENCODING_ENGINE_QUALITY
+ @brief The engine quality which lame should use to encode the mp3 file.
+ @constant LAME_ENCODING_ENGINE_QUALITY_BEST_SLOW The (near) best quality but slow.
+ @constant LAME_ENCODING_ENGINE_QUALITY_GOOD_FAST Good quality and fast.
+ @constant LAME_ENCODING_ENGINE_QUALITY_OK_REALLY_FAST Ok quality and really fast.
+ */
 typedef enum : NSUInteger {
+    
+    /// The (near) best quality but slow.
     LAME_ENCODING_ENGINE_QUALITY_BEST_SLOW = 2,
+    /// Good quality and fast.
     LAME_ENCODING_ENGINE_QUALITY_GOOD_FAST = 5,
+    /// Ok quality and really fast.
     LAME_ENCODING_ENGINE_QUALITY_OK_REALLY_FAST = 7
+    
 } LAME_ENCODING_ENGINE_QUALITY;
 
 /**
