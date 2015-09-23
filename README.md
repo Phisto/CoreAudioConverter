@@ -21,10 +21,15 @@ when using homebrew you can find this files in
 USE
 
 NSError *error = nil;
+
 MP3Encoder *converter = [MP3Encoder encoderForFile:sourceUrl error:&error];
+
 if (!converter) {
-  NSLog(@"converter init failed: %@", error.localizedDescription);    
-} 
+
+    NSLog(@"converter init failed: %@", error.localizedDescription);
+  
+}
+
 converter.delegate = self;
-    
+
 [converter encodeToUrl:outputUrl];
