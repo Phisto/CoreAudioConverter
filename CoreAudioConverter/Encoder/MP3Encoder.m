@@ -94,14 +94,6 @@
     SInt64							totalFrames, framesToRead;
     UInt32							frameCount;
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        if ([self.delegate respondsToSelector:@selector(encodingStarted:outputSize:)]) {
-        
-            [self.delegate encodingStarted:self outputSize:100];
-        }
-    });
-    
     @try {
         bufferList.mBuffers[0].mData = NULL;
         
@@ -124,6 +116,15 @@
             
             return;
         }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            if ([self.delegate respondsToSelector:@selector(encodingStarted:outputSize:)]) {
+                
+                NSUInteger duration = decoder.totalFrames/decoder.pcmFormat.mSampleRate;
+                [self.delegate encodingStarted:self outputSize:((duration)*(self.delegate.bitrate*1000)/8)];
+            }
+        });
         
         NSAssert(1 == decoder.pcmFormat.mChannelsPerFrame || 2 == decoder.pcmFormat.mChannelsPerFrame, NSLocalizedStringFromTable(@"LAME only supports one or two channel input.", @"Exceptions", @""));
         
