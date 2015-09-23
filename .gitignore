@@ -25,3 +25,7 @@ xcuserdata
 *.moved-aside
 *.xcuserstate
 
+## exclude lame because of license reasons
+libmp3lame.a
+lame.h
+
