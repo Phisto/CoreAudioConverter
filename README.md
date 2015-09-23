@@ -5,4 +5,4 @@ I used a lot of code from this repo: https://github.com/sbooth/Max
 
 Don't use this in your productive code, or at least double check my source!
 
-More informations about LAME Project can be found here: http://lame.sourceforge.net/
+More informations about the LAME Project can be found here: http://lame.sourceforge.net/
