@@ -17,3 +17,14 @@ Too use the code you have to add the lame library by hand:
 when using homebrew you can find this files in
 /usr/local/cellar/lame/<version>/lib
 /usr/local/cellar/lame/<version>/include/lame
+
+USE
+
+NSError *error = nil;
+MP3Encoder *converter = [MP3Encoder encoderForFile:sourceUrl error:&error];
+if (!converter) {
+  NSLog(@"converter init failed: %@", error.localizedDescription);    
+} 
+converter.delegate = self;
+    
+[converter encodeToUrl:outputUrl];
