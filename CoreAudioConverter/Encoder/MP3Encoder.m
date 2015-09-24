@@ -10,7 +10,6 @@
 
 #import "lame.h"
 #import "CADecoder.h"
-#import <AudioToolbox/AudioFormat.h>
 
 @interface MP3Encoder (/* Private */)
 
@@ -79,6 +78,11 @@
     return self;
 }
 
+- (void)dealloc {
+    
+    lame_close(_lame);
+}
+
 #pragma mark -
 #pragma mark Methodes
 
@@ -98,8 +102,8 @@
         bufferList.mBuffers[0].mData = NULL;
         
         // Parse the encoder settings
-        lame_set_quality(_lame, [self.delegate engineQuality]); // LAME_ENCODING_ENGINE_QUALITY_STANDARD
-        lame_set_brate(_lame, [self.delegate bitrate]); // set bitrate
+        lame_set_quality(_lame, [self.delegate engineQuality]); // LAME_ENCODING_ENGINE_QUALITY
+        lame_set_brate(_lame, [self.delegate bitrate]); // set bitrate for cbr encoding
         
         // Setup the decoder
         NSError *error = nil;
@@ -451,9 +455,8 @@
     return getCoreAudioExtensions();
 }
 
-NSError *
-NewNSErrorFromException(NSException * exc)
-{
+NSError * NewNSErrorFromException(NSException * exc) {
+    
     NSMutableDictionary * info = [NSMutableDictionary dictionary];
     [info setValue:exc.name forKey:@"MONExceptionName"];
     [info setValue:exc.reason forKey:@"MONExceptionReason"];

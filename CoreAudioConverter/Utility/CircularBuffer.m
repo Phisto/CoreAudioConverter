@@ -216,6 +216,10 @@
         
         _readPtr	= _buffer;
         _writePtr	= _buffer + chunkASize + chunkBSize;
+        
+        // else analyser shows memory leak 
+        free(chunkA);
+        free(chunkB);
     }
 }
 

@@ -14,4 +14,5 @@ extern NSString *AudioConverterErrorDomain;
 
 #pragma mark Error Codes
 extern NSInteger const ACErrorFileFormatNotSupported;
+extern NSInteger const ACErrorOutputUrlError;
 extern NSInteger const ACErrorUnknown;

@@ -60,21 +60,21 @@ typedef int LAME_ENCODING_ENGINE_QUALITY;
 @optional
 
 /**
- Informs the delegate that the encoding started.
+ Informs the delegate that the encoding started. Is called on main thread.
  @param encoder The encoder object which started the encoding.
  @param outputSize The calculated size of the output file.
  @return void
  */
 - (void)encodingStarted:(id)encoder outputSize:(NSUInteger)size;
 /**
- Informs the delegate that the encoding finished.
+ Informs the delegate that the encoding finished. Is called on main thread.
  @param encoder The encoder object which finished the encoding.
  @return void
  */
 - (void)encodingFinished:(id)encoder;
 /**
  Informs the delegate that the encoding failed.
- @param encoder The encoder object which failed to encode.
+ @param encoder The encoder object which failed to encode. Is called on main thread.
  @param error An error obect encapsulating the failure reason or nil.
  @return void
  */
@@ -90,7 +90,35 @@ typedef int LAME_ENCODING_ENGINE_QUALITY;
 
 @property (nonatomic, assign) NSObject<MP3EncoderDelegate> *delegate;
 
+/**
+ Returns an initiated encoder object for the given file.
+ 
+ Example usage:
+ @code
+    NSError *error = nil;
+    MP3Ecoder *converter = [MP3Encoder encoderForFile:fileUrl error:&error];
+    if (!converter) {
+ 
+        // Handle error
+        NSLog(@"%@", error.localizedDescription);
+    }
+
+    converter.delegate = self // needs to implement the <MP3EncoderDelegate> protocol
+    [converter encodeToUrl:outputUrl];
+ 
+ @endcode
+ @param fileUrl NSURL for the audio file you want to encode
+ @param error A pointer to an error object
+ @return instancetype
+ */
 + (instancetype)encoderForFile:(NSURL *)fileUrl error:(NSError **)error;
+/**
+ Encodes the source audio file to mp3 at a specific location.
+ 
+ @warning The url needs to include the file name like /path/to/save/to/example.mp3
+ @param outputUrl NSURL to the location where the encoded file should be saved.
+ @return void
+ */
 - (void)encodeToUrl:(NSURL *)outputUrl;
 
 @end
