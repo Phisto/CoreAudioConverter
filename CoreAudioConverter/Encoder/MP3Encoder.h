@@ -44,18 +44,16 @@ enum {
  */
 typedef int LAME_ENCODING_ENGINE_QUALITY;
 
-/**
- Returns the bitrate used for the constant bitrate encoding
- @see http://wiki.hydrogenaud.io/index.php?title=LAME for additional information about lame options
- @return LAME_CONSTANT_BITRATE
+/*!
+ * @brief The bitrate used for the constant bitrate encoding.
+ * @see http://wiki.hydrogenaud.io/index.php?title=LAME for additional information about lame options
  */
-- (LAME_CONSTANT_BITRATE)bitrate;
-/**
- Returns the engine quality used for the encoding
- @see http://wiki.hydrogenaud.io/index.php?title=LAME for additional information about lame options
- @return LAME_CONSTANT_BITRATE
+@property (atomic, readonly) LAME_CONSTANT_BITRATE bitrate;
+/*!
+ * @brief The engine quality used for the encoding.
+ * @see http://wiki.hydrogenaud.io/index.php?title=LAME for additional information about lame options
  */
-- (LAME_ENCODING_ENGINE_QUALITY)engineQuality;
+@property (atomic, readonly) LAME_ENCODING_ENGINE_QUALITY engineQuality;
 
 @optional
 
