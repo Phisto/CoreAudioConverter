@@ -263,13 +263,8 @@
         
         free(bufferList.mBuffers[0].mData);
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-             if ([self.delegate respondsToSelector:@selector(encodingFinished:)]) {
-            
-                 [self.delegate encodingFinished:self];
-             }
-        });
+        
+        [self setMP3TagsForEncodedFile];
     }
 }
 
@@ -445,6 +440,28 @@
     @finally {
         free(buf);
     }
+}
+
+- (void)setMP3TagsForEncodedFile {
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        if ([self.delegate respondsToSelector:@selector(encodingFinished:)]) {
+            
+            [self.delegate encodingFinished:self];
+        }
+    });
 }
 
 #pragma mark -
