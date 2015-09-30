@@ -12,7 +12,6 @@
 #import "CADecoder.h"
 @import AVFoundation;
 
-
 @interface MP3Encoder (/* Private */)
 
 @property (nonatomic, readwrite) lame_global_flags *lame;
