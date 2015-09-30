@@ -10,6 +10,7 @@
 
 #import "lame.h"
 #import "CADecoder.h"
+@import AVFoundation;
 
 @interface MP3Encoder (/* Private */)
 
@@ -17,6 +18,11 @@
 @property (nonatomic, strong) NSURL *sourceFileUrl;
 @property (nonatomic, readwrite) UInt32 sourceBitsPerChannel;
 @property (nonatomic, readwrite) FILE *out;
+@property (nonatomic, readwrite) BOOL hasMetadata;
+@property (nonatomic, strong) NSString *title;
+@property (nonatomic, strong) NSString *artist;
+@property (nonatomic, strong) NSString *albumName;
+@property (nonatomic, strong) NSImage *artwork;
 
 @end
 
@@ -65,6 +71,7 @@
     if (self && fileUrl) {
         
         _sourceFileUrl = fileUrl;
+        _hasMetadata = NO;
         
         _lame = lame_init();
         NSAssert(NULL != _lame, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
@@ -90,6 +97,8 @@
     
     NSAssert(self.delegate, NSLocalizedStringFromTable(@"No delegate for encoding.", @"Exceptions", @""));
     
+    self.hasMetadata = [self readMetadata];
+    
     FILE							*file							= NULL;
     int								result;
     AudioBufferList					bufferList;
@@ -104,6 +113,11 @@
         // Parse the encoder settings
         lame_set_quality(_lame, [self.delegate engineQuality]); // LAME_ENCODING_ENGINE_QUALITY
         lame_set_brate(_lame, [self.delegate bitrate]); // set bitrate for cbr encoding
+        
+        // set metadata if aplicable ...
+        id3tag_set_title(_lame, (const char*)[self.title UTF8String]);
+        id3tag_set_artist(_lame, (const char*)[self.artist UTF8String]);
+        id3tag_set_album(_lame, (const char*)[self.albumName UTF8String]);
         
         // Setup the decoder
         NSError *error = nil;
