@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F42592651BBC00FD0093985B /* TagLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F42592641BBC00FD0093985B /* TagLib.framework */; settings = {ASSET_TAGS = (); }; };
-		F42592661BBC02CA0093985B /* TagLib.framework in Resources */ = {isa = PBXBuildFile; fileRef = F42592641BBC00FD0093985B /* TagLib.framework */; };
 		F49DF7DC1BAF8D63003A7C41 /* CoreAudioConverter.h in Headers */ = {isa = PBXBuildFile; fileRef = F49DF7DB1BAF8D63003A7C41 /* CoreAudioConverter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F49DF7FC1BAF920B003A7C41 /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F49DF7FB1BAF920B003A7C41 /* libmp3lame.a */; settings = {ASSET_TAGS = (); }; };
 		F49DF8031BAF93DB003A7C41 /* AudioConverterErrorConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = F49DF7FF1BAF93DB003A7C41 /* AudioConverterErrorConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -23,7 +21,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		F42592641BBC00FD0093985B /* TagLib.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TagLib.framework; sourceTree = "<group>"; };
 		F49DF7D81BAF8D63003A7C41 /* CoreAudioConverter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreAudioConverter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F49DF7DB1BAF8D63003A7C41 /* CoreAudioConverter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreAudioConverter.h; sourceTree = "<group>"; };
 		F49DF7DD1BAF8D63003A7C41 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -45,24 +42,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				F49DF7FC1BAF920B003A7C41 /* libmp3lame.a in Frameworks */,
-				F42592651BBC00FD0093985B /* TagLib.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		F42591911BBBF70C0093985B /* TagLib */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = TagLib;
-			sourceTree = "<group>";
-		};
 		F49DF7CE1BAF8D63003A7C41 = {
 			isa = PBXGroup;
 			children = (
-				F42592641BBC00FD0093985B /* TagLib.framework */,
 				F49DF7DA1BAF8D63003A7C41 /* CoreAudioConverter */,
 				F49DF7D91BAF8D63003A7C41 /* Products */,
 			);
@@ -85,7 +73,6 @@
 				F49DF7F71BAF8F17003A7C41 /* Decoder */,
 				F49DF7F81BAF8F25003A7C41 /* Utility */,
 				F49DF7FA1BAF8F58003A7C41 /* LAME */,
-				F42591911BBBF70C0093985B /* TagLib */,
 			);
 			path = CoreAudioConverter;
 			sourceTree = "<group>";
@@ -201,7 +188,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F42592661BBC02CA0093985B /* TagLib.framework in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
