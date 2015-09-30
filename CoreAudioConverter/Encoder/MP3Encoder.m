@@ -10,6 +10,7 @@
 
 #import "lame.h"
 #import "CADecoder.h"
+@import AVFoundation;
 
 @interface MP3Encoder (/* Private */)
 
@@ -17,6 +18,11 @@
 @property (nonatomic, strong) NSURL *sourceFileUrl;
 @property (nonatomic, readwrite) UInt32 sourceBitsPerChannel;
 @property (nonatomic, readwrite) FILE *out;
+@property (nonatomic, readwrite) BOOL hasMetadata;
+@property (nonatomic, strong) NSString *title;
+@property (nonatomic, strong) NSString *artist;
+@property (nonatomic, strong) NSString *albumName;
+@property (nonatomic, strong) NSImage *artwork;
 
 @end
 
@@ -65,6 +71,7 @@
     if (self && fileUrl) {
         
         _sourceFileUrl = fileUrl;
+        _hasMetadata = NO;
         
         _lame = lame_init();
         NSAssert(NULL != _lame, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
@@ -90,6 +97,8 @@
     
     NSAssert(self.delegate, NSLocalizedStringFromTable(@"No delegate for encoding.", @"Exceptions", @""));
     
+    self.hasMetadata = [self readMetadata];
+    
     FILE							*file							= NULL;
     int								result;
     AudioBufferList					bufferList;
@@ -104,6 +113,11 @@
         // Parse the encoder settings
         lame_set_quality(_lame, [self.delegate engineQuality]); // LAME_ENCODING_ENGINE_QUALITY
         lame_set_brate(_lame, [self.delegate bitrate]); // set bitrate for cbr encoding
+        
+        // set metadata if aplicable ...
+        id3tag_set_title(_lame, (const char*)[self.title UTF8String]);
+        id3tag_set_artist(_lame, (const char*)[self.artist UTF8String]);
+        id3tag_set_album(_lame, (const char*)[self.albumName UTF8String]);
         
         // Setup the decoder
         NSError *error = nil;
@@ -263,13 +277,26 @@
         
         free(bufferList.mBuffers[0].mData);
         
-        dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.hasMetadata) {
             
-             if ([self.delegate respondsToSelector:@selector(encodingFinished:)]) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                if ([self.delegate respondsToSelector:@selector(encodingFinished:)]) {
+                    
+                    [self.delegate encodingFinished:self];
+                }
+            });
             
-                 [self.delegate encodingFinished:self];
-             }
-        });
+        } else {
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                if ([self.delegate respondsToSelector:@selector(encodingFinished:)]) {
+                    
+                    [self.delegate encodingFinished:self];
+                }
+            });
+        }
     }
 }
 
@@ -445,6 +472,88 @@
     @finally {
         free(buf);
     }
+}
+
+
+#pragma mark -
+#pragma mark Metadata Methodes
+
+- (BOOL)readMetadata {
+    
+    AVAsset *asset = [AVURLAsset URLAssetWithURL:self.sourceFileUrl options:nil];
+    
+    NSArray *titles = [AVMetadataItem metadataItemsFromArray:asset.commonMetadata
+                                                     withKey:AVMetadataCommonKeyTitle
+                                                    keySpace:AVMetadataKeySpaceCommon];
+    NSArray *artists = [AVMetadataItem metadataItemsFromArray:asset.commonMetadata
+                                                      withKey:AVMetadataCommonKeyArtist
+                                                     keySpace:AVMetadataKeySpaceCommon];
+    NSArray *albumNames = [AVMetadataItem metadataItemsFromArray:asset.commonMetadata
+                                                         withKey:AVMetadataCommonKeyAlbumName
+                                                        keySpace:AVMetadataKeySpaceCommon];
+    
+    AVMetadataItem *title = nil;
+    if (titles.count > 0) {
+        title = [titles objectAtIndex:0];
+        self.title = (NSString *)title.value;
+    }
+    
+    AVMetadataItem *artist = nil;
+    if (artists.count > 0) {
+        artist = [artists objectAtIndex:0];
+        self.artist = (NSString *)artist.value;
+    }
+    
+    AVMetadataItem *albumName = nil;
+    if (albumNames.count > 0) {
+        albumName = [albumNames objectAtIndex:0];
+        self.albumName = (NSString *)albumName.value;
+    }
+    
+
+    //__block NSString *lyrics = nil;
+    
+    [asset loadValuesAsynchronouslyForKeys:@[@"commonMetadata"] completionHandler:^{
+        NSArray *artworks = [AVMetadataItem metadataItemsFromArray:asset.commonMetadata
+                                                           withKey:AVMetadataCommonKeyArtwork
+                                                          keySpace:AVMetadataKeySpaceCommon];
+        
+        NSImage *img = nil;
+        for (AVMetadataItem *item in artworks) {
+            if ([item.keySpace isEqualToString:AVMetadataKeySpaceID3]) {
+                NSDictionary *d = [item.value copyWithZone:nil];
+                img = [[NSImage alloc] initWithData:[d objectForKey:@"data"]];
+            } else if ([item.keySpace isEqualToString:AVMetadataKeySpaceiTunes]) {
+                img = [[NSImage alloc] initWithData:[item.value copyWithZone:nil]];
+            }
+        }
+        if (img) {
+            
+            self.artwork = img;
+        }
+    }];
+    
+    /*
+    [asset loadValuesAsynchronouslyForKeys:@[@"commonMetadata"] completionHandler:^{
+        
+        NSArray *lyricsArray = [AVMetadataItem metadataItemsFromArray:asset.metadata
+                                                              withKey:AVMetadataiTunesMetadataKeyLyrics
+                                                             keySpace:AVMetadataKeySpaceiTunes];
+        
+        NSString *string = nil;
+        for (AVMetadataItem *item in lyricsArray) {
+            
+            string = (NSString *)item.value;
+        }
+        if (string) { lyrics = string; } else { NSLog(@"No lyrics"); }
+    }];
+    */
+    
+    if (self.title || self.artist || self.albumName) {
+        
+        return YES;
+    }
+    return NO;
 }
 
 #pragma mark -
