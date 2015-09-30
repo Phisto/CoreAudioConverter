@@ -48,6 +48,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F42591911BBBF70C0093985B /* TagLib */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = TagLib;
+			sourceTree = "<group>";
+		};
 		F49DF7CE1BAF8D63003A7C41 = {
 			isa = PBXGroup;
 			children = (
@@ -73,6 +80,7 @@
 				F49DF7F71BAF8F17003A7C41 /* Decoder */,
 				F49DF7F81BAF8F25003A7C41 /* Utility */,
 				F49DF7FA1BAF8F58003A7C41 /* LAME */,
+				F42591911BBBF70C0093985B /* TagLib */,
 			);
 			path = CoreAudioConverter;
 			sourceTree = "<group>";
@@ -302,6 +310,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/CoreAudioConverter",
+					"$(PROJECT_DIR)/CoreAudioConverter/TagLib",
 				);
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = CoreAudioConverter/Info.plist;
@@ -311,6 +320,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/CoreAudioConverter",
 					"$(PROJECT_DIR)/CoreAudioConverter/LAME",
+					"$(PROJECT_DIR)/CoreAudioConverter/TagLib",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = de.simonsserver.CoreAudioConverter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -329,6 +339,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/CoreAudioConverter",
+					"$(PROJECT_DIR)/CoreAudioConverter/TagLib",
 				);
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = CoreAudioConverter/Info.plist;
@@ -338,6 +349,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/CoreAudioConverter",
 					"$(PROJECT_DIR)/CoreAudioConverter/LAME",
+					"$(PROJECT_DIR)/CoreAudioConverter/TagLib",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = de.simonsserver.CoreAudioConverter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
