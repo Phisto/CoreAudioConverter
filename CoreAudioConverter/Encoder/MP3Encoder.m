@@ -277,8 +277,26 @@
         
         free(bufferList.mBuffers[0].mData);
         
-        
-        [self setMP3TagsForEncodedFile];
+        if (self.hasMetadata) {
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                if ([self.delegate respondsToSelector:@selector(encodingFinished:)]) {
+                    
+                    [self.delegate encodingFinished:self];
+                }
+            });
+            
+        } else {
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                if ([self.delegate respondsToSelector:@selector(encodingFinished:)]) {
+                    
+                    [self.delegate encodingFinished:self];
+                }
+            });
+        }
     }
 }
 
@@ -456,26 +474,86 @@
     }
 }
 
-- (void)setMP3TagsForEncodedFile {
+
+#pragma mark -
+#pragma mark Metadata Methodes
+
+- (BOOL)readMetadata {
     
+    AVAsset *asset = [AVURLAsset URLAssetWithURL:self.sourceFileUrl options:nil];
     
+    NSArray *titles = [AVMetadataItem metadataItemsFromArray:asset.commonMetadata
+                                                     withKey:AVMetadataCommonKeyTitle
+                                                    keySpace:AVMetadataKeySpaceCommon];
+    NSArray *artists = [AVMetadataItem metadataItemsFromArray:asset.commonMetadata
+                                                      withKey:AVMetadataCommonKeyArtist
+                                                     keySpace:AVMetadataKeySpaceCommon];
+    NSArray *albumNames = [AVMetadataItem metadataItemsFromArray:asset.commonMetadata
+                                                         withKey:AVMetadataCommonKeyAlbumName
+                                                        keySpace:AVMetadataKeySpaceCommon];
     
+    AVMetadataItem *title = nil;
+    if (titles.count > 0) {
+        title = [titles objectAtIndex:0];
+        self.title = (NSString *)title.value;
+    }
     
+    AVMetadataItem *artist = nil;
+    if (artists.count > 0) {
+        artist = [artists objectAtIndex:0];
+        self.artist = (NSString *)artist.value;
+    }
     
+    AVMetadataItem *albumName = nil;
+    if (albumNames.count > 0) {
+        albumName = [albumNames objectAtIndex:0];
+        self.albumName = (NSString *)albumName.value;
+    }
     
+
+    //__block NSString *lyrics = nil;
     
-    
-    
-    
-    
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
+    [asset loadValuesAsynchronouslyForKeys:@[@"commonMetadata"] completionHandler:^{
+        NSArray *artworks = [AVMetadataItem metadataItemsFromArray:asset.commonMetadata
+                                                           withKey:AVMetadataCommonKeyArtwork
+                                                          keySpace:AVMetadataKeySpaceCommon];
         
-        if ([self.delegate respondsToSelector:@selector(encodingFinished:)]) {
-            
-            [self.delegate encodingFinished:self];
+        NSImage *img = nil;
+        for (AVMetadataItem *item in artworks) {
+            if ([item.keySpace isEqualToString:AVMetadataKeySpaceID3]) {
+                NSDictionary *d = [item.value copyWithZone:nil];
+                img = [[NSImage alloc] initWithData:[d objectForKey:@"data"]];
+            } else if ([item.keySpace isEqualToString:AVMetadataKeySpaceiTunes]) {
+                img = [[NSImage alloc] initWithData:[item.value copyWithZone:nil]];
+            }
         }
-    });
+        if (img) {
+            
+            self.artwork = img;
+        }
+    }];
+    
+    /*
+    [asset loadValuesAsynchronouslyForKeys:@[@"commonMetadata"] completionHandler:^{
+        
+        NSArray *lyricsArray = [AVMetadataItem metadataItemsFromArray:asset.metadata
+                                                              withKey:AVMetadataiTunesMetadataKeyLyrics
+                                                             keySpace:AVMetadataKeySpaceiTunes];
+        
+        NSString *string = nil;
+        for (AVMetadataItem *item in lyricsArray) {
+            
+            string = (NSString *)item.value;
+        }
+        if (string) { lyrics = string; } else { NSLog(@"No lyrics"); }
+    }];
+    */
+    
+    if (self.title || self.artist || self.albumName) {
+        
+        return YES;
+    }
+    return NO;
 }
 
 #pragma mark -
