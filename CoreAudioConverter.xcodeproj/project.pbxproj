@@ -18,6 +18,7 @@
 		F49DF80D1BAF93F9003A7C41 /* MP3Encoder.h in Headers */ = {isa = PBXBuildFile; fileRef = F49DF80B1BAF93F9003A7C41 /* MP3Encoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F49DF80E1BAF93F9003A7C41 /* MP3Encoder.m in Sources */ = {isa = PBXBuildFile; fileRef = F49DF80C1BAF93F9003A7C41 /* MP3Encoder.m */; settings = {ASSET_TAGS = (); }; };
 		F49DF8101BAF9416003A7C41 /* lame.h in Headers */ = {isa = PBXBuildFile; fileRef = F49DF80F1BAF9416003A7C41 /* lame.h */; settings = {ASSET_TAGS = (); }; };
+		F4C0FA4C1BBD39DA00E0AD6C /* TagLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4C0FA4B1BBD39DA00E0AD6C /* TagLib.framework */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		F49DF80B1BAF93F9003A7C41 /* MP3Encoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MP3Encoder.h; sourceTree = "<group>"; };
 		F49DF80C1BAF93F9003A7C41 /* MP3Encoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MP3Encoder.m; sourceTree = "<group>"; };
 		F49DF80F1BAF9416003A7C41 /* lame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lame.h; sourceTree = "<group>"; };
+		F4C0FA4B1BBD39DA00E0AD6C /* TagLib.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TagLib.framework; path = TagLib/TagLib.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,6 +44,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F49DF7FC1BAF920B003A7C41 /* libmp3lame.a in Frameworks */,
+				F4C0FA4C1BBD39DA00E0AD6C /* TagLib.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -73,6 +76,7 @@
 				F49DF7F71BAF8F17003A7C41 /* Decoder */,
 				F49DF7F81BAF8F25003A7C41 /* Utility */,
 				F49DF7FA1BAF8F58003A7C41 /* LAME */,
+				F4C0FA481BBD395500E0AD6C /* TagLib */,
 			);
 			path = CoreAudioConverter;
 			sourceTree = "<group>";
@@ -113,6 +117,14 @@
 				F49DF7FB1BAF920B003A7C41 /* libmp3lame.a */,
 			);
 			path = LAME;
+			sourceTree = "<group>";
+		};
+		F4C0FA481BBD395500E0AD6C /* TagLib */ = {
+			isa = PBXGroup;
+			children = (
+				F4C0FA4B1BBD39DA00E0AD6C /* TagLib.framework */,
+			);
+			name = TagLib;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
