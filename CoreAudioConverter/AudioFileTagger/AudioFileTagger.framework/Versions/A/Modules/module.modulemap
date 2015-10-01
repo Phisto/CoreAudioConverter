@@ -1,0 +1,6 @@
+framework module AudioFileTagger {
+  umbrella header "AudioFileTagger.h"
+
+  export *
+  module * { export * }
+}
