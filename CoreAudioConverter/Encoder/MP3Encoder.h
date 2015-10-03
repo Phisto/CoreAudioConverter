@@ -86,6 +86,9 @@ typedef int LAME_ENCODING_ENGINE_QUALITY;
  */
 @interface MP3Encoder : NSObject
 
+@property (nonatomic, readonly) NSURL *sourceFileUrl;
+@property (nonatomic, readonly) NSURL *outputFileUrl;
+
 @property (nonatomic, assign) NSObject<MP3EncoderDelegate> *delegate;
 
 /**
