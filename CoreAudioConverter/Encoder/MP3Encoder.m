@@ -14,11 +14,14 @@
 
 #import <AudioFileTagger/AudioFileTagger.h>
 
+NSString * const kSongInputUrlKey = @"in";
+NSString * const kSongOutputUrlKey = @"out";
+NSString * const kSongArtworkKey = @"art";
+
 @interface MP3Encoder (/* Private */)
 
 @property (nonatomic, strong) NSURL *sourceFileUrl;
 @property (nonatomic, strong) NSURL *outputFileUrl;
-
 
 @property (nonatomic, readwrite) lame_global_flags *lame;
 @property (nonatomic, readwrite) UInt32 sourceBitsPerChannel;
@@ -69,6 +72,43 @@
     return result;
 }
 
++ (instancetype)encoderForFile:(NSURL *)fileUrl output:(NSURL *)outFile error:(NSError **)error {
+    
+    MP3Encoder *result = nil;
+    
+    // Create the source based on the file's extension
+    NSArray			*coreAudioExtensions	= [MP3Encoder supportedAudioExtensions];
+    NSString		*extension				= [[fileUrl pathExtension] lowercaseString];
+    
+    // format supported
+    if ([coreAudioExtensions containsObject:extension]) {
+        
+        result = [[MP3Encoder alloc] initWithFile:fileUrl];
+        if (!result) {
+            
+            NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: NSLocalizedString(@"Couldn't create decoder.", @"---") };
+            NSError *newError = [NSError errorWithDomain:AudioConverterErrorDomain
+                                                    code:ACErrorUnknown
+                                                userInfo:infoDict];
+            if (error != NULL) *error = newError;
+            return nil;
+        }
+        
+        result.outputFileUrl = outFile;
+    }
+    // format not supported
+    else {
+        
+        NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: NSLocalizedString(@"File format not supported.", @"---") };
+        NSError *newError = [NSError errorWithDomain:AudioConverterErrorDomain
+                                                code:ACErrorFileFormatNotSupported
+                                            userInfo:infoDict];
+        if (error != NULL) *error = newError;
+    }
+    
+    return result;
+}
+
 - (instancetype)initWithFile:(NSURL *)fileUrl {
     
     self = [super init];
@@ -90,15 +130,29 @@
     return self;
 }
 
+- (instancetype)initWithDelegate:(NSObject<MP3EncoderDelegate> *)delegate {
+    
+    self = [super init];
+    if (self) {
+        
+        _delegate = delegate;
+    }
+    return self;
+}
+
 - (void)dealloc {
     
     lame_close(_lame);
 }
 
-#pragma mark -
-#pragma mark Methodes
-
-- (void)encodeToUrl:(NSURL *)outputUrl {
+- (BOOL)encodeSong:(NSURL *)inputUrl toLocation:(NSURL *)outputUrl error:(NSError **)encodingError {
+    
+    _hasMetadata = NO;
+    _lame = lame_init();
+    NSAssert(NULL != _lame, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
+    lame_set_VBR(_lame, vbr_off); // use constant bitrate
+    lame_set_mode(_lame, JOINT_STEREO);
+    self.sourceFileUrl = inputUrl;
     
     NSAssert(self.delegate, NSLocalizedStringFromTable(@"No delegate for encoding.", @"Exceptions", @""));
     
@@ -118,37 +172,429 @@
         bufferList.mBuffers[0].mData = NULL;
         
         // Parse the encoder settings
-        lame_set_quality(_lame, [self.delegate engineQuality]); // LAME_ENCODING_ENGINE_QUALITY
-        lame_set_brate(_lame, [self.delegate bitrate]); // set bitrate for cbr encoding
+        lame_set_brate(_lame, self.delegate.bitrate); // set bitrate for cbr encoding
+        
+        /*
+         I added this to deactivate the use of psycho acustic model(s) as it may infringe some active patents (until 2017).
+         I'M NOT A PATENT LAWYER! SO THIS NO GUARANTEE THAT THIS IMPLEMENTATION WONT INFRINGE ANY ACTIVE PATENTS!
+         */
+        lame_set_quality(_lame, 9); // LAME_ENCODING_ENGINE_QUALITY
+        
+        // Setup the decoder
+        NSError *decoderError = nil;
+        CADecoder *decoder = [CADecoder decoderForFile:self.sourceFileUrl error:&decoderError];
+        if (!decoder) {
+            
+            *encodingError = decoderError;
+            return NO;
+        }
+        
+        /*
+         I added this to prevent encoding of the samplerates 8/11,025/12 kHz (MPEG 2.5) as it may infringe some active patents (until 2017).
+         I'M NOT A PATENT LAWYER! SO THIS NO GUARANTEE THAT THIS IMPLEMENTATION WONT INFRINGE ANY ACTIVE PATENTS!
+         */
+        if (decoder.pcmFormat.mSampleRate < 12001) {
+            
+            NSString *text = NSLocalizedString(@"The samplerate '%f kHz' is not supported.", @"---");
+            NSString *locText = [NSString stringWithFormat:text, decoder.pcmFormat.mSampleRate];
+            
+            NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: locText };
+            NSError *newError = [NSError errorWithDomain:AudioConverterErrorDomain
+                                                    code:ACErrorUnknown
+                                                userInfo:infoDict];
+            
+            *encodingError = newError;
+            return NO;
+        }
+        
+        NSUInteger duration = decoder.totalFrames/decoder.pcmFormat.mSampleRate;
+        self.metadata.length = [NSNumber numberWithInteger:duration];
+        
+        
+        if ([self.delegate respondsToSelector:@selector(encodingStarted:outputSize:)]) {
+            
+            [self.delegate encodingStarted:self outputSize:(duration*(self.delegate.bitrate*1000)/8)];
+        }
+        
+        NSAssert(1 == decoder.pcmFormat.mChannelsPerFrame || 2 == decoder.pcmFormat.mChannelsPerFrame, NSLocalizedStringFromTable(@"LAME only supports one or two channel input.", @"Exceptions", @""));
+        
+        
+        _sourceBitsPerChannel	= decoder.pcmFormat.mBitsPerChannel;
+        totalFrames				= decoder.totalFrames;
+        framesToRead			= totalFrames;
+        
+        // Set up the AudioBufferList
+        bufferList.mNumberBuffers					= 1;
+        bufferList.mBuffers[0].mData				= NULL;
+        bufferList.mBuffers[0].mNumberChannels		= decoder.pcmFormat.mChannelsPerFrame;
+        
+        // Allocate the buffer that will hold the interleaved audio data
+        bufferLen									= 1024;
+        switch(decoder.pcmFormat.mBitsPerChannel) {
+                
+            case 8:
+            case 24:
+                bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int8_t));
+                bufferList.mBuffers[0].mDataByteSize	= (UInt32)bufferLen * sizeof(int8_t);
+                break;
+                
+            case 16:
+                bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int16_t));
+                bufferList.mBuffers[0].mDataByteSize	= (UInt32)bufferLen * sizeof(int16_t);
+                break;
+                
+            case 32:
+                bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int32_t));
+                bufferList.mBuffers[0].mDataByteSize	= (UInt32)bufferLen * sizeof(int32_t);
+                break;
+                
+            default:
+                @throw [NSException exceptionWithName:@"IllegalInputException" reason:@"Sample size not supported" userInfo:nil];
+                break;
+        }
+        
+        bufferByteSize = bufferList.mBuffers[0].mDataByteSize;
+        NSAssert(NULL != bufferList.mBuffers[0].mData, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
+        
+        // Initialize the LAME encoder
+        lame_set_num_channels(_lame, decoder.pcmFormat.mChannelsPerFrame);
+        lame_set_in_samplerate(_lame, decoder.pcmFormat.mSampleRate);
+        
+        result = lame_init_params(_lame);
+        NSAssert(-1 != result, NSLocalizedStringFromTable(@"Unable to initialize the LAME encoder.", @"Exceptions", @""));
+        
+        // Open the output file
+        _out = fopen([outputUrl fileSystemRepresentation], "w");
+        NSAssert(NULL != _out, NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @""));
+        
+        // Iteratively get the PCM data and encode it
+        for(;;) {
+            
+            // Set up the buffer parameters
+            bufferList.mBuffers[0].mNumberChannels	= decoder.pcmFormat.mChannelsPerFrame;
+            bufferList.mBuffers[0].mDataByteSize	= bufferByteSize;
+            frameCount								= bufferList.mBuffers[0].mDataByteSize / decoder.pcmFormat.mBytesPerFrame;
+            
+            // Read a chunk of PCM input
+            frameCount = [decoder readAudio:&bufferList frameCount:frameCount];
+            
+            // We're finished if no frames were returned
+            if(0 == frameCount) {
+                break;
+            }
+            
+            // Encode the PCM data
+            [self encodeChunk:&bufferList frameCount:frameCount];
+            
+            // Update status
+            framesToRead -= frameCount;
+        }
+        
+        // Flush the last MP3 frames (maybe)
+        [self finishEncode];
+        
+        // Close the output file
+        result = fclose(_out);
+        NSAssert(0 == result, NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @""));
+        _out = NULL;
+        
+        // Write the Xing VBR tag
+        file = fopen([outputUrl fileSystemRepresentation], "r+");
+        NSAssert(NULL != file, NSLocalizedStringFromTable(@"Unable to open the output file.", @"Exceptions", @""));
+        
+        lame_mp3_tags_fid(_lame, file);
+        
+        if (self.hasMetadata) {
+            // write methadata...
+            self.tagger.metadata = self.metadata;
+            [self.tagger tag];
+        }
+        return YES;
+    }
+    
+    @catch(NSException *exception) {
+        
+        *encodingError = NewNSErrorFromException(exception);
+        return NO;
+    }
+    
+    @finally {
+        // could still occur...
+        NSException *exception;
+        
+        // Close the output file if not already closed
+        if(NULL != _out && EOF == fclose(_out)) {
+            exception = [NSException exceptionWithName:@"IOException"
+                                                reason:NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @"")
+                                              userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+            *encodingError = NewNSErrorFromException(exception);
+        }
+        
+        // And close the other output file
+        if(NULL != file && EOF == fclose(file)) {
+            exception = [NSException exceptionWithName:@"IOException"
+                                                reason:NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @"")
+                                              userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+            *encodingError = NewNSErrorFromException(exception);
+        }
+        
+        free(bufferList.mBuffers[0].mData);
+    }
+}
+
+- (BOOL)encode  {
+    if (self.delegate.cancel) {
+        
+        return NO;
+    }
+    
+    NSAssert(self.delegate, NSLocalizedStringFromTable(@"No delegate for encoding.", @"Exceptions", @""));
+    
+    self.hasMetadata = [self readMetadata];
+    self.tagger = [MP3Tagger taggerForFile:self.outputFileUrl];
+    
+    FILE							*file							= NULL;
+    int								result;
+    AudioBufferList					bufferList;
+    ssize_t							bufferLen						= 0;
+    UInt32							bufferByteSize					= 0;
+    SInt64							totalFrames, framesToRead;
+    UInt32							frameCount;
+    
+    @try {
+        bufferList.mBuffers[0].mData = NULL;
+        
+        // Parse the encoder settings
+        lame_set_brate(_lame, self.delegate.bitrate); // set bitrate for cbr encoding
+        
+        /*
+         I added this to deactivate the use of psycho acustic model(s) as it may infringe some active patents (until 2017).
+         I'M NOT A PATENT LAWYER! SO THIS NO GUARANTEE THAT THIS IMPLEMENTATION WONT INFRINGE ANY ACTIVE PATENTS!
+         */
+        lame_set_quality(_lame, 9); // LAME_ENCODING_ENGINE_QUALITY
         
         // Setup the decoder
         NSError *error = nil;
         CADecoder *decoder = [CADecoder decoderForFile:self.sourceFileUrl error:&error];
         if (!decoder) {
             
-            dispatch_async(dispatch_get_main_queue(), ^{
+            return NO;
+        }
+        
+        /*
+         I added this to prevent encoding of the samplerates 8/11,025/12 kHz (MPEG 2.5) as it may infringe some active patents (until 2017).
+         I'M NOT A PATENT LAWYER! SO THIS NO GUARANTEE THAT THIS IMPLEMENTATION WONT INFRINGE ANY ACTIVE PATENTS!
+         */
+        if (decoder.pcmFormat.mSampleRate < 12001) {
+        
+            return NO;
+        }
+        
+        NSUInteger duration = decoder.totalFrames/decoder.pcmFormat.mSampleRate;
+        self.metadata.length = [NSNumber numberWithInteger:duration];
+        
+        NSAssert(1 == decoder.pcmFormat.mChannelsPerFrame || 2 == decoder.pcmFormat.mChannelsPerFrame, NSLocalizedStringFromTable(@"LAME only supports one or two channel input.", @"Exceptions", @""));
+        
+        
+        _sourceBitsPerChannel	= decoder.pcmFormat.mBitsPerChannel;
+        totalFrames				= decoder.totalFrames;
+        framesToRead			= totalFrames;
+        
+        // Set up the AudioBufferList
+        bufferList.mNumberBuffers					= 1;
+        bufferList.mBuffers[0].mData				= NULL;
+        bufferList.mBuffers[0].mNumberChannels		= decoder.pcmFormat.mChannelsPerFrame;
+        
+        // Allocate the buffer that will hold the interleaved audio data
+        bufferLen									= 1024;
+        switch(decoder.pcmFormat.mBitsPerChannel) {
                 
-                if ([self.delegate respondsToSelector:@selector(encodingFailed:withError:)]) {
+            case 8:
+            case 24:
+                bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int8_t));
+                bufferList.mBuffers[0].mDataByteSize	= (UInt32)bufferLen * sizeof(int8_t);
+                break;
                 
-                    [self.delegate encodingFailed:self withError:error];
-                }
-            });
+            case 16:
+                bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int16_t));
+                bufferList.mBuffers[0].mDataByteSize	= (UInt32)bufferLen * sizeof(int16_t);
+                break;
+                
+            case 32:
+                bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int32_t));
+                bufferList.mBuffers[0].mDataByteSize	= (UInt32)bufferLen * sizeof(int32_t);
+                break;
+                
+            default:
+                @throw [NSException exceptionWithName:@"IllegalInputException" reason:@"Sample size not supported" userInfo:nil];
+                break;
+        }
+        
+        bufferByteSize = bufferList.mBuffers[0].mDataByteSize;
+        NSAssert(NULL != bufferList.mBuffers[0].mData, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
+        
+        // Initialize the LAME encoder
+        lame_set_num_channels(_lame, decoder.pcmFormat.mChannelsPerFrame);
+        lame_set_in_samplerate(_lame, decoder.pcmFormat.mSampleRate);
+        
+        result = lame_init_params(_lame);
+        NSAssert(-1 != result, NSLocalizedStringFromTable(@"Unable to initialize the LAME encoder.", @"Exceptions", @""));
+        
+        // Open the output file
+        _out = fopen([self.outputFileUrl fileSystemRepresentation], "w");
+        NSAssert(NULL != _out, NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @""));
+        
+        // Iteratively get the PCM data and encode it
+        for(;;) {
             
+            // Set up the buffer parameters
+            bufferList.mBuffers[0].mNumberChannels	= decoder.pcmFormat.mChannelsPerFrame;
+            bufferList.mBuffers[0].mDataByteSize	= bufferByteSize;
+            frameCount								= bufferList.mBuffers[0].mDataByteSize / decoder.pcmFormat.mBytesPerFrame;
+            
+            // Read a chunk of PCM input
+            frameCount = [decoder readAudio:&bufferList frameCount:frameCount];
+            
+            // We're finished if no frames were returned
+            if(0 == frameCount) {
+                break;
+            }
+            
+            // Encode the PCM data
+            [self encodeChunk:&bufferList frameCount:frameCount];
+            
+            // Update status
+            framesToRead -= frameCount;
+        }
+        
+        // Flush the last MP3 frames (maybe)
+        [self finishEncode];
+        
+        // Close the output file
+        result = fclose(_out);
+        NSAssert(0 == result, NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @""));
+        _out = NULL;
+        
+        // Write the Xing VBR tag
+        file = fopen([self.outputFileUrl fileSystemRepresentation], "r+");
+        NSAssert(NULL != file, NSLocalizedStringFromTable(@"Unable to open the output file.", @"Exceptions", @""));
+        
+        lame_mp3_tags_fid(_lame, file);
+    }
+    
+    @catch(NSException *exception) {
+        
+        return NO;
+    }
+    
+    @finally {
+        
+        // Close the output file if not already closed
+        if(NULL != _out && EOF == fclose(_out)) {
+            
+            return NO;
+        }
+        
+        // And close the other output file
+        if(NULL != file && EOF == fclose(file)) {
+            
+            return NO;
+        }
+        
+        free(bufferList.mBuffers[0].mData);
+        
+        if (self.hasMetadata) {
+            
+            // write methadata...
+            [self writeMethadata];
+            return YES;
+            
+        } else {
+            
+            return YES;
+        }
+    }
+}
+
+#pragma mark -
+#pragma mark Methodes
+
+- (void)encodeToUrl:(NSURL *)outputUrl {
+    
+    if (self.delegate.cancel) {
+        
+        return;
+    }
+    
+    NSAssert(self.delegate, NSLocalizedStringFromTable(@"No delegate for encoding.", @"Exceptions", @""));
+    
+    self.hasMetadata = [self readMetadata];
+    self.outputFileUrl = outputUrl;
+    self.tagger = [MP3Tagger taggerForFile:self.outputFileUrl];
+    
+    FILE							*file							= NULL;
+    int								result;
+    AudioBufferList					bufferList;
+    ssize_t							bufferLen						= 0;
+    UInt32							bufferByteSize					= 0;
+    SInt64							totalFrames, framesToRead;
+    UInt32							frameCount;
+    
+    @try {
+        bufferList.mBuffers[0].mData = NULL;
+        
+        // Parse the encoder settings
+        lame_set_brate(_lame, self.delegate.bitrate); // set bitrate for cbr encoding
+        
+        /*
+         I added this to deactivate the use of psycho acustic model(s) as it may infringe some active patents (until 2017).
+         I'M NOT A PATENT LAWYER! SO THIS NO GUARANTEE THAT THIS IMPLEMENTATION WONT INFRINGE ANY ACTIVE PATENTS!
+         */
+        lame_set_quality(_lame, 9); // LAME_ENCODING_ENGINE_QUALITY
+        
+        // Setup the decoder
+        NSError *error = nil;
+        CADecoder *decoder = [CADecoder decoderForFile:self.sourceFileUrl error:&error];
+        if (!decoder) {
+            
+            if ([self.delegate respondsToSelector:@selector(encodingFailed:withError:)]) {
+                
+                [self.delegate encodingFailed:self withError:error];
+            }
+            return;
+        }
+    
+        /*
+         I added this to prevent encoding of the samplerates 8/11,025/12 kHz (MPEG 2.5) as it may infringe some active patents (until 2017).
+         I'M NOT A PATENT LAWYER! SO THIS NO GUARANTEE THAT THIS IMPLEMENTATION WONT INFRINGE ANY ACTIVE PATENTS!
+         */
+        if (decoder.pcmFormat.mSampleRate < 12001) {
+            if ([self.delegate respondsToSelector:@selector(encodingFailed:withError:)]) {
+                
+                NSString *text = NSLocalizedString(@"The samplerate '%f kHz' is not supported.", @"---");
+                NSString *locText = [NSString stringWithFormat:text, decoder.pcmFormat.mSampleRate];
+                
+                NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: locText };
+                NSError *newError = [NSError errorWithDomain:AudioConverterErrorDomain
+                                                        code:ACErrorUnknown
+                                                    userInfo:infoDict];
+                
+                [self.delegate encodingFailed:self withError:newError];
+            }
             return;
         }
         
         NSUInteger duration = decoder.totalFrames/decoder.pcmFormat.mSampleRate;
         self.metadata.length = [NSNumber numberWithInteger:duration];
         
-        dispatch_async(dispatch_get_main_queue(), ^{
+        
+        if ([self.delegate respondsToSelector:@selector(encodingStarted:outputSize:)]) {
             
-            if ([self.delegate respondsToSelector:@selector(encodingStarted:outputSize:)]) {
-                
-                [self.delegate encodingStarted:self outputSize:(duration*(self.delegate.bitrate*1000)/8)];
-            }
-        });
+            [self.delegate encodingStarted:self outputSize:(duration*(self.delegate.bitrate*1000)/8)];
+        }
         
         NSAssert(1 == decoder.pcmFormat.mChannelsPerFrame || 2 == decoder.pcmFormat.mChannelsPerFrame, NSLocalizedStringFromTable(@"LAME only supports one or two channel input.", @"Exceptions", @""));
+        
         
         _sourceBitsPerChannel	= decoder.pcmFormat.mBitsPerChannel;
         totalFrames				= decoder.totalFrames;
@@ -238,13 +684,11 @@
     
     @catch(NSException *exception) {
         
-        dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self.delegate respondsToSelector:@selector(encodingFailed:withError:)]) {
             
-             if ([self.delegate respondsToSelector:@selector(encodingFailed:withError:)]) {
-            
-                 [self.delegate encodingFailed:self withError:NewNSErrorFromException(exception)];
-             }
-        });
+            [self.delegate encodingFailed:self withError:NewNSErrorFromException(exception)];
+        }
+        
     }
     
     @finally {
@@ -256,13 +700,10 @@
                                                 reason:NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @"")
                                               userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
             
-            dispatch_async(dispatch_get_main_queue(), ^{
+            if ([self.delegate respondsToSelector:@selector(encodingFailed:withError:)]) {
                 
-                 if ([self.delegate respondsToSelector:@selector(encodingFailed:withError:)]) {
-                
-                     [self.delegate encodingFailed:self withError:NewNSErrorFromException(exception)];
-                 }
-            });
+                [self.delegate encodingFailed:self withError:NewNSErrorFromException(exception)];
+            }
         }
         
         // And close the other output file
@@ -270,36 +711,26 @@
             exception = [NSException exceptionWithName:@"IOException"
                                                 reason:NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @"")
                                               userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-            dispatch_async(dispatch_get_main_queue(), ^{
+            
+            if ([self.delegate respondsToSelector:@selector(encodingFailed:withError:)]) {
                 
-                 if ([self.delegate respondsToSelector:@selector(encodingFailed:withError:)]) {
-                
-                     [self.delegate encodingFailed:self withError:NewNSErrorFromException(exception)];
-                 }
-            });
+                [self.delegate encodingFailed:self withError:NewNSErrorFromException(exception)];
+            }
         }
         
         free(bufferList.mBuffers[0].mData);
         
         if (self.hasMetadata) {
             
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                if ([self.delegate respondsToSelector:@selector(encodingFinished:)]) {
-                    
-                    [self writeMethadata];
-                }
-            });
+            // write methadata...
+            [self writeMethadata];
             
         } else {
             
-            dispatch_async(dispatch_get_main_queue(), ^{
+            if ([self.delegate respondsToSelector:@selector(encodingFinished:)]) {
                 
-                if ([self.delegate respondsToSelector:@selector(encodingFinished:)]) {
-                    
-                    [self.delegate encodingFinished:self];
-                }
-            });
+                [self.delegate encodingFinished:self];
+            }
         }
     }
 }
@@ -626,7 +1057,6 @@
     
     self.tagger.metadata = self.metadata;
     [self.tagger tag];
-    [self.delegate encodingFinished:self];
 }
 
 #pragma mark -

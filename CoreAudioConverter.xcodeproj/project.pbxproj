@@ -7,19 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F42913C21BBE63400027FC28 /* AudioFileTagger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F42913C11BBE63400027FC28 /* AudioFileTagger.framework */; };
-		F42913C31BBE634C0027FC28 /* AudioFileTagger.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = F42913C11BBE63400027FC28 /* AudioFileTagger.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F43E129A1BC429D000BF062A /* AudioFileTagger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F43E12991BC429D000BF062A /* AudioFileTagger.framework */; };
+		F43E129B1BC429D900BF062A /* AudioFileTagger.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = F43E12991BC429D000BF062A /* AudioFileTagger.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F49DF7DC1BAF8D63003A7C41 /* CoreAudioConverter.h in Headers */ = {isa = PBXBuildFile; fileRef = F49DF7DB1BAF8D63003A7C41 /* CoreAudioConverter.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F49DF7FC1BAF920B003A7C41 /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F49DF7FB1BAF920B003A7C41 /* libmp3lame.a */; settings = {ASSET_TAGS = (); }; };
+		F49DF7FC1BAF920B003A7C41 /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F49DF7FB1BAF920B003A7C41 /* libmp3lame.a */; };
 		F49DF8031BAF93DB003A7C41 /* AudioConverterErrorConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = F49DF7FF1BAF93DB003A7C41 /* AudioConverterErrorConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F49DF8041BAF93DB003A7C41 /* AudioConverterErrorConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = F49DF8001BAF93DB003A7C41 /* AudioConverterErrorConstants.m */; settings = {ASSET_TAGS = (); }; };
-		F49DF8051BAF93DB003A7C41 /* CircularBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = F49DF8011BAF93DB003A7C41 /* CircularBuffer.h */; settings = {ASSET_TAGS = (); }; };
-		F49DF8061BAF93DB003A7C41 /* CircularBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = F49DF8021BAF93DB003A7C41 /* CircularBuffer.m */; settings = {ASSET_TAGS = (); }; };
-		F49DF8091BAF93ED003A7C41 /* CADecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = F49DF8071BAF93ED003A7C41 /* CADecoder.h */; settings = {ASSET_TAGS = (); }; };
-		F49DF80A1BAF93ED003A7C41 /* CADecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = F49DF8081BAF93ED003A7C41 /* CADecoder.m */; settings = {ASSET_TAGS = (); }; };
+		F49DF8041BAF93DB003A7C41 /* AudioConverterErrorConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = F49DF8001BAF93DB003A7C41 /* AudioConverterErrorConstants.m */; };
+		F49DF8051BAF93DB003A7C41 /* CircularBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = F49DF8011BAF93DB003A7C41 /* CircularBuffer.h */; };
+		F49DF8061BAF93DB003A7C41 /* CircularBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = F49DF8021BAF93DB003A7C41 /* CircularBuffer.m */; };
+		F49DF8091BAF93ED003A7C41 /* CADecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = F49DF8071BAF93ED003A7C41 /* CADecoder.h */; };
+		F49DF80A1BAF93ED003A7C41 /* CADecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = F49DF8081BAF93ED003A7C41 /* CADecoder.m */; };
 		F49DF80D1BAF93F9003A7C41 /* MP3Encoder.h in Headers */ = {isa = PBXBuildFile; fileRef = F49DF80B1BAF93F9003A7C41 /* MP3Encoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F49DF80E1BAF93F9003A7C41 /* MP3Encoder.m in Sources */ = {isa = PBXBuildFile; fileRef = F49DF80C1BAF93F9003A7C41 /* MP3Encoder.m */; settings = {ASSET_TAGS = (); }; };
-		F49DF8101BAF9416003A7C41 /* lame.h in Headers */ = {isa = PBXBuildFile; fileRef = F49DF80F1BAF9416003A7C41 /* lame.h */; settings = {ASSET_TAGS = (); }; };
+		F49DF80E1BAF93F9003A7C41 /* MP3Encoder.m in Sources */ = {isa = PBXBuildFile; fileRef = F49DF80C1BAF93F9003A7C41 /* MP3Encoder.m */; };
+		F49DF8101BAF9416003A7C41 /* lame.h in Headers */ = {isa = PBXBuildFile; fileRef = F49DF80F1BAF9416003A7C41 /* lame.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -29,14 +29,14 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				F42913C31BBE634C0027FC28 /* AudioFileTagger.framework in CopyFiles */,
+				F43E129B1BC429D900BF062A /* AudioFileTagger.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		F42913C11BBE63400027FC28 /* AudioFileTagger.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioFileTagger.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/ConverterWorkspace-ahskqvxvvbdmkyerjdggslcbhfvn/Build/Products/Debug/AudioFileTagger.framework"; sourceTree = "<group>"; };
+		F43E12991BC429D000BF062A /* AudioFileTagger.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioFileTagger.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/ConverterWorkspace-ahskqvxvvbdmkyerjdggslcbhfvn/Build/Products/Release/AudioFileTagger.framework"; sourceTree = "<group>"; };
 		F49DF7D81BAF8D63003A7C41 /* CoreAudioConverter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreAudioConverter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F49DF7DB1BAF8D63003A7C41 /* CoreAudioConverter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreAudioConverter.h; sourceTree = "<group>"; };
 		F49DF7DD1BAF8D63003A7C41 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -57,7 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F42913C21BBE63400027FC28 /* AudioFileTagger.framework in Frameworks */,
+				F43E129A1BC429D000BF062A /* AudioFileTagger.framework in Frameworks */,
 				F49DF7FC1BAF920B003A7C41 /* libmp3lame.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -68,7 +68,7 @@
 		F49DF7CE1BAF8D63003A7C41 = {
 			isa = PBXGroup;
 			children = (
-				F42913C11BBE63400027FC28 /* AudioFileTagger.framework */,
+				F43E12991BC429D000BF062A /* AudioFileTagger.framework */,
 				F49DF7DA1BAF8D63003A7C41 /* CoreAudioConverter */,
 				F49DF7D91BAF8D63003A7C41 /* Products */,
 			);
@@ -140,10 +140,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F49DF8031BAF93DB003A7C41 /* AudioConverterErrorConstants.h in Headers */,
-				F49DF8101BAF9416003A7C41 /* lame.h in Headers */,
-				F49DF80D1BAF93F9003A7C41 /* MP3Encoder.h in Headers */,
 				F49DF7DC1BAF8D63003A7C41 /* CoreAudioConverter.h in Headers */,
+				F49DF8101BAF9416003A7C41 /* lame.h in Headers */,
+				F49DF8031BAF93DB003A7C41 /* AudioConverterErrorConstants.h in Headers */,
+				F49DF80D1BAF93F9003A7C41 /* MP3Encoder.h in Headers */,
 				F49DF8091BAF93ED003A7C41 /* CADecoder.h in Headers */,
 				F49DF8051BAF93DB003A7C41 /* CircularBuffer.h in Headers */,
 			);

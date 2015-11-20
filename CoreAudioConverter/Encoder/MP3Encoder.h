@@ -6,7 +6,11 @@
 //  Copyright © 2015 Simon Gaus. All rights reserved.
 //
 
-@import Foundation;
+@import Cocoa;
+
+extern NSString * const kSongInputUrlKey;
+extern NSString * const kSongOutputUrlKey;
+extern NSString * const kSongArtworkKey;
 
 /**
  @protocol MP3EncoderDelegate
@@ -30,6 +34,7 @@ enum {
  */
 typedef int LAME_CONSTANT_BITRATE;
 
+/*
 enum {
     /// The (near) best quality but slow.
     LAME_ENCODING_ENGINE_QUALITY_BEST_SLOW = 2,
@@ -38,41 +43,47 @@ enum {
     /// Ok quality and really fast.
     LAME_ENCODING_ENGINE_QUALITY_OK_REALLY_FAST = 7
 };
+ */
 /**
  *@typedef LAME_ENCODING_ENGINE_QUALITY
  *@brief The engine quality which lame should use to encode the mp3 file.
  */
-typedef int LAME_ENCODING_ENGINE_QUALITY;
+//typedef int LAME_ENCODING_ENGINE_QUALITY;
 
 /*!
  * @brief The bitrate used for the constant bitrate encoding.
  * @see http://wiki.hydrogenaud.io/index.php?title=LAME for additional information about lame options
  */
-@property (atomic, readonly) LAME_CONSTANT_BITRATE bitrate;
+- (LAME_CONSTANT_BITRATE)bitrate;
 /*!
  * @brief The engine quality used for the encoding.
  * @see http://wiki.hydrogenaud.io/index.php?title=LAME for additional information about lame options
- */
 @property (atomic, readonly) LAME_ENCODING_ENGINE_QUALITY engineQuality;
+ */
+
+/*!
+ * @brief Indicates if the encoding should be canceld.
+ */
+@property (atomic, readonly) BOOL cancel;
 
 @optional
 
 /**
- Informs the delegate that the encoding started. Is called on main thread.
+ Informs the delegate that the encoding started. Is called on current thread.
  @param encoder The encoder object which started the encoding.
  @param outputSize The calculated size of the output file.
  @return void
  */
 - (void)encodingStarted:(id)encoder outputSize:(NSUInteger)size;
 /**
- Informs the delegate that the encoding finished. Is called on main thread.
+ Informs the delegate that the encoding finished. Is called on current thread.
  @param encoder The encoder object which finished the encoding.
  @return void
  */
 - (void)encodingFinished:(id)encoder;
 /**
  Informs the delegate that the encoding failed.
- @param encoder The encoder object which failed to encode. Is called on main thread.
+ @param encoder The encoder object which failed to encode. Is called on current thread.
  @param error An error obect encapsulating the failure reason or nil.
  @return void
  */
@@ -113,6 +124,8 @@ typedef int LAME_ENCODING_ENGINE_QUALITY;
  @return instancetype
  */
 + (instancetype)encoderForFile:(NSURL *)fileUrl error:(NSError **)error;
+
+- (instancetype)initWithDelegate:(NSObject<MP3EncoderDelegate> *)delegate;
 /**
  Encodes the source audio file to mp3 at a specific location.
  
@@ -121,5 +134,11 @@ typedef int LAME_ENCODING_ENGINE_QUALITY;
  @return void
  */
 - (void)encodeToUrl:(NSURL *)outputUrl;
+
+- (BOOL)encodeSong:(NSURL *)inputUrl toLocation:(NSURL *)outputUrl error:(NSError **)encodingError;
+
++ (instancetype)encoderForFile:(NSURL *)fileUrl output:(NSURL *)outFile error:(NSError **)error;
+
+- (BOOL)encode;
 
 @end
