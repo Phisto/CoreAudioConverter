@@ -25,7 +25,9 @@ xcuserdata
 *.moved-aside
 *.xcuserstate
 
-## exclude lame because of license reasons
-libmp3lame.a
-lame.h
+## exclude aac encoding files (not ready)
+AACEncodingTests.m
+AACEncoderOperation.h
+AACEncoderOperation.m
+
 
