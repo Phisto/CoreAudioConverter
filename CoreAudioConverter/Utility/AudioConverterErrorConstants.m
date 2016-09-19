@@ -9,7 +9,7 @@
 #import "AudioConverterErrorConstants.h"
 
 #pragma mark Error Domain
-NSString *AudioConverterErrorDomain = @"AudioConverterErrorDomain";
+NSString *ACErrorDomain = @"AudioConverterErrorDomain";
 
 #pragma mark Error Codes
 NSInteger const ACErrorFileFormatNotSupported = 1904;

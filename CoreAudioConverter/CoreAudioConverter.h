@@ -16,5 +16,9 @@ FOUNDATION_EXPORT const unsigned char CoreAudioConverterVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <CoreAudioConverter/PublicHeader.h>
 
-#import "MP3Encoder.h"
-#import "AudioConverterErrorConstants.h"
+// Objects
+#import <CoreAudioConverter/EncoderTask.h>
+#import <CoreAudioConverter/XPCEncoderTask.h>
+#import <CoreAudioConverter/MP3Encoder.h>
+// Constants
+#import <CoreAudioConverter/AudioConverterErrorConstants.h>

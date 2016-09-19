@@ -20,6 +20,9 @@
 
 #import "CircularBuffer.h"
 
+// ALog always displays output regardless of the DEBUG setting
+#define ALog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+
 @interface CircularBuffer (/* Private */)
 
 @property (nonatomic, readwrite) uint8_t *buffer;
@@ -28,67 +31,47 @@
 @property (nonatomic, readwrite) uint8_t *readPtr;
 @property (nonatomic, readwrite) uint8_t *writePtr;
 
-- (void)normalizeBuffer;
+- (BOOL)normalizeBuffer;
 - (NSUInteger)contiguousBytesAvailable;
 - (NSUInteger)contiguousFreeSpaceAvailable;
 
 @end
 
 @implementation CircularBuffer
-#pragma mark Object creation
+#pragma mark - Object creation
 
-- (instancetype)init {
+- (nullable instancetype)init {
 	return [self initWithSize:10 * 1024];
 }
-- (instancetype)initWithSize:(NSUInteger)size {
-	NSParameterAssert(0 < size);
+- (nullable instancetype)initWithSize:(NSUInteger)size {
+    
+    if (size <= 0) {
+        return nil;
+    }
 	
-	if((self = [super init])) {
+    self = [super init];
+    
+	if (self) {
+        
 		_bufsize	= size;
 		_buffer		= (uint8_t *)calloc(_bufsize, sizeof(uint8_t));
 		
-		NSAssert1(NULL != _buffer, @"Unable to allocate memory: %s", strerror(errno));
+        if (_buffer == NULL) {
+            return nil;
+        }
 		
 		_readPtr	= _buffer;
 		_writePtr	= _buffer;
-										
-		return self;
 	}
-	return nil;
+    
+	return self;
 }
 
-#pragma mark -
-#pragma mark Methode Implementation
+#pragma mark - Methode Implementation
 
 - (void)reset { _readPtr = _writePtr = _buffer; }
 
 - (NSUInteger)size { return _bufsize; }
-
-- (void)resize:(NSUInteger)size {
-	uint8_t		*newbuf;
-	
-	// We can only grow in size, not shrink
-	if(size <= [self size])
-		return;
-
-	[self normalizeBuffer];
-	
-	// Allocate a new buffer of the requested size
-	newbuf		= (uint8_t *)calloc(size, sizeof(uint8_t));
-	NSAssert1(NULL != newbuf, @"Unable to allocate memory: %s", strerror(errno));
-	
-	// Copy the current data into the new buffer
-	memcpy(newbuf, _buffer, [self size]);
-	
-	// Adjust the read and write pointers
-	_readPtr	= newbuf + (_readPtr - _buffer);
-	_writePtr	= newbuf + (_writePtr - _buffer);
-
-	// Free the old buffer and activate new one
-	free(_buffer);
-	_buffer		= newbuf;
-	_bufsize	= size;
-}
 
 - (NSUInteger)bytesAvailable {
 	return (_writePtr >= _readPtr ? (NSUInteger)(_writePtr - _readPtr) : [self size] - (NSUInteger)(_readPtr - _writePtr));
@@ -96,33 +79,13 @@
 
 - (NSUInteger)freeSpaceAvailable { return _bufsize - [self bytesAvailable]; }
 
-- (NSUInteger)putData:(const void *)data byteCount:(NSUInteger)byteCount {
-	NSParameterAssert(NULL != data);
-	NSParameterAssert(0 < byteCount);
-	NSParameterAssert([self freeSpaceAvailable] >= byteCount);
-	
-	if([self contiguousFreeSpaceAvailable] >= byteCount) {
-		memcpy(_writePtr, data, byteCount);
-		_writePtr += byteCount;
-
-		return byteCount;
-	}
-	else {
-		NSUInteger	blockSize		= [self contiguousFreeSpaceAvailable];
-		NSUInteger	wrapSize		= byteCount - blockSize;
-		
-		memcpy(_writePtr, data, blockSize);
-		_writePtr = _buffer;
-
-		memcpy(_writePtr, data + blockSize, wrapSize);
-		_writePtr += wrapSize;
-
-		return byteCount;
-	}
-}
 
 - (NSUInteger)getData:(void *)buffer byteCount:(NSUInteger)byteCount {
-	NSParameterAssert(NULL != buffer);
+	//NSParameterAssert(NULL != buffer);
+    if (buffer == NULL) {
+        ALog(@"Failed to get data because the buffer is missing.");
+        return 0;
+    }
 
 	// Do nothing!
 	if(0 == byteCount) {
@@ -152,8 +115,6 @@
 	return byteCount;
 }
 
-- (const void *)exposeBufferForReading { [self normalizeBuffer]; return _readPtr; }
-
 - (void)readBytes:(NSUInteger)byteCount {
 	uint8_t			*limit		= _buffer + _bufsize;
 	
@@ -164,7 +125,15 @@
 	}
 }
 
-- (void *)exposeBufferForWriting { [self normalizeBuffer]; return _writePtr; }
+- (void *)exposeBufferForWriting {
+    
+    BOOL erfolg = [self normalizeBuffer];
+    if (!erfolg) {
+        return nil;
+    }
+    return _writePtr;
+
+}
 
 - (void)wroteBytes:(NSUInteger)byteCount {
 	uint8_t			*limit		= _buffer + _bufsize;
@@ -176,10 +145,14 @@
 	}
 }
 
-#pragma mark -
-#pragma mark Private Methode Implementation
+#pragma mark - Private Methode Implementation
 
-- (void)normalizeBuffer {
+- (void)dealloc {
+    
+    free(_buffer);
+}
+
+- (BOOL)normalizeBuffer {
     
     if(_writePtr == _readPtr) {
         _writePtr = _readPtr = _buffer;
@@ -202,12 +175,21 @@
         uint8_t			*chunkB		= NULL;
         
         chunkA = (uint8_t *)calloc(chunkASize, sizeof(uint8_t));
-        NSAssert1(NULL != chunkA, @"Unable to allocate memory: %s", strerror(errno));
+        //NSAssert1(NULL != chunkA, @"Unable to allocate memory: %s", strerror(errno));
+        if (chunkA == NULL) {
+            ALog(@"Unable to allocate memory: %s", strerror(errno));
+            return NO;
+        }
         memcpy(chunkA, _readPtr, chunkASize);
         
         if(0 < chunkBSize) {
             chunkB = (uint8_t *)calloc(chunkBSize, sizeof(uint8_t));
-            NSAssert1(NULL != chunkA, @"Unable to allocate memory: %s", strerror(errno));
+            //NSAssert1(NULL != chunkA, @"Unable to allocate memory: %s", strerror(errno));
+            if (chunkB == NULL) {
+                ALog(@"Unable to allocate memory: %s", strerror(errno));
+                free(chunkA);
+                return NO;
+            }
             memcpy(chunkB, _buffer, chunkBSize);
         }
         
@@ -221,11 +203,12 @@
         free(chunkA);
         free(chunkB);
     }
+    return YES;
 }
 
 - (NSUInteger)contiguousBytesAvailable {
     
-    uint8_t			*limit		= _buffer + _bufsize;
+    uint8_t	*limit = _buffer + _bufsize;
     
     return (_writePtr >= _readPtr ? _writePtr - _readPtr : limit - _readPtr);
 }

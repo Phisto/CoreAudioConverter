@@ -18,28 +18,39 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-@import Cocoa;
+@import Foundation;
 
-// A simple implementation of a circular (AKA ring) buffer
+NS_ASSUME_NONNULL_BEGIN
+/**
+ A simple implementation of a circular (AKA ring) buffer
+ */
 @interface CircularBuffer : NSObject
-
-- (id)initWithSize:(NSUInteger)size;
-
+/*
+ 
+ */
 - (void)reset;
-
-- (NSUInteger)size;
-- (void)resize:(NSUInteger)size;
-
+/*
+ @return
+ */
 - (NSUInteger)bytesAvailable;
+/*
+ @return
+ */
 - (NSUInteger)freeSpaceAvailable;
-
-- (NSUInteger)putData:(const void *)data byteCount:(NSUInteger)byteCount;
+/*
+ @param buffer
+ @param byteCount
+ @return
+ */
 - (NSUInteger)getData:(void *)buffer byteCount:(NSUInteger)byteCount;
-
-- (const void *)exposeBufferForReading;
-- (void)readBytes:(NSUInteger)byteCount;
-
-- (void *)exposeBufferForWriting;
+/*
+ 
+ */
+- (nullable void *)exposeBufferForWriting;
+/*
+ @param byteCount
+ */
 - (void)wroteBytes:(NSUInteger)byteCount;
 
 @end
+NS_ASSUME_NONNULL_END

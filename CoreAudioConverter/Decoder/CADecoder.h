@@ -13,26 +13,22 @@
 
 @class CircularBuffer;
 
-/*!
- * @class CADecoder
- * @brief The Core Audio Decoder can decode audio files with the suffix .aif | .aiff | .m4a | .aac .
+NS_ASSUME_NONNULL_BEGIN
+/**
+ The Core Audio Decoder can decode audio files with the suffix .aif | .aiff | .m4a | .aac .
  */
 @interface CADecoder : NSObject
-#pragma mark Properties
-/*!
- * @brief The format of PCM data provided by the source file.
+#pragma mark - Properties
+/**
+ The format of PCM data provided by the source file.
  */
 @property (nonatomic, readonly) AudioStreamBasicDescription pcmFormat;
-/*!
- * @brief Returns the name of the decoders files format, for example, “16-bit, interleaved” for linear PCM.
- */
-@property (nonatomic, readonly) NSString *pcmFormatDescription;
-/*!
- * @brief Returns the length in sample frames of the decoders associated audio file.
+/**
+ Returns the length in sample frames of the decoders associated audio file.
  */
 @property (nonatomic, readonly) SInt64 totalFrames;
 
-#pragma mark Methodes
+#pragma - mark Methodes
 /**
  Creates and returns a decoder object for a specific audio file.
  
@@ -45,21 +41,23 @@
  }
  // do stuff with the decoder...
  @endcode
- @param NSURL of the file to decode.
+ @param fileUrl of the file to decode.
+ @param error
  @return instancetype or nil
  */
-+ (instancetype)decoderForFile:(NSURL *)fileUrl error:(NSError **)error;
++ (nullable instancetype)decoderForFile:(NSURL *)fileUrl error:(NSError **)error;
 /**
-  Reads a chunk of PCM input and let the bufferList point to it.
-  @param AudioBufferList a pointer to hold audio data chunk
-  @param UInt32 position in the PCM input
-  @return UInt32
+ Reads a chunk of PCM input and let the bufferList point to it. Will return Zero(0) on failure.
+ @param AudioBufferList a pointer to hold audio data chunk
+ @param UInt32 position in the PCM input
+ @return UInt32
  */
 - (UInt32)readAudio:(AudioBufferList *)bufferList frameCount:(UInt32)frameCount;
 /**
-  Returns a array with supported audio extensions.
-  @return NSArray
- */
-NSArray * getCoreAudioExtensions();
+ Return an array of valid audio file extensions recognized by Core Audio.
+ @return The supported audio extensions as strings, or nil if an error occures.
+*/
++ (nullable NSArray<NSString *> *)supportedAudioExtensions;
 
 @end
+NS_ASSUME_NONNULL_END

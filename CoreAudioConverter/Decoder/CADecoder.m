@@ -13,7 +13,9 @@
 
 #import "CircularBuffer.h"
 
-static NSArray *sAudioExtensions;
+
+// ALog always displays output regardless of the DEBUG setting
+#define ALog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
 
 @interface CADecoder (/* Private */)
 
@@ -43,58 +45,90 @@ static NSArray *sAudioExtensions;
 @implementation CADecoder
 #pragma mark Object creation
 
-+ (instancetype)decoderForFile:(NSURL *)fileUrl error:(NSError *__autoreleasing *)error {
++ (nullable instancetype)decoderForFile:(NSURL *)fileUrl error:(NSError * __autoreleasing *)error {
     
     CADecoder *result = nil;
     
     // Create the source based on the file's extension
-    NSArray			*coreAudioExtensions	= getCoreAudioExtensions();
+    NSArray			*coreAudioExtensions	= [CADecoder supportedAudioExtensions];
     NSString		*extension				= [[fileUrl pathExtension] lowercaseString];
     
     // format supported
     if ([coreAudioExtensions containsObject:extension]) {
         
-        result = [[CADecoder alloc] initWithFile:fileUrl];
+        result = [[CADecoder alloc] initWithFile:fileUrl error:(NSError **)error];
         if (!result) {
             
-            NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: NSLocalizedString(@"Couldn't create decoder.", @"---") };
-            NSError *newError = [NSError errorWithDomain:AudioConverterErrorDomain
-                                                    code:ACErrorUnknown
-                                                userInfo:infoDict];
-            *error = newError;
+            if (!error) {
+                NSDictionary *infoDict = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Couldn't create decoder for file: \"%@\".", fileUrl]};
+                NSError *newError = [NSError errorWithDomain:ACErrorDomain
+                                                        code:ACErrorUnknown
+                                                    userInfo:infoDict];
+                if (error != NULL) *error = newError;
+            }
+            
             return nil;
         }
     }
     // format not supported
     else {
         
-        NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: NSLocalizedString(@"File format not supported.", @"---") };
-        NSError *newError = [NSError errorWithDomain:AudioConverterErrorDomain
+        NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"File format not supported for file: \"%@\".", fileUrl.lastPathComponent] };
+        NSError *newError = [NSError errorWithDomain:ACErrorDomain
                                                 code:ACErrorFileFormatNotSupported
                                             userInfo:infoDict];
         if (error != NULL) *error = newError;
     }
-        
+    
     return result;
 }
-- (instancetype)initWithFile:(NSURL *)fileUrl {
-    NSParameterAssert(fileUrl);
+- (nullable instancetype)initWithFile:(NSURL *)fileUrl error:(NSError * __autoreleasing *)error {
+
+    if (!fileUrl) return nil;
     
     self = [super init];
     
-    if(self) {
+    if (self) {
         
         _pcmBuffer = [[CircularBuffer alloc] init];
+        if (!_pcmBuffer) {
+            NSDictionary *infoDict = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Couldn't allocate memory for the ring buffer."]};
+            NSError *newError = [NSError errorWithDomain:ACErrorDomain
+                                                    code:ACErrorUnknown
+                                                userInfo:infoDict];
+            if (error != NULL) *error = newError;
+            return nil;
+        }
         _fileUrl = fileUrl;
-    
-        OSStatus result = ExtAudioFileOpenURL((__bridge CFURLRef _Nonnull)(fileUrl), &_extAudioFile);
-        NSAssert1(noErr == result, @"ExtAudioFileOpen failed: %@", UTCreateStringForOSType(result));
+        
+        __unused OSStatus result = ExtAudioFileOpenURL((__bridge CFURLRef _Nonnull)(fileUrl), &_extAudioFile);
+        if (result != noErr) {
+            CFStringRef descr = UTCreateStringForOSType(result);
+            //ALog(@"ExtAudioFileOpen failed: %@", descr);
+            NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Couldn't open the file \"%@\", the file may be corrupted. Underlying failure reason: %@ failure code: %d", fileUrl.lastPathComponent, descr, (int)result]};
+            if (descr != NULL) CFRelease(descr);
+            NSError *newError = [NSError errorWithDomain:ACErrorDomain
+                                                    code:ACErrorUnknown
+                                                userInfo:infoDict];
+            if (error != NULL) *error = newError;
+            return nil;
+        }
         
         // Query file type
         UInt32 dataSize = sizeof(AudioStreamBasicDescription);
         result = ExtAudioFileGetProperty(_extAudioFile, kExtAudioFileProperty_FileDataFormat, &dataSize, &_pcmFormat);
-        NSAssert1(noErr == result, @"AudioFileGetProperty failed: %@", UTCreateStringForOSType(result));
-        
+        if (result != noErr) {
+            CFStringRef descr = UTCreateStringForOSType(result);
+            ALog(@"AudioFileGetProperty failed: %@", descr);
+            if (descr != NULL) CFRelease(descr);
+            NSDictionary *infoDict = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Couldn't detect type for file: \"%@\", the file may be corrupted.", fileUrl.lastPathComponent]};
+            NSError *newError = [NSError errorWithDomain:ACErrorDomain
+                                                    code:ACErrorUnknown
+                                                userInfo:infoDict];
+            if (error != NULL) *error = newError;
+            return nil;
+        }
+    
         _pcmFormat.mFormatID = kAudioFormatLinearPCM;
         _pcmFormat.mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsPacked;
         
@@ -120,7 +154,7 @@ static NSArray *sAudioExtensions;
             
             // Preserve mSampleRate and mChannelsPerFrame
             _pcmFormat.mBitsPerChannel	= (0 == _pcmFormat.mBitsPerChannel ? 16 : _pcmFormat.mBitsPerChannel);
-        
+            
             _pcmFormat.mBytesPerPacket = (_pcmFormat.mBitsPerChannel / 8) * _pcmFormat.mChannelsPerFrame;
             _pcmFormat.mFramesPerPacket = 1;
             _pcmFormat.mBytesPerFrame = _pcmFormat.mBytesPerPacket * _pcmFormat.mFramesPerPacket;
@@ -128,10 +162,26 @@ static NSArray *sAudioExtensions;
         
         // Tell the extAudioFile the format we'd like for data
         result = ExtAudioFileSetProperty(_extAudioFile, kExtAudioFileProperty_ClientDataFormat, sizeof(_pcmFormat), &_pcmFormat);
-        NSAssert1(noErr == result, @"ExtAudioFileSetProperty failed: %@", UTCreateStringForOSType(result));
+        if (result != noErr) {
+            
+            CFStringRef descr = UTCreateStringForOSType(result);
+            ALog(@"ExtAudioFileSetProperty failed: %@", descr);
+            if (descr != NULL) CFRelease(descr);
+            return nil;
+        }
     }
     
     return self;
+}
+
+- (void)dealloc {
+    
+    OSStatus result = ExtAudioFileDispose(_extAudioFile);
+    if (result != noErr) {
+        CFStringRef descr = UTCreateStringForOSType(result);
+        ALog(@"ExtAudioFileDispose failed: %@", descr);
+        if (descr != NULL) CFRelease(descr);
+    }
 }
 
 #pragma mark -
@@ -139,20 +189,41 @@ static NSArray *sAudioExtensions;
 
 - (UInt32)readAudio:(AudioBufferList *)bufferList frameCount:(UInt32)frameCount {
     
-    NSParameterAssert(NULL != bufferList);
-    NSParameterAssert(0 < bufferList->mNumberBuffers);
-    NSParameterAssert(0 < frameCount);
+    //NSParameterAssert(NULL != bufferList);
+    if (bufferList == NULL) {
+        ALog(@"An error occured during decoding.");
+        return 0;
+    }
+    //NSParameterAssert(0 < bufferList->mNumberBuffers);
+    if (bufferList->mNumberBuffers <= 0) {
+        ALog(@"An error occured during decoding.");
+        return 0;
+    }
+    //NSParameterAssert(0 < frameCount);
+    if (frameCount <= 0) {
+        //NSLog(@"%@", _fileUrl.lastPathComponent);
+        //ALog(@"An error occured during decoding.");
+        return 0;
+    }
     
     UInt32		framesRead		= 0;
     UInt32		byteCount		= frameCount * self.pcmFormat.mBytesPerPacket;
     UInt32		bytesRead		= 0;
     
-    NSParameterAssert(bufferList->mBuffers[0].mDataByteSize >= byteCount);
+    //NSParameterAssert(bufferList->mBuffers[0].mDataByteSize >= byteCount);
+    if (byteCount > bufferList->mBuffers[0].mDataByteSize) {
+        ALog(@"An error occured during decoding.");
+        return 0;
+    }
     
     // If there aren't enough bytes in the buffer, fill it as much as possible
     if([[self pcmBuffer] bytesAvailable] < byteCount) {
         
-        [self fillPCMBuffer];
+        BOOL erfolg = [self fillPCMBuffer];
+        if (!erfolg) {
+            ALog(@"An error occured during decoding.");
+            return 0;
+        }
     }
     
     // If there still aren't enough bytes available, return what we have
@@ -172,114 +243,80 @@ static NSArray *sAudioExtensions;
 
 - (SInt64)totalFrames {
     
-    OSStatus	result;
+    __unused OSStatus	result;
     UInt32		dataSize;
     SInt64		frameCount;
     
     dataSize		= sizeof(frameCount);
     result			= ExtAudioFileGetProperty(_extAudioFile, kExtAudioFileProperty_FileLengthFrames, &dataSize, &frameCount);
-    NSAssert1(noErr == result, @"ExtAudioFileGetProperty(kExtAudioFileProperty_FileLengthFrames) failed: %@", UTCreateStringForOSType(result));
+    //NSAssert1(noErr == result, @"ExtAudioFileGetProperty(kExtAudioFileProperty_FileLengthFrames) failed: %@", UTCreateStringForOSType(result));
+    if (result != noErr) {
+        CFStringRef descr = UTCreateStringForOSType(result);
+        ALog(@"AudioFileGetProperty failed: %@", descr);
+        if (descr != NULL) CFRelease(descr);
+        return 0;
+    }
     
     return frameCount;
 }
 
-- (BOOL)supportsSeeking {
+- (BOOL)fillPCMBuffer {
     
-    return YES;
-}
-
-- (SInt64)seekToFrame:(SInt64)frame {
-    
-    OSStatus result = ExtAudioFileSeek(_extAudioFile, frame);
-    if(noErr == result) {
-        [self.pcmBuffer reset];
-        _currentFrame = frame;
-    }
-    
-    return self.currentFrame;
-}
-
-- (void)fillPCMBuffer {
-    
-    CircularBuffer		*buffer				= self.pcmBuffer;
-    OSStatus			result;
+    CircularBuffer		*buffer	= self.pcmBuffer;
+    __unused OSStatus	result;
     AudioBufferList		bufferList;
     UInt32				frameCount;
     
     bufferList.mNumberBuffers				= 1;
     bufferList.mBuffers[0].mNumberChannels	= self.pcmFormat.mChannelsPerFrame;
-    bufferList.mBuffers[0].mData			= [buffer exposeBufferForWriting];
-    bufferList.mBuffers[0].mDataByteSize	= (UInt32)[buffer freeSpaceAvailable];
+    // type is spezified return type in circular buffer
+    uint8_t *data = [buffer exposeBufferForWriting];
+    if (data == nil) {
+        ALog(@"Failed to expose buffer for writing.");
+        return NO;
+    }
+    bufferList.mBuffers[0].mData			= data;
     
+    bufferList.mBuffers[0].mDataByteSize	= (UInt32)[buffer freeSpaceAvailable];
     frameCount								= bufferList.mBuffers[0].mDataByteSize / self.pcmFormat.mBytesPerFrame;
     result									= ExtAudioFileRead(_extAudioFile, &frameCount, &bufferList);
-    NSAssert1(noErr == result, @"ExtAudioFileRead failed: %@", UTCreateStringForOSType(result));
     
-    NSAssert(frameCount * self.pcmFormat.mBytesPerFrame == bufferList.mBuffers[0].mDataByteSize, @"mismatch");
+    
+    //NSAssert1(noErr == result, @"ExtAudioFileRead failed: %@", UTCreateStringForOSType(result));
+    if (result != noErr) {
+        CFStringRef descr = UTCreateStringForOSType(result);
+        ALog(@"ExtAudioFileRead failed: %@", descr);
+        if (descr != NULL) CFRelease(descr);
+        return NO;
+    }
+    
+    //NSAssert(frameCount * self.pcmFormat.mBytesPerFrame == bufferList.mBuffers[0].mDataByteSize, @"mismatch");
+    if ((bufferList.mBuffers[0].mDataByteSize) != (frameCount * self.pcmFormat.mBytesPerFrame)) {
+        ALog(@"mismatch");
+        return NO;
+    }
     
     [buffer wroteBytes:bufferList.mBuffers[0].mDataByteSize];
+    return YES;
 }
 
 #pragma mark -
 #pragma mark Helper Methodes
 
-- (NSString *)pcmFormatDescription {
++ (NSArray<NSString *> *)supportedAudioExtensions {
     
-    OSStatus						result;
-    UInt32							specifierSize;
-    AudioStreamBasicDescription		asbd;
-    NSString						*fileFormat;
+    NSArray *coreAudioExtensions;
+    UInt32		size	= sizeof(coreAudioExtensions);
+    __unused OSStatus	err		= AudioFileGetGlobalInfo(kAudioFileGlobalInfo_AllExtensions, 0, NULL, &size, &coreAudioExtensions);
     
-    asbd			= _pcmFormat;
-    specifierSize	= sizeof(fileFormat);
-    result			= AudioFormatGetProperty(kAudioFormatProperty_FormatName, sizeof(AudioStreamBasicDescription), &asbd, &specifierSize, &fileFormat);
-    NSAssert1(noErr == result, @"AudioFormatGetProperty failed: %@", UTCreateStringForOSType(result));
-    
-    return fileFormat;
-}
-/**
-  Return an array of valid audio file extensions recognized by Core Audio.
-  @return NSArray
- */
-NSArray * getCoreAudioExtensions() {
-    
-    @synchronized(sAudioExtensions) {
-        if(nil == sAudioExtensions) {
-            UInt32		size	= sizeof(sAudioExtensions);
-            OSStatus	err		= AudioFileGetGlobalInfo(kAudioFileGlobalInfo_AllExtensions, 0, NULL, &size, &sAudioExtensions);
-            
-            NSCAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioFileGetGlobalInfo", UTCreateStringForOSType(err));
-        }
+    if (err != noErr) {
+        
+        CFStringRef descr = UTCreateStringForOSType(err);
+        ALog(@"Failed to get supported Core Audio Extensions. Failure reason: %@", descr);
+        if (descr != NULL) CFRelease(descr);
     }
-    
-    return sAudioExtensions;
+    return coreAudioExtensions;
 }
 
 #pragma mark -
 @end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

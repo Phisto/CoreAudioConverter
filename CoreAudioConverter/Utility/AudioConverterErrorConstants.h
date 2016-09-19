@@ -9,8 +9,7 @@
 @import Foundation;
 
 #pragma mark Error Domain
-extern NSString *AudioConverterErrorDomain;
-
+extern NSString *ACErrorDomain;
 
 #pragma mark Error Codes
 extern NSInteger const ACErrorFileFormatNotSupported;
