@@ -88,7 +88,6 @@
 		F4727BA61D478EA200B15C13 /* MP3Encoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MP3Encoder.h; sourceTree = "<group>"; };
 		F474F08C1D55154E007BF84D /* NSError+Exceptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSError+Exceptions.h"; path = "Categories/NSError+Exceptions.h"; sourceTree = "<group>"; };
 		F474F08D1D55154E007BF84D /* NSError+Exceptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSError+Exceptions.m"; path = "Categories/NSError+Exceptions.m"; sourceTree = "<group>"; };
-		F478E19A1C7D09E100670966 /* CoreAudioConverter.profdata */ = {isa = PBXFileReference; lastKnownFileType = file; path = CoreAudioConverter.profdata; sourceTree = "<group>"; };
 		F478E19C1C7D249C00670966 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = CoreAudioConverter/fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F478E19E1C7D249C00670966 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = CoreAudioConverter/fr.lproj/Exceptions.strings; sourceTree = "<group>"; };
 		F478E19F1C7D249C00670966 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = CoreAudioConverter/en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -200,7 +199,6 @@
 		F478E1991C7D09E100670966 /* OptimizationProfiles */ = {
 			isa = PBXGroup;
 			children = (
-				F478E19A1C7D09E100670966 /* CoreAudioConverter.profdata */,
 			);
 			path = OptimizationProfiles;
 			sourceTree = "<group>";
