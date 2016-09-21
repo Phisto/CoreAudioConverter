@@ -779,7 +779,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/CoreAudioConverter/LAME",
 					"$(PROJECT_DIR)/CoreAudioConverter",
 				);
 				LLVM_LTO = YES;
@@ -812,7 +811,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/CoreAudioConverter/LAME",
 					"$(PROJECT_DIR)/CoreAudioConverter",
 				);
 				LLVM_LTO = YES;
