@@ -1,7 +1,8 @@
 /*
- *  $Id$
+ *  MP3Encoder.h
+ *  CoreAudioConverter
  *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright © 2016 Simon Gaus <simon.cay.gaus@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,81 +21,36 @@
 
 @import Cocoa;
 
-@class EncoderTask, XPCEncoderTask;
+@class EncoderTask;
+
+#import "MP3EncoderDelegateProtocol.h"
+
+/**
+ A MP3Encoder object can convert various audio file formats to MPEG-1 and/or MPEG-2 Audio Layer III,
+ more commonly referred to as MP3.
+ 
+ It takes an EncoderTask as input.
+ */
 
 NS_ASSUME_NONNULL_BEGIN
-#pragma mark - Protocol Declaration
-/**
- 
- */
-@protocol MP3EncoderDelegate <NSObject>
-enum {
-    ///max. quality, slow
-    LAME_QUALITY_VERY_HIGH = 1,
-    ///near-best quality, not too slow
-    LAME_QUALITY_HIGH = 2,
-    ///good quality, fast
-    LAME_QUALITY_GOOD = 5,
-    ///ok quality, really fast
-    LAME_QUALITY_LOW = 7
-};
-/**
- * @typedef LAME_CONSTANT_BITRATE
- * @brief The quality setting for the MP3 encoder (lame) .
- */
-typedef int LAME_QUALITY;
-enum {
-    ///320 kbit/s
-    CONSTANT_BITRATE_VERY_HIGH = 320,
-    ///256 kbit/s
-    CONSTANT_BITRATE_HIGH = 256,
-    ///192 kbit/s
-    CONSTANT_BITRATE_GOOD = 192,
-    ///128 kbit/s
-    CONSTANT_BITRATE_LOW = 128,
-    ///128 kbit/s
-    CONSTANT_BITRATE_AUDIOBOOK = 64
-};
-/**
- @typedef CONSTANT_BITRATE
- @brief The constant bitrate we should use to encode the output file.
- */
-typedef int CONSTANT_BITRATE;
-@required
-/**
- 
- */
-- (LAME_QUALITY)quality;
-/**
- 
- */
-- (CONSTANT_BITRATE)bitrate;
-/**
- 
- */
-- (BOOL)cancel;
 
-@end
-#pragma mark - Class Declaration
-/**
- 
- */
 @interface MP3Encoder : NSObject
 /**
- @param aDelegate
+ 
+ @param aDelegate The delegate
+ 
  @return
  */
 - (nullable instancetype)initWithDelegate:(NSObject<MP3EncoderDelegate> *)aDelegate;
 /**
- @param dict
- @param error
+ 
+ @param task The tasks
+ 
+ @param error possible error
+ 
  @return
  */
 - (BOOL)executeTask:(EncoderTask *)task error:(NSError * _Nullable *)error;
-
-- (BOOL)executeXPCTask:(XPCEncoderTask *)task error:(NSError * __autoreleasing *)error;
-
-//- (BOOL)tagTask:(EncoderTask *)task error:(NSError * _Nullable *)error;
 
 @end
 NS_ASSUME_NONNULL_END
