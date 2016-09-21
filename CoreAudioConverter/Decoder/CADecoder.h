@@ -13,10 +13,14 @@
 
 @class CircularBuffer;
 
-NS_ASSUME_NONNULL_BEGIN
 /**
+ 
  The Core Audio Decoder can decode audio files with the suffix .aif | .aiff | .m4a | .aac .
+ 
  */
+
+NS_ASSUME_NONNULL_BEGIN
+
 @interface CADecoder : NSObject
 #pragma mark - Properties
 /**
@@ -41,8 +45,11 @@ NS_ASSUME_NONNULL_BEGIN
  }
  // do stuff with the decoder...
  @endcode
+ 
  @param fileUrl of the file to decode.
- @param error
+ 
+ @param error The error reference.
+ 
  @return instancetype or nil
  */
 + (nullable instancetype)decoderForFile:(NSURL *)fileUrl error:(NSError **)error;

@@ -4,20 +4,20 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>ConverterService.xcscheme</key>
-		<dict>
-			<key>orderHint</key>
-			<integer>5</integer>
-		</dict>
 		<key>CoreAudioConverter.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>2</integer>
+			<integer>7</integer>
 		</dict>
 		<key>CoreAudioConverterTests.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>3</integer>
+			<integer>6</integer>
+		</dict>
+		<key>Documentation.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>8</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
@@ -33,6 +33,11 @@
 			<true/>
 		</dict>
 		<key>F478E1AA1C7D2E8D00670966</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F47CAFD71D91454400CFAB41</key>
 		<dict>
 			<key>primary</key>
 			<true/>

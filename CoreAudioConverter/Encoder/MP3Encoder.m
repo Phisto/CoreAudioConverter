@@ -25,7 +25,6 @@
 #include <stdio.h>      // for fopen, fclose
 
 #import "EncoderTask.h"
-#import "XPCEncoderTask.h"
 #import "CADecoder.h"
 
 // categories
@@ -42,8 +41,6 @@
 
 
 NSString * const kFileExtension = @"mp3";
-
-#define TESTAFALUIRE 0
 
 // only convert if there are more than 100 MB discspace available ...
 #define kMinFreeDiskSpace 100000000
@@ -111,12 +108,9 @@ NSString * const kFileExtension = @"mp3";
 	lame_close(_gfp);
 }
 
-- (BOOL)executeXPCTask:(XPCEncoderTask *)task error:(NSError * __autoreleasing *)error {
-
-    return [self executeTask:task.encoderTask error:error];
-}
-
 - (BOOL)executeTask:(EncoderTask *)task error:(NSError * __autoreleasing *)error {
+    
+    if ([self.delegate cancel]) return YES;
     
     FILE							*file							= NULL;
 	int								result;
@@ -406,10 +400,10 @@ NSString * const kFileExtension = @"mp3";
 	lame_set_mode(_gfp, JOINT_STEREO);
 	
 	// quality
-    lame_set_quality(_gfp, self.delegate.quality);
+    lame_set_quality(_gfp, [self.delegate quality]);
 	
 	// Target is bitrate
-    lame_set_brate(_gfp, self.delegate.bitrate);
+    lame_set_brate(_gfp, [self.delegate bitrate]);
 }
 
 - (BOOL)encodeChunk:(const AudioBufferList *)chunk

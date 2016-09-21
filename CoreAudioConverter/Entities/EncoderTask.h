@@ -8,46 +8,41 @@
 
 #import <Foundation/Foundation.h>
 
-NS_ASSUME_NONNULL_BEGIN
 /**
+ 
+ A Encoder Task
  
  */
+
+NS_ASSUME_NONNULL_BEGIN
+
 @interface EncoderTask : NSObject
 /**
- 
+ The URL to the input file.
  */
 @property (nonatomic, readonly) NSURL *inputURL;
 /**
- 
+ The URL to the output file.
  */
 @property (nonatomic, readonly) NSURL *outputURL;
 /**
- 
+ The URL to the temporary file.
  */
 @property (nonatomic, readonly) NSURL *tempURL;
-/**
- 
- */
-@property (nonatomic, nullable, readonly) NSImage *artwork;
-/**
- 
- */
-@property (nonatomic, readonly) BOOL artworkAvailable;
 
 /**
  
  @param inputURL
+ 
  @param outputURL
+ 
  @param tempURL
- @param artwork
- @param artworkAvailable
+ 
  @return Instance or nil
  */
 + (nullable instancetype)taskWithInputURL:(NSURL *)inputURL
                                 outputURL:(NSURL *)outputURL
-                             temporaryURL:(NSURL *)tempURL
-                                  artwork:(NSImage *)artwork
-                         artworkAvailable:(BOOL)artworkAvailable;
+                             temporaryURL:(NSURL *)tempURL;
 
 @end
 NS_ASSUME_NONNULL_END

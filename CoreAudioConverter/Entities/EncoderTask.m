@@ -16,42 +16,40 @@
 @property (nonatomic, strong) NSURL *inputURL;
 @property (nonatomic, strong) NSURL *outputURL;
 
-@property (nonatomic, nullable, strong) NSImage *artwork;
-@property (nonatomic, readwrite) BOOL artworkAvailable;
-
 @end
 
 @implementation EncoderTask
 
 + (nullable instancetype)taskWithInputURL:(NSURL *)inputURL
                                 outputURL:(NSURL *)outputURL
-                             temporaryURL:(NSURL *)tempURL
-                                  artwork:(NSImage *)artwork
-                         artworkAvailable:(BOOL)artworkAvailable {
+                             temporaryURL:(NSURL *)tempURL {
     
     return [[[self class] alloc] initWithInputURL:inputURL
                                         outputURL:outputURL
-                                     temporaryURL:tempURL
-                                          artwork:artwork
-                                 artworkAvailable:artworkAvailable];
+                                     temporaryURL:tempURL];
 }
 
 
 - (instancetype)initWithInputURL:(NSURL *)inputURL
                        outputURL:(NSURL *)outputURL
-                    temporaryURL:(NSURL *)tempURL
-                         artwork:(NSImage *)artwork
-                artworkAvailable:(BOOL)artworkAvailable {
+                    temporaryURL:(NSURL *)tempURL {
+    
+    if (!inputURL || !outputURL || !tempURL) {
+        
+        NSLog(@"Called %@ with nil argument.", NSStringFromSelector(_cmd));
+        return nil;
+    }
     
     self = [super init];
+    
     if (self) {
      
         _inputURL = inputURL;
         _outputURL = outputURL;
         _tempURL = tempURL;
-        _artwork = artwork;
-        _artworkAvailable = artworkAvailable;
+
     }
+    
     return self;
 }
 

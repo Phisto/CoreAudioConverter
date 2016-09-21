@@ -107,11 +107,7 @@
     
         EncoderTask *task = [EncoderTask taskWithInputURL:[NSURL fileURLWithPath:pathArray[i]]
                                                 outputURL:tempFileUrl
-                                             temporaryURL:tempFileUrl
-                                                  artwork:[NSImage new]
-                                         artworkAvailable:NO];
-        
-        
+                                             temporaryURL:tempFileUrl];
         
         [muteArray addObject:task];
     }

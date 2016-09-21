@@ -18,7 +18,6 @@ FOUNDATION_EXPORT const unsigned char CoreAudioConverterVersionString[];
 
 // Objects
 #import <CoreAudioConverter/EncoderTask.h>
-#import <CoreAudioConverter/XPCEncoderTask.h>
 #import <CoreAudioConverter/MP3Encoder.h>
 // Constants
 #import <CoreAudioConverter/AudioConverterErrorConstants.h>

@@ -19,25 +19,11 @@
 
 @interface CADecoder (/* Private */)
 
-/*!
- * @brief The first frame that will be returned from -readAudio:frameCount:
- */
+
 @property (nonatomic, readwrite) SInt64 currentFrame;
-/*!
- * @brief The buffer which holds the PCM audio data.
- */
 @property (nonatomic, strong) CircularBuffer *pcmBuffer;
-/*!
- * @brief The url of the source file.
- */
 @property (nonatomic, strong) NSURL *fileUrl;
-/*!
- * @brief Extendet audio file struct for the source file.
- */
 @property (nonatomic, readwrite) ExtAudioFileRef extAudioFile;
-/*!
- * @brief The format of PCM data provided by the source file.
- */
 @property (nonatomic, readwrite) AudioStreamBasicDescription pcmFormat;
 
 @end
@@ -176,11 +162,13 @@
 
 - (void)dealloc {
     
-    OSStatus result = ExtAudioFileDispose(_extAudioFile);
-    if (result != noErr) {
-        CFStringRef descr = UTCreateStringForOSType(result);
-        ALog(@"ExtAudioFileDispose failed: %@", descr);
-        if (descr != NULL) CFRelease(descr);
+    if (_extAudioFile) {
+        OSStatus result = ExtAudioFileDispose(_extAudioFile);
+        if (result != noErr) {
+            CFStringRef descr = UTCreateStringForOSType(result);
+            ALog(@"ExtAudioFileDispose failed: %@", descr);
+            if (descr != NULL) CFRelease(descr);
+        }
     }
 }
 
