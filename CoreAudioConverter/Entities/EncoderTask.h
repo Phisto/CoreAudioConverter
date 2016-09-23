@@ -6,11 +6,11 @@
 //  Copyright © 2016 Simon Gaus. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 /**
  
- A Encoder Task
+ An Encoder Task represents one file to convert.
  
  */
 
@@ -18,15 +18,25 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EncoderTask : NSObject
 /**
- The URL to the input file.
+ The file URL for the file to convert.
+ 
+ @warning In sandboxed applications this needs to be a security-scoped URL, as -startAccessingSecurityScopedResource will be send to it.
+ 
+ @see https://developer.apple.com/reference/foundation/nsurl/1417051-startaccessingsecurityscopedreso?language=objc for more information.
  */
 @property (nonatomic, readonly) NSURL *inputURL;
 /**
- The URL to the output file.
+ The file URL to the output file.
+ 
+ @warning The encoder will use the tempURL as destination for the encoded file.
+ 
+ @see Related: tempURL
  */
 @property (nonatomic, readonly) NSURL *outputURL;
 /**
- The URL to the temporary file.
+ The URL to a temporary location for the output file.
+ 
+ @warning If this is set to nil in +taskWithInputURL:outputURL:temporaryURL: this property will return outputURL.
  */
 @property (nonatomic, readonly) NSURL *tempURL;
 
@@ -42,7 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (nullable instancetype)taskWithInputURL:(NSURL *)inputURL
                                 outputURL:(NSURL *)outputURL
-                             temporaryURL:(NSURL *)tempURL;
+                             temporaryURL:(nullable NSURL *)tempURL;
 
 @end
 NS_ASSUME_NONNULL_END

@@ -8,7 +8,7 @@
 
 #import "EncoderTask.h"
 
-#import <Cocoa/Cocoa.h>
+//@import Cocoa;
 
 @interface EncoderTask (/* Private */)
 
@@ -22,7 +22,7 @@
 
 + (nullable instancetype)taskWithInputURL:(NSURL *)inputURL
                                 outputURL:(NSURL *)outputURL
-                             temporaryURL:(NSURL *)tempURL {
+                             temporaryURL:(nullable NSURL *)tempURL {
     
     return [[[self class] alloc] initWithInputURL:inputURL
                                         outputURL:outputURL
@@ -32,9 +32,9 @@
 
 - (instancetype)initWithInputURL:(NSURL *)inputURL
                        outputURL:(NSURL *)outputURL
-                    temporaryURL:(NSURL *)tempURL {
+                    temporaryURL:(nullable NSURL *)tempURL {
     
-    if (!inputURL || !outputURL || !tempURL) {
+    if (!inputURL || !outputURL) {
         
         NSLog(@"Called %@ with nil argument.", NSStringFromSelector(_cmd));
         return nil;
@@ -51,6 +51,12 @@
     }
     
     return self;
+}
+
+- (NSURL *)tempURL {
+    
+    // if tempURL isnt set, just return outputURL.
+    return (_tempURL) ? _tempURL : self.outputURL;
 }
 
 @end
