@@ -8,8 +8,6 @@
 
 #import "EncoderTask.h"
 
-//@import Cocoa;
-
 @interface EncoderTask (/* Private */)
 
 @property (nonatomic, strong) NSURL *tempURL;
@@ -43,7 +41,7 @@
     self = [super init];
     
     if (self) {
-     
+        
         _inputURL = inputURL;
         _outputURL = outputURL;
         _tempURL = tempURL;

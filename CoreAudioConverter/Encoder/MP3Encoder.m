@@ -20,7 +20,7 @@
 
 #import "MP3Encoder.h"
 
-#import <AudioFileTagger/AudioFileTagger.h>
+#import <AudioFileTagger/AudioFileTagger.h> // for MP3Tagger
 #import <LAME/lame.h>   // for lame
 #include <stdio.h>      // for fopen, fclose
 
@@ -39,42 +39,20 @@
 // ALog always displays output regardless of the DEBUG setting
 #define ALog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
 
-
 NSString * const kFileExtension = @"mp3";
 
 // only convert if there are more than 100 MB discspace available ...
 #define kMinFreeDiskSpace 100000000
 
 @interface MP3Encoder (/* Private */)
-/**
- 
- */
-@property (nonatomic, readwrite) FILE *out;
-/**
- 
- */
-@property (nonatomic, readwrite) UInt32 sourceBitsPerChannel;
-/**
- 
- */
-@property (nonatomic, readwrite) lame_global_flags *gfp;
-/**
- 
- */
-@property (nonatomic, assign) NSObject<MP3EncoderDelegate> *delegate;
-/**
- 
- */
-@property (nonatomic, strong) NSURL *secureURLIn;
-/**
- 
- */
-@property (nonatomic, strong) NSURL *secureURLOut;
-/**
- 
- */
-@property (nonatomic, readwrite) BOOL fileProperlyEncoded;
 
+@property (nonatomic, readwrite) FILE *out;
+@property (nonatomic, readwrite) UInt32 sourceBitsPerChannel;
+@property (nonatomic, readwrite) lame_global_flags *gfp;
+@property (nonatomic, assign) NSObject<MP3EncoderDelegate> *delegate;
+@property (nonatomic, strong) NSURL *secureURLIn;
+@property (nonatomic, strong) NSURL *secureURLOut;
+@property (nonatomic, readwrite) BOOL fileProperlyEncoded;
 
 @end
 
@@ -101,11 +79,6 @@ NSString * const kFileExtension = @"mp3";
 	}
 	
 	return self;
-}
-
-- (void)dealloc {
-    // free lame
-	lame_close(_gfp);
 }
 
 - (BOOL)executeTask:(EncoderTask *)task error:(NSError * __autoreleasing *)error {
@@ -137,7 +110,9 @@ NSString * const kFileExtension = @"mp3";
             
             ALog(@"Can't access source file. %@", NSStringFromSelector(_cmd));
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Can't access source file: \"%@\".", _secureURLIn.path]};
-            NSError *newError = [NSError errorWithDomain:ACErrorDomain code:ACErrorUnknown userInfo:infoDict];
+            NSError *newError = [NSError errorWithDomain:ACErrorDomain
+                                                    code:ACErrorInputAccessError
+                                                userInfo:infoDict];
             if (error != NULL) *error = newError;
             [_secureURLIn stopAccessingSecurityScopedResource];
             return NO;
@@ -146,7 +121,9 @@ NSString * const kFileExtension = @"mp3";
         if (![self enoughFreeSpaceToConvert:_secureURLOut.URLByDeletingLastPathComponent]) {
             //ALog(@"Not enough disc space to convert file.");
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"There is not enough free disc space to encode the file: \"%@\".", _secureURLIn.lastPathComponent]};
-            NSError *newError = [NSError errorWithDomain:ACErrorDomain code:ACErrorUnknown userInfo:infoDict];
+            NSError *newError = [NSError errorWithDomain:ACErrorDomain
+                                                    code:ACErrorDiskSpaceError
+                                                userInfo:infoDict];
             if (error != NULL) *error = newError;
             return NO;
         }
@@ -163,7 +140,9 @@ NSString * const kFileExtension = @"mp3";
         if ([decoder pcmFormat].mChannelsPerFrame > 2) {
             ALog(@"LAME only supports one or two channel input.");
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"LAME only supports one or two channel input. But \"%@\" has \"%u\" channels.", _secureURLIn.path, (unsigned int)[decoder pcmFormat].mChannelsPerFrame]};
-            NSError *newError = [NSError errorWithDomain:ACErrorDomain code:ACErrorUnknown userInfo:infoDict];
+            NSError *newError = [NSError errorWithDomain:ACErrorDomain
+                                                    code:ACErrorLameError
+                                                userInfo:infoDict];
             if (error != NULL) *error = newError;
             return NO;
         }
@@ -197,20 +176,25 @@ NSString * const kFileExtension = @"mp3";
 				bufferList.mBuffers[0].mDataByteSize	= (UInt32)bufferLen * sizeof(int32_t);
 				break;
 				
-			default:
-                ALog(@"Sample size not supported");
-                NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"LAME only supports sample sizes of 8, 16, 24 and 32. But \"%@\" has a sample size of \"%u\".", _secureURLIn.path, (unsigned int)[decoder pcmFormat].mBitsPerChannel]};
-                NSError *newError = [NSError errorWithDomain:ACErrorDomain code:ACErrorUnknown userInfo:infoDict];
+            default: {
+                NSString *locString = NSLocalizedString(@"LAME only supports sample sizes of 8, 16, 24 and 32. \"%@\" has a sample size of \"%u\".", @"Error message if the sample size is not suitable for lame.");
+                locString = [NSString stringWithFormat:locString, _secureURLIn.lastPathComponent, (unsigned int)[decoder pcmFormat].mBitsPerChannel];
+                NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: locString};
+                
+                NSError *newError = [NSError errorWithDomain:ACErrorDomain
+                                                        code:ACErrorLameError
+                                                    userInfo:infoDict];
                 if (error != NULL) *error = newError;
                 return NO;
-				break;				
+            }
 		}
 		
 		bufferByteSize = bufferList.mBuffers[0].mDataByteSize;
         if (bufferList.mBuffers[0].mData == NULL) {
-            ALog(@"Unable to allocate memory.");
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: @"Unable to allocate memory."};
-            NSError *newError = [NSError errorWithDomain:ACErrorDomain code:ACErrorUnknown userInfo:infoDict];
+            NSError *newError = [NSError errorWithDomain:ACErrorDomain
+                                                    code:ACErrorMemoryError
+                                                userInfo:infoDict];
             if (error != NULL) *error = newError;
             return NO;
         }
@@ -220,33 +204,35 @@ NSString * const kFileExtension = @"mp3";
 		lame_set_in_samplerate(_gfp, [decoder pcmFormat].mSampleRate);
 		
 		result = lame_init_params(_gfp);
-        if (result != 0) {
-            ALog(@"Unable to initialize the LAME encoder.");
-            NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: @"Unable to initialize the LAME encoder."};
-            NSError *newError = [NSError errorWithDomain:ACErrorDomain code:ACErrorUnknown userInfo:infoDict];
+        if (result != noErr) {
+            NSString *locString = NSLocalizedString(@"Unable to initialize the LAME settings. Failed with code: %i", @"Error message when the lame settings couldent be set.");
+            locString = [NSString stringWithFormat:locString, result];
+            NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: locString };
+            NSError *newError = [NSError errorWithDomain:ACErrorDomain
+                                                    code:ACErrorLameError
+                                                userInfo:infoDict];
             if (error != NULL) *error = newError;
             return NO;
         }
         
         // touch output file (dont cancle here, because of posix file permissions)
-        BOOL touched = [self touchOutputFile:_secureURLOut];
-        if (!touched) {
-            ALog(@"Unable to create the output file.");
-        }
-    
+        [self touchOutputFile:_secureURLOut];
+   
 		// Open the output file
 		_out = fopen(_secureURLOut.fileSystemRepresentation, "w");
         if (_out == NULL) {
-            ALog(@"Unable to open the output file: \"%s\"", _secureURLOut.fileSystemRepresentation);
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Unable to open the output file: \"%s\".", _secureURLOut.fileSystemRepresentation]};
-            NSError *newError = [NSError errorWithDomain:ACErrorDomain code:ACErrorUnknown userInfo:infoDict];
+            NSError *newError = [NSError errorWithDomain:ACErrorDomain
+                                                    code:ACErrorOutputAccessError
+                                                userInfo:infoDict];
             if (error != NULL) *error = newError;
             return NO;
         }
 		
-		// Iteratively get the PCM data and encode it
+		// Iterate over the data and encode it
 		for(;;) {
             
+            // check if we should cancel
             if ([self.delegate cancel]) return YES;
 			
 			// Set up the buffer parameters
@@ -354,6 +340,11 @@ NSString * const kFileExtension = @"mp3";
         
         [_secureURLIn stopAccessingSecurityScopedResource];
     }
+}
+
+- (void)dealloc {
+    // free lame
+    lame_close(_gfp);
 }
 
 #pragma mark - Helper Methodes

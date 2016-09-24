@@ -12,6 +12,12 @@
 extern NSString *ACErrorDomain;
 
 #pragma mark Error Codes
-extern NSInteger const ACErrorFileFormatNotSupported;
-extern NSInteger const ACErrorOutputUrlError;
-extern NSInteger const ACErrorUnknown;
+typedef NS_ENUM(NSUInteger, ACError) {
+    ACErrorFileFormatNotSupported = 1904,
+    ACErrorInputAccessError = 1905,
+    ACErrorDiskSpaceError = 1906,
+    ACErrorLameError = 1907,
+    ACErrorMemoryError = 1908,
+    ACErrorOutputAccessError = 1909,
+    ACErrorUnknown = 1910
+};
