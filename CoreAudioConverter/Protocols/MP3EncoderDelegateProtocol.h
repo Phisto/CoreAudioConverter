@@ -21,76 +21,80 @@
 
 @import Cocoa;
 
-/**
- The delegate of a MP3Encoder object must adopt the MP3EncoderDelegate protocol. 
- 
- Required methods of the protocol allow the delegate to decide on the quality and bitrate to use for encoding and to indicate if the encoding should cancel.
- */
-
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol MP3EncoderDelegate <NSObject>
-
 /**
-    The quality setting for the MP3Encoder.
+ The quality setting for the MP3Encoder.
  
-    This variable is used by lame to select a algorithm.
+ This variable is used by lame to select a algorithm.
  
-    True quality is determined by the bitrate but this variable will effect quality by selecting expensive or cheap algorithms.
+ True quality is determined by the bitrate but this variable will effect quality by selecting expensive or cheap algorithms.
  */
 typedef NS_ENUM(NSUInteger, LAME_QUALITY) {
     
-    /** max. quality, slow */
+    /// max. quality, slow
     LAME_QUALITY_VERY_HIGH = 1,
-    
-    /** near-best quality, not too slow */
+    /// near-best quality, not too slow
     LAME_QUALITY_HIGH = 2,
-    
-    /** good quality, fast */
+    /// good quality, fast
     LAME_QUALITY_GOOD = 5,
-    
-    /** ok quality, really fast */
+    /// ok quality, really fast
     LAME_QUALITY_LOW = 7
 };
-
-/** The constant bitrate we should use to encode the output file.
+/**
+ 
+ The constant bitrate we should use to encode the output file.
+ 
  */
 typedef NS_ENUM(NSUInteger, CONSTANT_BITRATE) {
-    
-    /** 320 kbit/s */
+    /// 320 kbit/s
     CONSTANT_BITRATE_VERY_HIGH = 320,
-    
-    /** 256 kbit/s */
+    /// 256 kbit/s
     CONSTANT_BITRATE_HIGH = 256,
-    
-    /** 192 kbit/s */
+    /// 192 kbit/s
     CONSTANT_BITRATE_GOOD = 192,
-    
-    /** 128 kbit/s */
+    /// 128 kbit/s
     CONSTANT_BITRATE_LOW = 128,
-    
-    /** 128 kbit/s */
+    /// 64 kbit/s
     CONSTANT_BITRATE_AUDIOBOOK = 64
 };
 
-@required
-
 /**
+ The delegate of a MP3Encoder object must adopt the MP3EncoderDelegate protocol.
+ 
+ Required methods of the protocol allow the delegate to decide on the quality and bitrate to use for encoding and to indicate if the encoding should cancel.
+ */
+@protocol MP3EncoderDelegate <NSObject>
+
+///------------------------
+/// @name Required Methodes
+///------------------------
+
+@required
+/**
+ 
  This variable is used by lame to select an algorithm.
  
  True quality is determined by the bitrate but this variable will effect the quality by selecting expensive or cheap algorithms.
  
  @return The LAME_QUALITY for the MP3Encoder.
+ 
  */
 - (LAME_QUALITY)quality;
 /**
+ 
  This variable is used by lame to select the constant bitrate.
  
- @return The CONSTANT_BITRATE for the MP3Encoder.
+ @return The CONSTANT_BITRATE the MP3Encoder should use for encoding.
+ 
  */
 - (CONSTANT_BITRATE)bitrate;
 /**
- @return
+ 
+ This variable is used to check if the encoder should cancle the encoding.
+ 
+ @return Yes if the encoding should be stopped, otherwise NO.
+ 
  */
 - (BOOL)cancel;
 
