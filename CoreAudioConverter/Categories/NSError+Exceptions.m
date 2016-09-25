@@ -21,7 +21,7 @@
     
     return [[NSError alloc] initWithDomain:domain
                                       code:code
-                                  userInfo:info];
+                                  userInfo:[info copy]];
 }
 
 @end
