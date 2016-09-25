@@ -1,10 +1,23 @@
-//
-//  CADecoder.m
-//  M4AtoMP3
-//
-//  Created by Simon Gaus on 19.09.15.
-//  Copyright © 2015 Simon Gaus. All rights reserved.
-//
+/*
+ *  CADecoder.m
+ *  CoreAudioConverter
+ *
+ *  Copyright © 2015-2016 Simon Gaus <simon.cay.gaus@gmail.com>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
 
 #import "CADecoder.h"
 
@@ -12,6 +25,8 @@
 #import <AudioToolbox/ExtendedAudioFile.h>
 
 #import "CircularBuffer.h"
+
+#import "CoreAudioConverterErrorConstants.h"
 
 
 // ALog always displays output regardless of the DEBUG setting
@@ -47,8 +62,8 @@
             
             if (!error) {
                 NSDictionary *infoDict = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Couldn't create decoder for file: \"%@\".", fileUrl]};
-                NSError *newError = [NSError errorWithDomain:ACErrorDomain
-                                                        code:ACErrorUnknown
+                NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain
+                                                        code:CACErrorUnknown
                                                     userInfo:infoDict];
                 if (error != NULL) *error = newError;
             }
@@ -60,8 +75,8 @@
     else {
         
         NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"File format not supported for file: \"%@\".", fileUrl.lastPathComponent] };
-        NSError *newError = [NSError errorWithDomain:ACErrorDomain
-                                                code:ACErrorFileFormatNotSupported
+        NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain
+                                                code:CACErrorFileFormatNotSupported
                                             userInfo:infoDict];
         if (error != NULL) *error = newError;
     }
@@ -79,8 +94,8 @@
         _pcmBuffer = [[CircularBuffer alloc] init];
         if (!_pcmBuffer) {
             NSDictionary *infoDict = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Couldn't allocate memory for the ring buffer."]};
-            NSError *newError = [NSError errorWithDomain:ACErrorDomain
-                                                    code:ACErrorUnknown
+            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain
+                                                    code:CACErrorUnknown
                                                 userInfo:infoDict];
             if (error != NULL) *error = newError;
             return nil;
@@ -93,8 +108,8 @@
             //ALog(@"ExtAudioFileOpen failed: %@", descr);
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Couldn't open the file \"%@\", the file may be corrupted. Underlying failure reason: %@ failure code: %d", fileUrl.lastPathComponent, descr, (int)result]};
             if (descr != NULL) CFRelease(descr);
-            NSError *newError = [NSError errorWithDomain:ACErrorDomain
-                                                    code:ACErrorUnknown
+            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain
+                                                    code:CACErrorUnknown
                                                 userInfo:infoDict];
             if (error != NULL) *error = newError;
             return nil;
@@ -108,8 +123,8 @@
             ALog(@"AudioFileGetProperty failed: %@", descr);
             if (descr != NULL) CFRelease(descr);
             NSDictionary *infoDict = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Couldn't detect type for file: \"%@\", the file may be corrupted.", fileUrl.lastPathComponent]};
-            NSError *newError = [NSError errorWithDomain:ACErrorDomain
-                                                    code:ACErrorUnknown
+            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain
+                                                    code:CACErrorUnknown
                                                 userInfo:infoDict];
             if (error != NULL) *error = newError;
             return nil;

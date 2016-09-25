@@ -1,7 +1,8 @@
 /*
- *  $Id$
+ *  MP3Encoder.m
+ *  CoreAudioConverter
  *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright © 2016 Simon Gaus <simon.cay.gaus@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,10 +21,11 @@
 
 #import "MP3Encoder.h"
 
+// frameworks
 #import <AudioFileTagger/AudioFileTagger.h> // for MP3Tagger
 #import <LAME/lame.h>   // for lame
-#include <stdio.h>      // for fopen, fclose
 
+// classes
 #import "EncoderTask.h"
 #import "CADecoder.h"
 
@@ -33,8 +35,9 @@
 // Constants
 #import "CoreAudioConverterErrorConstants.h"
 
-#include <fcntl.h>		// open, write
+// for low-level api
 #include <sys/stat.h>	// stat
+#include <stdio.h>      // for fopen, fclose
 
 // ALog always displays output regardless of the DEBUG setting
 #define ALog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
@@ -110,8 +113,8 @@ NSString * const kFileExtension = @"mp3";
             
             ALog(@"Can't access source file. %@", NSStringFromSelector(_cmd));
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Can't access source file: \"%@\".", _secureURLIn.path]};
-            NSError *newError = [NSError errorWithDomain:ACErrorDomain
-                                                    code:ACErrorInputAccessError
+            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain
+                                                    code:CACErrorInputAccessError
                                                 userInfo:infoDict];
             if (error != NULL) *error = newError;
             [_secureURLIn stopAccessingSecurityScopedResource];
@@ -121,8 +124,8 @@ NSString * const kFileExtension = @"mp3";
         if (![self enoughFreeSpaceToConvert:_secureURLOut.URLByDeletingLastPathComponent]) {
             //ALog(@"Not enough disc space to convert file.");
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"There is not enough free disc space to encode the file: \"%@\".", _secureURLIn.lastPathComponent]};
-            NSError *newError = [NSError errorWithDomain:ACErrorDomain
-                                                    code:ACErrorDiskSpaceError
+            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain
+                                                    code:CACErrorDiskSpaceError
                                                 userInfo:infoDict];
             if (error != NULL) *error = newError;
             return NO;
@@ -140,8 +143,8 @@ NSString * const kFileExtension = @"mp3";
         if ([decoder pcmFormat].mChannelsPerFrame > 2) {
             ALog(@"LAME only supports one or two channel input.");
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"LAME only supports one or two channel input. But \"%@\" has \"%u\" channels.", _secureURLIn.path, (unsigned int)[decoder pcmFormat].mChannelsPerFrame]};
-            NSError *newError = [NSError errorWithDomain:ACErrorDomain
-                                                    code:ACErrorLameError
+            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain
+                                                    code:CACErrorLameError
                                                 userInfo:infoDict];
             if (error != NULL) *error = newError;
             return NO;
@@ -181,8 +184,8 @@ NSString * const kFileExtension = @"mp3";
                 locString = [NSString stringWithFormat:locString, _secureURLIn.lastPathComponent, (unsigned int)[decoder pcmFormat].mBitsPerChannel];
                 NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: locString};
                 
-                NSError *newError = [NSError errorWithDomain:ACErrorDomain
-                                                        code:ACErrorLameError
+                NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain
+                                                        code:CACErrorLameError
                                                     userInfo:infoDict];
                 if (error != NULL) *error = newError;
                 return NO;
@@ -192,8 +195,8 @@ NSString * const kFileExtension = @"mp3";
 		bufferByteSize = bufferList.mBuffers[0].mDataByteSize;
         if (bufferList.mBuffers[0].mData == NULL) {
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: @"Unable to allocate memory."};
-            NSError *newError = [NSError errorWithDomain:ACErrorDomain
-                                                    code:ACErrorMemoryError
+            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain
+                                                    code:CACErrorMemoryError
                                                 userInfo:infoDict];
             if (error != NULL) *error = newError;
             return NO;
@@ -208,8 +211,8 @@ NSString * const kFileExtension = @"mp3";
             NSString *locString = NSLocalizedString(@"Unable to initialize the LAME settings. Failed with code: %i", @"Error message when the lame settings couldent be set.");
             locString = [NSString stringWithFormat:locString, result];
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: locString };
-            NSError *newError = [NSError errorWithDomain:ACErrorDomain
-                                                    code:ACErrorLameError
+            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain
+                                                    code:CACErrorLameError
                                                 userInfo:infoDict];
             if (error != NULL) *error = newError;
             return NO;
@@ -222,8 +225,8 @@ NSString * const kFileExtension = @"mp3";
 		_out = fopen(_secureURLOut.fileSystemRepresentation, "w");
         if (_out == NULL) {
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Unable to open the output file: \"%s\".", _secureURLOut.fileSystemRepresentation]};
-            NSError *newError = [NSError errorWithDomain:ACErrorDomain
-                                                    code:ACErrorOutputAccessError
+            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain
+                                                    code:CACErrorOutputAccessError
                                                 userInfo:infoDict];
             if (error != NULL) *error = newError;
             return NO;
@@ -268,8 +271,8 @@ NSString * const kFileExtension = @"mp3";
 		result = fclose(_out);
         if (result != noErr) {
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Unable to close the output file: \"%@\".", _secureURLOut.path]};
-            NSError *newError = [NSError errorWithDomain:ACErrorDomain
-                                                    code:ACErrorUnknown
+            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain
+                                                    code:CACErrorUnknown
                                                 userInfo:infoDict];
             if (error != NULL) *error = newError;
             return NO;
@@ -280,8 +283,8 @@ NSString * const kFileExtension = @"mp3";
 		file = fopen(_secureURLOut.fileSystemRepresentation, "r+");
         if (file == NULL) {
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Unable to open the output file: \"%@\".", _secureURLOut.path]};
-            NSError *newError = [NSError errorWithDomain:ACErrorDomain
-                                                    code:ACErrorOutputAccessError
+            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain
+                                                    code:CACErrorOutputAccessError
                                                 userInfo:infoDict];
             if (error != NULL) *error = newError;
             return NO;
@@ -429,7 +432,7 @@ NSString * const kFileExtension = @"mp3";
         if (buffer == NULL) {
             ALog(@"Unable to allocate memory.");
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: @"Unable to allocate memory."};
-            NSError *newError = [NSError errorWithDomain:ACErrorDomain code:ACErrorUnknown userInfo:infoDict];
+            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
             if (error != NULL) *error = newError;
             return NO;
         }
@@ -439,7 +442,7 @@ NSString * const kFileExtension = @"mp3";
         if (channelBuffers == NULL) {
             ALog(@"Unable to allocate memory.");
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: @"Unable to allocate memory."};
-            NSError *newError = [NSError errorWithDomain:ACErrorDomain code:ACErrorUnknown userInfo:infoDict];
+            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
             if (error != NULL) *error = newError;
             return NO;
         }
@@ -461,7 +464,7 @@ NSString * const kFileExtension = @"mp3";
                         
                         ALog(@"Unable to allocate memory.");
                         NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: @"Unable to allocate memory."};
-                        NSError *newError = [NSError errorWithDomain:ACErrorDomain code:ACErrorUnknown userInfo:infoDict];
+                        NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
                         if (error != NULL) *error = newError;
                         return NO;
                     }
@@ -488,7 +491,7 @@ NSString * const kFileExtension = @"mp3";
                         
                         ALog(@"Unable to allocate memory.");
                         NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: @"Unable to allocate memory."};
-                        NSError *newError = [NSError errorWithDomain:ACErrorDomain code:ACErrorUnknown userInfo:infoDict];
+                        NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
                         if (error != NULL) *error = newError;
                         return NO;
                     }
@@ -514,7 +517,7 @@ NSString * const kFileExtension = @"mp3";
                         
                         ALog(@"Unable to allocate memory.");
                         NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: @"Unable to allocate memory."};
-                        NSError *newError = [NSError errorWithDomain:ACErrorDomain code:ACErrorUnknown userInfo:infoDict];
+                        NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
                         if (error != NULL) *error = newError;
                         return NO;
                     }
@@ -546,7 +549,7 @@ NSString * const kFileExtension = @"mp3";
                     if (channelBuffers32[channel] == NULL) {
                         ALog(@"Unable to allocate memory.");
                         NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: @"Unable to allocate memory."};
-                        NSError *newError = [NSError errorWithDomain:ACErrorDomain code:ACErrorUnknown userInfo:infoDict];
+                        NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
                         if (error != NULL) *error = newError;
                         return NO;
                     }
@@ -566,7 +569,7 @@ NSString * const kFileExtension = @"mp3";
 			default:
                 ALog(@"Sample size not supported");
                 NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"LAME only supports sample sizes of 8, 16, 24 and 32. But \"%@\" has a sample size of \"%u\".", _secureURLIn.path, (unsigned int)_sourceBitsPerChannel]};
-                NSError *newError = [NSError errorWithDomain:ACErrorDomain code:ACErrorUnknown userInfo:infoDict];
+                NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
                 if (error != NULL) *error = newError;
                 return NO;
 				break;
@@ -575,7 +578,7 @@ NSString * const kFileExtension = @"mp3";
         if (result == -1) {
             ALog(@"LAME encoding error.");
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"An error occured inside of LAME, while encoding the file: \"%@\".", _secureURLIn.path]};
-            NSError *newError = [NSError errorWithDomain:ACErrorDomain code:ACErrorUnknown userInfo:infoDict];
+            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
             if (error != NULL) *error = newError;
             return NO;
         }
@@ -584,7 +587,7 @@ NSString * const kFileExtension = @"mp3";
         if (result != numWritten) {
             ALog(@"Unable to write to the output file.");
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Unable to write to the output file: \"%@\"", _secureURLOut.path]};
-            NSError *newError = [NSError errorWithDomain:ACErrorDomain code:ACErrorUnknown userInfo:infoDict];
+            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
             if (error != NULL) *error = newError;
             return NO;
         }
@@ -618,7 +621,7 @@ NSString * const kFileExtension = @"mp3";
         if (buf == NULL) {
             ALog(@"Unable to allocate memory.");
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: @"Unable to allocate memory."};
-            NSError *newError = [NSError errorWithDomain:ACErrorDomain code:ACErrorUnknown userInfo:infoDict];
+            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
             if (error != NULL) *error = newError;
             return NO;
         }
@@ -628,7 +631,7 @@ NSString * const kFileExtension = @"mp3";
         if (result == -1) {
             ALog(@"LAME was unable to flush the buffers.");
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"LAME was unable to flush the buffers for file: \"%@\".", _secureURLIn.path]};
-            NSError *newError = [NSError errorWithDomain:ACErrorDomain code:ACErrorUnknown userInfo:infoDict];
+            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
             if (error != NULL) *error = newError;
             return NO;
         }
@@ -638,7 +641,7 @@ NSString * const kFileExtension = @"mp3";
         if (result != numWritten) {
             ALog(@"Unable to write to the output file.");
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Unable to write to the output file: \"%@\".", _secureURLOut.path]};
-            NSError *newError = [NSError errorWithDomain:ACErrorDomain code:ACErrorUnknown userInfo:infoDict];
+            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
             if (error != NULL) *error = newError;
             return NO;
         }
