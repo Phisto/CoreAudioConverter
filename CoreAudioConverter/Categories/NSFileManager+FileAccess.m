@@ -12,7 +12,7 @@
 
 - (BOOL)path:(NSString *)path isAccessibleFor:(AccessKind)mode {
     
-    return (access(path.fileSystemRepresentation, mode) == 0);
+    return (access(path.fileSystemRepresentation, mode) == noErr);
 }
 
 @end

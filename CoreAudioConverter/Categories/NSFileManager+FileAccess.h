@@ -1,34 +1,71 @@
-//
-//  NSFileManager+FileAccess.h
-//  CoreAudioConverter
-//
-//  Created by Simon Gaus on 02.09.16.
-//  Copyright © 2016 Simon Gaus. All rights reserved.
-//
+/*
+ *  NSFileManager+FileAccess.h
+ *  CoreAudioConverter
+ *
+ *  Copyright © 2015-2016 Simon Gaus <simon.cay.gaus@gmail.com>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef enum {
-    ///
+/**
+ 
+ ## Overview
+ These constants defines the different file access kinds. The values are taken from <unistd.h>.
+ 
+ */
+typedef NS_OPTIONS(NSInteger, AccessKind) {
+    /// test for read permission (1<<2)
     ReadAccess = R_OK,
-    ///
+    /// test for write permission (1<<1)
     WriteAccess = W_OK,
-    ///
+    /// test for execute or search permission (1<<0)
     ExecuteAccess = X_OK,
-    ///
+    /// test for existence of file (0)
     PathExists = F_OK
-}AccessKind;
+};
 
 /**
  
+ The FileAccess categorie adds the capability to check for file access to the NSFileManager.
+ 
+ ## Discussion
+ This is implemented in a sandboxing friendly manor, the sandbox won't be triggered if the calling application checks a file outside of it's sandbox.
+ 
  */
 @interface NSFileManager (FileAccess)
+
+///---------------------
+/// @name Methodes
+///---------------------
+
 /**
- @param path
- @param mode
- @return
+ 
+ Determine whether a file or folder can be accessed.
+ 
+ @see AccessKind enum for possible values for mode.
+ 
+ @param path The path to the file or folder.
+ 
+ @param mode The access mode to check for.
+ 
+ @return Yes if the file or folder is accessible for the specified access mode, otherwise NO.
+ 
  */
 - (BOOL)path:(NSString *)path isAccessibleFor:(AccessKind)mode;
 

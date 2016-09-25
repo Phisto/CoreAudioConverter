@@ -31,7 +31,7 @@
 #import "NSFileManager+FileAccess.h"
 
 // Constants
-#import "AudioConverterErrorConstants.h"
+#import "CoreAudioConverterErrorConstants.h"
 
 #include <fcntl.h>		// open, write
 #include <sys/stat.h>	// stat
@@ -258,19 +258,19 @@ NSString * const kFileExtension = @"mp3";
 		}
         
 		// Flush the last MP3 frames (maybe)
-        NSError *flushError = nil;
+        NSError *flushError;
         if (![self finishEncodeWithError:&flushError]) {
-            ALog(@"Unable to flush last MP3 frames.");
             if (flushError && error != NULL) *error = flushError;
             return NO;
         }
 		
 		// Close the output file
 		result = fclose(_out);
-        if (result != 0) {
-            ALog(@"Unable to close the output file.");
+        if (result != noErr) {
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Unable to close the output file: \"%@\".", _secureURLOut.path]};
-            NSError *newError = [NSError errorWithDomain:ACErrorDomain code:ACErrorUnknown userInfo:infoDict];
+            NSError *newError = [NSError errorWithDomain:ACErrorDomain
+                                                    code:ACErrorUnknown
+                                                userInfo:infoDict];
             if (error != NULL) *error = newError;
             return NO;
         }
@@ -279,9 +279,10 @@ NSString * const kFileExtension = @"mp3";
 		// Write the Xing VBR tag
 		file = fopen(_secureURLOut.fileSystemRepresentation, "r+");
         if (file == NULL) {
-            ALog(@"Unable to open the output file.");
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Unable to open the output file: \"%@\".", _secureURLOut.path]};
-            NSError *newError = [NSError errorWithDomain:ACErrorDomain code:ACErrorUnknown userInfo:infoDict];
+            NSError *newError = [NSError errorWithDomain:ACErrorDomain
+                                                    code:ACErrorOutputAccessError
+                                                userInfo:infoDict];
             if (error != NULL) *error = newError;
             return NO;
         }
@@ -318,9 +319,10 @@ NSString * const kFileExtension = @"mp3";
 			ALog(@"%@", exception);
 		}		
 
+        // free buffer
 		free(bufferList.mBuffers[0].mData);
-        
-        
+        ///!!!: Implement tagger failing handling ...
+        // the file was properly encoded
         if (self.fileProperlyEncoded) {
          
             MP3Tagger *tagger = [MP3Tagger taggerForFile:_secureURLIn];

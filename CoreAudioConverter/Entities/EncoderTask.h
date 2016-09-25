@@ -12,8 +12,9 @@
  
  An EncoderTask object represents an audio file to convert.
  
+ ## Notes
  It would have been enough to specify an input and output URL to give the encoder enough informations for the converting.
- But i decided to use a temporary url, as there are various cases where you want to encode the file to a temporary location and than later move the file to their final location. It is possible to skip that step by intitializing an EncoderTask object with nil as argument for the tempURL, than the file will be encoded directly to the location the outputURL points to.
+ I decided to use a temporary url, as there are various cases where you want to encode the file to a temporary location and than later move the file to their final location. It is possible to skip that step by intitializing an EncoderTask object with nil as argument for the tempURL, than the file will be encoded directly to the location the outputURL points to.
  
  */
 

@@ -6,7 +6,7 @@
 //  Copyright © 2015 Simon Gaus. All rights reserved.
 //
 
-#import "AudioConverterErrorConstants.h"
+#import "CoreAudioConverterErrorConstants.h"
 
 #pragma mark Error Domain
-NSString *ACErrorDomain = @"AudioConverterErrorDomain";
+NSString *CoreAudioConverterErrorDomain = @"CoreAudioConverterErrorDomain";

@@ -42,8 +42,8 @@
 		F474F08F1D55154E007BF84D /* NSError+Exceptions.m in Sources */ = {isa = PBXBuildFile; fileRef = F474F08D1D55154E007BF84D /* NSError+Exceptions.m */; };
 		F47CAFE71D9154BA00CFAB41 /* MP3EncoderDelegateProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = F47CAFE51D9154BA00CFAB41 /* MP3EncoderDelegateProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F49DF7DC1BAF8D63003A7C41 /* CoreAudioConverter.h in Headers */ = {isa = PBXBuildFile; fileRef = F49DF7DB1BAF8D63003A7C41 /* CoreAudioConverter.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F49DF8031BAF93DB003A7C41 /* AudioConverterErrorConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = F49DF7FF1BAF93DB003A7C41 /* AudioConverterErrorConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F49DF8041BAF93DB003A7C41 /* AudioConverterErrorConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = F49DF8001BAF93DB003A7C41 /* AudioConverterErrorConstants.m */; };
+		F49DF8031BAF93DB003A7C41 /* CoreAudioConverterErrorConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = F49DF7FF1BAF93DB003A7C41 /* CoreAudioConverterErrorConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F49DF8041BAF93DB003A7C41 /* CoreAudioConverterErrorConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = F49DF8001BAF93DB003A7C41 /* CoreAudioConverterErrorConstants.m */; };
 		F49DF8051BAF93DB003A7C41 /* CircularBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = F49DF8011BAF93DB003A7C41 /* CircularBuffer.h */; };
 		F49DF8061BAF93DB003A7C41 /* CircularBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = F49DF8021BAF93DB003A7C41 /* CircularBuffer.m */; };
 		F49DF8091BAF93ED003A7C41 /* CADecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = F49DF8071BAF93ED003A7C41 /* CADecoder.h */; };
@@ -145,8 +145,8 @@
 		F49DF7D81BAF8D63003A7C41 /* CoreAudioConverter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreAudioConverter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F49DF7DB1BAF8D63003A7C41 /* CoreAudioConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreAudioConverter.h; sourceTree = "<group>"; };
 		F49DF7DD1BAF8D63003A7C41 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F49DF7FF1BAF93DB003A7C41 /* AudioConverterErrorConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioConverterErrorConstants.h; sourceTree = "<group>"; };
-		F49DF8001BAF93DB003A7C41 /* AudioConverterErrorConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioConverterErrorConstants.m; sourceTree = "<group>"; };
+		F49DF7FF1BAF93DB003A7C41 /* CoreAudioConverterErrorConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreAudioConverterErrorConstants.h; sourceTree = "<group>"; };
+		F49DF8001BAF93DB003A7C41 /* CoreAudioConverterErrorConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreAudioConverterErrorConstants.m; sourceTree = "<group>"; };
 		F49DF8011BAF93DB003A7C41 /* CircularBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircularBuffer.h; sourceTree = "<group>"; };
 		F49DF8021BAF93DB003A7C41 /* CircularBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircularBuffer.m; sourceTree = "<group>"; };
 		F49DF8071BAF93ED003A7C41 /* CADecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CADecoder.h; sourceTree = "<group>"; };
@@ -307,8 +307,8 @@
 		F49DF7F81BAF8F25003A7C41 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
-				F49DF7FF1BAF93DB003A7C41 /* AudioConverterErrorConstants.h */,
-				F49DF8001BAF93DB003A7C41 /* AudioConverterErrorConstants.m */,
+				F49DF7FF1BAF93DB003A7C41 /* CoreAudioConverterErrorConstants.h */,
+				F49DF8001BAF93DB003A7C41 /* CoreAudioConverterErrorConstants.m */,
 				F49DF8011BAF93DB003A7C41 /* CircularBuffer.h */,
 				F49DF8021BAF93DB003A7C41 /* CircularBuffer.m */,
 			);
@@ -362,7 +362,7 @@
 				F49DF7DC1BAF8D63003A7C41 /* CoreAudioConverter.h in Headers */,
 				F45155561D5F6E9200B6FDEF /* EncoderTask.h in Headers */,
 				F4727BA81D478EA200B15C13 /* MP3Encoder.h in Headers */,
-				F49DF8031BAF93DB003A7C41 /* AudioConverterErrorConstants.h in Headers */,
+				F49DF8031BAF93DB003A7C41 /* CoreAudioConverterErrorConstants.h in Headers */,
 				F44BC1311D7986B4008D9CF1 /* NSFileManager+FileAccess.h in Headers */,
 				F474F08E1D55154E007BF84D /* NSError+Exceptions.h in Headers */,
 				F49DF8051BAF93DB003A7C41 /* CircularBuffer.h in Headers */,
@@ -568,7 +568,7 @@
 				F45155571D5F6E9200B6FDEF /* EncoderTask.m in Sources */,
 				F49DF8061BAF93DB003A7C41 /* CircularBuffer.m in Sources */,
 				F4727BA71D478EA200B15C13 /* MP3Encoder.m in Sources */,
-				F49DF8041BAF93DB003A7C41 /* AudioConverterErrorConstants.m in Sources */,
+				F49DF8041BAF93DB003A7C41 /* CoreAudioConverterErrorConstants.m in Sources */,
 				F44BC1321D7986B4008D9CF1 /* NSFileManager+FileAccess.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

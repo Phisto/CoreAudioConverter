@@ -20,4 +20,4 @@ FOUNDATION_EXPORT const unsigned char CoreAudioConverterVersionString[];
 #import <CoreAudioConverter/EncoderTask.h>
 #import <CoreAudioConverter/MP3Encoder.h>
 // Constants
-#import <CoreAudioConverter/AudioConverterErrorConstants.h>
+#import <CoreAudioConverter/CoreAudioConverterErrorConstants.h>
