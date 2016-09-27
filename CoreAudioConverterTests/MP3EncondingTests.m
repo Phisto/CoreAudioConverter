@@ -12,6 +12,7 @@
 #import <CoreAudioConverter/CoreAudioConverter.h>
 
 #define TEST_AUDIO NO
+#define TEST_AUDIO_EXTENSIVE NO
 
 @interface MP3EncondingTests : XCTestCase <MP3EncoderDelegate>
 
@@ -133,6 +134,14 @@
                                @{@"bitrate":[NSNumber numberWithInt:CONSTANT_BITRATE_LOW], @"quality": [NSNumber numberWithInt:LAME_QUALITY_GOOD]},
                                @{@"bitrate":[NSNumber numberWithInt:CONSTANT_BITRATE_LOW], @"quality": [NSNumber numberWithInt:LAME_QUALITY_LOW]}
                                ];
+    
+    if (!TEST_AUDIO_EXTENSIVE) {
+        
+        settingsArray = @[
+                          @{@"bitrate":[NSNumber numberWithInt:CONSTANT_BITRATE_GOOD], @"quality": [NSNumber numberWithInt:LAME_QUALITY_GOOD]}
+                          ];
+    }
+    
     for (NSDictionary *settingsDict in settingsArray) {
         
         self.bitrate = [(NSNumber *)[settingsDict valueForKey:@"bitrate"] intValue];
@@ -181,6 +190,13 @@
         XCTAssertTrue(![manager fileExistsAtPath:[self.workload[10] tempURL].path], @"Converting Failed");
     }
     
+}
+
+- (void)testMP3EncoderInit {
+    
+    XCTAssertTrue(![MP3Encoder new], @"Init Failed");
+    XCTAssertTrue(![[MP3Encoder alloc] init], @"Init Failed");
+    XCTAssertTrue([[MP3Encoder alloc] initWithDelegate:(NSObject<MP3EncoderDelegate> *)[NSObject new]], @"Init Failed");
 }
 
 #pragma mark Delegate Methodes

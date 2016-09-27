@@ -32,21 +32,21 @@
 		F40F2A7D1CA99E0B00BDCF2B /* about.rtf in Resources */ = {isa = PBXBuildFile; fileRef = F40F2A731CA99E0B00BDCF2B /* about.rtf */; };
 		F40F2A7E1CA99E0B00BDCF2B /* AAC 44.100 Hz Stereo 320 kbits:s.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F40F2A741CA99E0B00BDCF2B /* AAC 44.100 Hz Stereo 320 kbits:s.m4a */; };
 		F40F2A7F1CA99E0B00BDCF2B /* AAC 44.100 Hz Stereo 80 kbits:s (HE).m4a in Resources */ = {isa = PBXBuildFile; fileRef = F40F2A751CA99E0B00BDCF2B /* AAC 44.100 Hz Stereo 80 kbits:s (HE).m4a */; };
-		F44BC1311D7986B4008D9CF1 /* NSFileManager+FileAccess.h in Headers */ = {isa = PBXBuildFile; fileRef = F44BC12F1D7986B4008D9CF1 /* NSFileManager+FileAccess.h */; };
+		F44BC1311D7986B4008D9CF1 /* NSFileManager+FileAccess.h in Headers */ = {isa = PBXBuildFile; fileRef = F44BC12F1D7986B4008D9CF1 /* NSFileManager+FileAccess.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		F44BC1321D7986B4008D9CF1 /* NSFileManager+FileAccess.m in Sources */ = {isa = PBXBuildFile; fileRef = F44BC1301D7986B4008D9CF1 /* NSFileManager+FileAccess.m */; };
 		F45155561D5F6E9200B6FDEF /* EncoderTask.h in Headers */ = {isa = PBXBuildFile; fileRef = F45155541D5F6E9200B6FDEF /* EncoderTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F45155571D5F6E9200B6FDEF /* EncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = F45155551D5F6E9200B6FDEF /* EncoderTask.m */; };
 		F4727BA71D478EA200B15C13 /* MP3Encoder.m in Sources */ = {isa = PBXBuildFile; fileRef = F4727BA51D478EA200B15C13 /* MP3Encoder.m */; };
 		F4727BA81D478EA200B15C13 /* MP3Encoder.h in Headers */ = {isa = PBXBuildFile; fileRef = F4727BA61D478EA200B15C13 /* MP3Encoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F474F08E1D55154E007BF84D /* NSError+Exceptions.h in Headers */ = {isa = PBXBuildFile; fileRef = F474F08C1D55154E007BF84D /* NSError+Exceptions.h */; };
+		F474F08E1D55154E007BF84D /* NSError+Exceptions.h in Headers */ = {isa = PBXBuildFile; fileRef = F474F08C1D55154E007BF84D /* NSError+Exceptions.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		F474F08F1D55154E007BF84D /* NSError+Exceptions.m in Sources */ = {isa = PBXBuildFile; fileRef = F474F08D1D55154E007BF84D /* NSError+Exceptions.m */; };
 		F47CAFE71D9154BA00CFAB41 /* MP3EncoderDelegateProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = F47CAFE51D9154BA00CFAB41 /* MP3EncoderDelegateProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F49DF7DC1BAF8D63003A7C41 /* CoreAudioConverter.h in Headers */ = {isa = PBXBuildFile; fileRef = F49DF7DB1BAF8D63003A7C41 /* CoreAudioConverter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F49DF8031BAF93DB003A7C41 /* CoreAudioConverterErrorConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = F49DF7FF1BAF93DB003A7C41 /* CoreAudioConverterErrorConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F49DF8041BAF93DB003A7C41 /* CoreAudioConverterErrorConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = F49DF8001BAF93DB003A7C41 /* CoreAudioConverterErrorConstants.m */; };
-		F49DF8051BAF93DB003A7C41 /* CircularBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = F49DF8011BAF93DB003A7C41 /* CircularBuffer.h */; };
+		F49DF8051BAF93DB003A7C41 /* CircularBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = F49DF8011BAF93DB003A7C41 /* CircularBuffer.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		F49DF8061BAF93DB003A7C41 /* CircularBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = F49DF8021BAF93DB003A7C41 /* CircularBuffer.m */; };
-		F49DF8091BAF93ED003A7C41 /* CADecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = F49DF8071BAF93ED003A7C41 /* CADecoder.h */; };
+		F49DF8091BAF93ED003A7C41 /* CADecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = F49DF8071BAF93ED003A7C41 /* CADecoder.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		F49DF80A1BAF93ED003A7C41 /* CADecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = F49DF8081BAF93ED003A7C41 /* CADecoder.m */; };
 		F4CE0C621D5C6FF3009360C6 /* CoreAudioConverter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F49DF7D81BAF8D63003A7C41 /* CoreAudioConverter.framework */; };
 		F4CE0C711D5C7AB7009360C6 /* WAV Microsoft (Signed 16 bit PCM).wav in Resources */ = {isa = PBXBuildFile; fileRef = F4CE0C701D5C7AB7009360C6 /* WAV Microsoft (Signed 16 bit PCM).wav */; };
@@ -132,17 +132,14 @@
 		F474F08C1D55154E007BF84D /* NSError+Exceptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSError+Exceptions.h"; path = "Categories/NSError+Exceptions.h"; sourceTree = "<group>"; };
 		F474F08D1D55154E007BF84D /* NSError+Exceptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSError+Exceptions.m"; path = "Categories/NSError+Exceptions.m"; sourceTree = "<group>"; };
 		F478E19C1C7D249C00670966 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = CoreAudioConverter/fr.lproj/Localizable.strings; sourceTree = "<group>"; };
-		F478E19E1C7D249C00670966 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = CoreAudioConverter/fr.lproj/Exceptions.strings; sourceTree = "<group>"; };
 		F478E19F1C7D249C00670966 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = CoreAudioConverter/en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		F478E1A01C7D249C00670966 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = CoreAudioConverter/en.lproj/Exceptions.strings; sourceTree = "<group>"; };
 		F478E1A11C7D249C00670966 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = CoreAudioConverter/de.lproj/Localizable.strings; sourceTree = "<group>"; };
-		F478E1A21C7D249C00670966 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = CoreAudioConverter/de.lproj/Exceptions.strings; sourceTree = "<group>"; };
 		F478E1A51C7D24B100670966 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = CoreAudioConverter/Base.lproj/Localizable.strings; sourceTree = "<group>"; };
-		F478E1A61C7D24B100670966 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = CoreAudioConverter/Base.lproj/Exceptions.strings; sourceTree = "<group>"; };
 		F478E1AB1C7D2E8D00670966 /* CoreAudioConverterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoreAudioConverterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F478E1AF1C7D2E8D00670966 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F47CAFE51D9154BA00CFAB41 /* MP3EncoderDelegateProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MP3EncoderDelegateProtocol.h; path = Protocols/MP3EncoderDelegateProtocol.h; sourceTree = "<group>"; };
 		F48DA44C1D9B172400070708 /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
+		F48DA44D1D9B1FBE00070708 /* module.private.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.private.modulemap; sourceTree = "<group>"; };
 		F49DF7D81BAF8D63003A7C41 /* CoreAudioConverter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreAudioConverter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F49DF7DB1BAF8D63003A7C41 /* CoreAudioConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreAudioConverter.h; sourceTree = "<group>"; };
 		F49DF7DD1BAF8D63003A7C41 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -207,9 +204,9 @@
 			isa = PBXGroup;
 			children = (
 				F49DF7DD1BAF8D63003A7C41 /* Info.plist */,
-				F478E19B1C7D249C00670966 /* Localizable.strings */,
-				F478E19D1C7D249C00670966 /* Exceptions.strings */,
 				F48DA44C1D9B172400070708 /* module.modulemap */,
+				F48DA44D1D9B1FBE00070708 /* module.private.modulemap */,
+				F478E19B1C7D249C00670966 /* Localizable.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -598,18 +595,6 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
-		F478E19D1C7D249C00670966 /* Exceptions.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				F478E19E1C7D249C00670966 /* fr */,
-				F478E1A01C7D249C00670966 /* en */,
-				F478E1A21C7D249C00670966 /* de */,
-				F478E1A61C7D24B100670966 /* Base */,
-			);
-			name = Exceptions.strings;
-			path = ..;
-			sourceTree = "<group>";
-		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -785,7 +770,8 @@
 				);
 				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				MODULEMAP_FILE = "/Users/Simon/Documents/XCode/Mac Apps/Converter - Projekt/CoreAudioConverter/CoreAudioConverter/module.modulemap";
+				MODULEMAP_FILE = "$(PRODUCT_NAME:c99extidentifier)/module.modulemap";
+				MODULEMAP_PRIVATE_FILE = "$(PRODUCT_NAME:c99extidentifier)/module.private.modulemap";
 				PRODUCT_BUNDLE_IDENTIFIER = de.simonsserver.CoreAudioConverter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -818,7 +804,8 @@
 				);
 				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				MODULEMAP_FILE = "/Users/Simon/Documents/XCode/Mac Apps/Converter - Projekt/CoreAudioConverter/CoreAudioConverter/module.modulemap";
+				MODULEMAP_FILE = "$(PRODUCT_NAME:c99extidentifier)/module.modulemap";
+				MODULEMAP_PRIVATE_FILE = "$(PRODUCT_NAME:c99extidentifier)/module.private.modulemap";
 				PRODUCT_BUNDLE_IDENTIFIER = de.simonsserver.CoreAudioConverter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

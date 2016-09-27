@@ -5,24 +5,22 @@
  *  Copyright © 2015-2016 Simon Gaus <simon.cay.gaus@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
+ *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *  GNU Lesser General Public License for more details.
  */
 
 #import "CircularBuffer.h"
 
 // ALog always displays output regardless of the DEBUG setting
 #define ALog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+
+#define BUFFER_INIT_SIZE 10 * 1024
 
 @interface CircularBuffer (/* Private */)
 
@@ -32,10 +30,6 @@
 @property (nonatomic, readwrite) uint8_t *readPtr;
 @property (nonatomic, readwrite) uint8_t *writePtr;
 
-- (BOOL)normalizeBuffer;
-- (NSUInteger)contiguousBytesAvailable;
-- (NSUInteger)contiguousFreeSpaceAvailable;
-
 @end
 
 @implementation CircularBuffer
@@ -43,11 +37,11 @@
 
 
 - (nullable instancetype)init {
-	return [self initWithSize:10 * 1024];
+	return [self initWithSize:BUFFER_INIT_SIZE];
 }
 
 
-- (nullable instancetype)initWithSize:(NSUInteger)size {
+- (nullable instancetype)initWithSize:(NSUInteger)size /* NS_DESIGNATED_INTITIALIZER */ {
     
     if (size <= 0) {
         return nil;
@@ -60,9 +54,7 @@
 		_bufsize	= size;
 		_buffer		= (uint8_t *)calloc(_bufsize, sizeof(uint8_t));
 		
-        if (_buffer == NULL) {
-            return nil;
-        }
+        if (_buffer == NULL) { return nil; }
 		
 		_readPtr	= _buffer;
 		_writePtr	= _buffer;
@@ -213,7 +205,7 @@
         _readPtr	= _buffer;
         _writePtr	= _buffer + chunkASize + chunkBSize;
         
-        // else analyser shows memory leak 
+        // free chunkA & chunkB
         free(chunkA);
         free(chunkB);
     }

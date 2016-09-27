@@ -1,0 +1,6 @@
+explicit module CoreAudioConverter.Private {
+    header "PrivateHeaders/CADecoder.h"
+    header "PrivateHeaders/CircularBuffer.h"
+    header "PrivateHeaders/NSError+Exception.h"
+    header "PrivateHeaders/NSFileManager+FileAccess.h"
+}
