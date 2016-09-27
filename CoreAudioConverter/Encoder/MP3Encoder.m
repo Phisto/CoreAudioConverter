@@ -57,10 +57,6 @@ NSString * const kFileExtension = @"mp3";
 @property (nonatomic, strong) NSURL *secureURLOut;
 @property (nonatomic, readwrite) BOOL fileProperlyEncoded;
 
-@end
-
-@interface MP3Encoder (Private)
-
 - (void)parseSettings;
 - (BOOL)encodeChunk:(const AudioBufferList *)chunk frameCount:(UInt32)frameCount error:(NSError **)error;
 - (BOOL)finishEncodeWithError:(NSError **)error;
@@ -69,20 +65,38 @@ NSString * const kFileExtension = @"mp3";
 @end
 
 @implementation MP3Encoder
+#pragma mark - Initialization / Object life cycle
 
 - (nullable instancetype)initWithDelegate:(NSObject<MP3EncoderDelegate> *)aDelegate {
 	
     self = [super init];
     if(self) {
+        
+        if (!aDelegate) {
+            return nil;
+        }
+        _delegate = aDelegate;
+        
 		_gfp = lame_init();
         if (_gfp == NULL || !aDelegate) {
             return nil;
         }
-        _delegate = aDelegate;
 	}
 	
 	return self;
 }
+- (nullable instancetype)init {
+    
+    NSObject<MP3EncoderDelegate> *noDelegate;
+    return [self initWithDelegate:noDelegate];
+}
+
+- (void)dealloc {
+    // free lame
+    lame_close(_gfp);
+}
+
+#pragma mark - API Methodes
 
 - (BOOL)executeTask:(EncoderTask *)task error:(NSError * __autoreleasing *)error {
     
@@ -347,11 +361,6 @@ NSString * const kFileExtension = @"mp3";
     }
 }
 
-- (void)dealloc {
-    // free lame
-    lame_close(_gfp);
-}
-
 #pragma mark - Helper Methodes
 
 - (BOOL)enoughFreeSpaceToConvert:(NSURL *)destFolder {
@@ -387,48 +396,44 @@ NSString * const kFileExtension = @"mp3";
 }
 
 #pragma mark -
-@end
-
-@implementation MP3Encoder (Private)
 
 - (void)parseSettings {
-	// Set encoding properties
-	lame_set_mode(_gfp, JOINT_STEREO);
-	
-	// quality
+    // Set encoding properties
+    lame_set_mode(_gfp, JOINT_STEREO);
+    
+    // quality
     lame_set_quality(_gfp, [self.delegate quality]);
-	
-	// Target is bitrate
+    
+    // Target is bitrate
     lame_set_brate(_gfp, [self.delegate bitrate]);
 }
-
 - (BOOL)encodeChunk:(const AudioBufferList *)chunk
          frameCount:(UInt32)frameCount
               error:(NSError * __autoreleasing *)error {
     
     unsigned char	*buffer					= NULL;
-	unsigned		bufferLen				= 0;
-	
-	void			**channelBuffers		= NULL;
-	short			**channelBuffers16		= NULL;
-	long			**channelBuffers32		= NULL;
-	
-	int8_t			*buffer8				= NULL;
-	int16_t			*buffer16				= NULL;
-	int32_t			*buffer32				= NULL;
-	
-	int32_t			constructedSample;
-	
-	int				result;
-	size_t			numWritten;
-	
-	unsigned		wideSample;
-	unsigned		sample, channel;
-	
-	@try {
-		// Allocate the MP3 buffer using LAME guide for size
-		bufferLen	= 1.25 * (chunk->mBuffers[0].mNumberChannels * frameCount) + 7200;
-		buffer		= (unsigned char *) calloc(bufferLen, sizeof(unsigned char));
+    unsigned		bufferLen				= 0;
+    
+    void			**channelBuffers		= NULL;
+    short			**channelBuffers16		= NULL;
+    long			**channelBuffers32		= NULL;
+    
+    int8_t			*buffer8				= NULL;
+    int16_t			*buffer16				= NULL;
+    int32_t			*buffer32				= NULL;
+    
+    int32_t			constructedSample;
+    
+    int				result;
+    size_t			numWritten;
+    
+    unsigned		wideSample;
+    unsigned		sample, channel;
+    
+    @try {
+        // Allocate the MP3 buffer using LAME guide for size
+        bufferLen	= 1.25 * (chunk->mBuffers[0].mNumberChannels * frameCount) + 7200;
+        buffer		= (unsigned char *) calloc(bufferLen, sizeof(unsigned char));
         if (buffer == NULL) {
             ALog(@"Unable to allocate memory.");
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: @"Unable to allocate memory."};
@@ -436,9 +441,9 @@ NSString * const kFileExtension = @"mp3";
             if (error != NULL) *error = newError;
             return NO;
         }
-
-		// Allocate channel buffers for sample de-interleaving
-		channelBuffers = calloc(chunk->mBuffers[0].mNumberChannels, sizeof(void *));
+        
+        // Allocate channel buffers for sample de-interleaving
+        channelBuffers = calloc(chunk->mBuffers[0].mNumberChannels, sizeof(void *));
         if (channelBuffers == NULL) {
             ALog(@"Unable to allocate memory.");
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: @"Unable to allocate memory."};
@@ -446,20 +451,20 @@ NSString * const kFileExtension = @"mp3";
             if (error != NULL) *error = newError;
             return NO;
         }
-		
-		// Initialize each channel buffer to zero
-		for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
-			channelBuffers[channel] = NULL;
-		}
-		
-		// Split PCM data into channels and convert to appropriate sample size for LAME
-		switch(_sourceBitsPerChannel) {
-			
-			case 8:				
-				channelBuffers16 = (short **)channelBuffers;
-				
-				for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
-					channelBuffers16[channel] = calloc(frameCount, sizeof(short));
+        
+        // Initialize each channel buffer to zero
+        for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
+            channelBuffers[channel] = NULL;
+        }
+        
+        // Split PCM data into channels and convert to appropriate sample size for LAME
+        switch(_sourceBitsPerChannel) {
+                
+            case 8:
+                channelBuffers16 = (short **)channelBuffers;
+                
+                for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
+                    channelBuffers16[channel] = calloc(frameCount, sizeof(short));
                     if (channelBuffers16[channel] == NULL) {
                         
                         ALog(@"Unable to allocate memory.");
@@ -468,25 +473,25 @@ NSString * const kFileExtension = @"mp3";
                         if (error != NULL) *error = newError;
                         return NO;
                     }
-				}
-					
-				buffer8 = chunk->mBuffers[0].mData;
-				for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
-					for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel, ++sample) {
-						// Rescale values to short
-						channelBuffers16[channel][wideSample] = (short)(((buffer8[sample] << 8) & 0xFF00) | (buffer8[sample] & 0xFF));
-					}
-				}
-					
-				result = lame_encode_buffer(_gfp, channelBuffers16[0], channelBuffers16[1], frameCount, buffer, bufferLen);
-				
-				break;
-				
-			case 16:
-				channelBuffers16 = (short **)channelBuffers;
-				
-				for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
-					channelBuffers16[channel] = calloc(frameCount, sizeof(short));
+                }
+                
+                buffer8 = chunk->mBuffers[0].mData;
+                for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
+                    for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel, ++sample) {
+                        // Rescale values to short
+                        channelBuffers16[channel][wideSample] = (short)(((buffer8[sample] << 8) & 0xFF00) | (buffer8[sample] & 0xFF));
+                    }
+                }
+                
+                result = lame_encode_buffer(_gfp, channelBuffers16[0], channelBuffers16[1], frameCount, buffer, bufferLen);
+                
+                break;
+                
+            case 16:
+                channelBuffers16 = (short **)channelBuffers;
+                
+                for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
+                    channelBuffers16[channel] = calloc(frameCount, sizeof(short));
                     if (channelBuffers16[channel] == NULL) {
                         
                         ALog(@"Unable to allocate memory.");
@@ -495,24 +500,24 @@ NSString * const kFileExtension = @"mp3";
                         if (error != NULL) *error = newError;
                         return NO;
                     }
-				}
-					
-				buffer16 = chunk->mBuffers[0].mData;
-				for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
-					for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel, ++sample) {
-						channelBuffers16[channel][wideSample] = (short)OSSwapBigToHostInt16(buffer16[sample]);
-					}
-				}
-					
-				result = lame_encode_buffer(_gfp, channelBuffers16[0], channelBuffers16[1], frameCount, buffer, bufferLen);
-				
-				break;
-				
-			case 24:
-				channelBuffers32 = (long **)channelBuffers;
-				
-				for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
-					channelBuffers32[channel] = calloc(frameCount, sizeof(long));
+                }
+                
+                buffer16 = chunk->mBuffers[0].mData;
+                for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
+                    for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel, ++sample) {
+                        channelBuffers16[channel][wideSample] = (short)OSSwapBigToHostInt16(buffer16[sample]);
+                    }
+                }
+                
+                result = lame_encode_buffer(_gfp, channelBuffers16[0], channelBuffers16[1], frameCount, buffer, bufferLen);
+                
+                break;
+                
+            case 24:
+                channelBuffers32 = (long **)channelBuffers;
+                
+                for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
+                    channelBuffers32[channel] = calloc(frameCount, sizeof(long));
                     if (channelBuffers32[channel] == NULL) {
                         
                         ALog(@"Unable to allocate memory.");
@@ -521,31 +526,31 @@ NSString * const kFileExtension = @"mp3";
                         if (error != NULL) *error = newError;
                         return NO;
                     }
-				}
-				
-				// Packed 24-bit data is 3 bytes, while unpacked is 24 bits in an int32_t
-				buffer8 = chunk->mBuffers[0].mData;
-				for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
-					for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
-						// Read three bytes and reconstruct them as a 32-bit BE integer
-						constructedSample = (int8_t)*buffer8++; constructedSample <<= 8;
-						constructedSample |= (uint8_t)*buffer8++; constructedSample <<= 8;
-						constructedSample |= (uint8_t)*buffer8++;
-												
-						// Convert to 32-bit sample scaling
-						channelBuffers32[channel][wideSample] = (long)((constructedSample << 8) | (constructedSample & 0x000000ff));
-					}
-				}
-					
-				result = lame_encode_buffer_long2(_gfp, channelBuffers32[0], channelBuffers32[1], frameCount, buffer, bufferLen);
-				
-				break;
-				
-			case 32:
-				channelBuffers32 = (long **)channelBuffers;
-				
-				for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
-					channelBuffers32[channel] = calloc(frameCount, sizeof(long));
+                }
+                
+                // Packed 24-bit data is 3 bytes, while unpacked is 24 bits in an int32_t
+                buffer8 = chunk->mBuffers[0].mData;
+                for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
+                    for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
+                        // Read three bytes and reconstruct them as a 32-bit BE integer
+                        constructedSample = (int8_t)*buffer8++; constructedSample <<= 8;
+                        constructedSample |= (uint8_t)*buffer8++; constructedSample <<= 8;
+                        constructedSample |= (uint8_t)*buffer8++;
+                        
+                        // Convert to 32-bit sample scaling
+                        channelBuffers32[channel][wideSample] = (long)((constructedSample << 8) | (constructedSample & 0x000000ff));
+                    }
+                }
+                
+                result = lame_encode_buffer_long2(_gfp, channelBuffers32[0], channelBuffers32[1], frameCount, buffer, bufferLen);
+                
+                break;
+                
+            case 32:
+                channelBuffers32 = (long **)channelBuffers;
+                
+                for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
+                    channelBuffers32[channel] = calloc(frameCount, sizeof(long));
                     if (channelBuffers32[channel] == NULL) {
                         ALog(@"Unable to allocate memory.");
                         NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: @"Unable to allocate memory."};
@@ -553,28 +558,28 @@ NSString * const kFileExtension = @"mp3";
                         if (error != NULL) *error = newError;
                         return NO;
                     }
-				}
-					
-				buffer32 = chunk->mBuffers[0].mData;
-				for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
-					for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel, ++sample) {
-						channelBuffers32[channel][wideSample] = (long)OSSwapBigToHostInt32(buffer32[sample]);
-					}
-				}
-					
-				result = lame_encode_buffer_long2(_gfp, channelBuffers32[0], channelBuffers32[1], frameCount, buffer, bufferLen);
-				
-				break;
-				
-			default:
+                }
+                
+                buffer32 = chunk->mBuffers[0].mData;
+                for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
+                    for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel, ++sample) {
+                        channelBuffers32[channel][wideSample] = (long)OSSwapBigToHostInt32(buffer32[sample]);
+                    }
+                }
+                
+                result = lame_encode_buffer_long2(_gfp, channelBuffers32[0], channelBuffers32[1], frameCount, buffer, bufferLen);
+                
+                break;
+                
+            default:
                 ALog(@"Sample size not supported");
                 NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"LAME only supports sample sizes of 8, 16, 24 and 32. But \"%@\" has a sample size of \"%u\".", _secureURLIn.path, (unsigned int)_sourceBitsPerChannel]};
                 NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
                 if (error != NULL) *error = newError;
                 return NO;
-				break;
-		}
-		
+                break;
+        }
+        
         if (result == -1) {
             ALog(@"LAME encoding error.");
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"An error occured inside of LAME, while encoding the file: \"%@\".", _secureURLIn.path]};
@@ -583,7 +588,7 @@ NSString * const kFileExtension = @"mp3";
             return NO;
         }
         
-		numWritten = fwrite(buffer, sizeof(unsigned char), result, _out);
+        numWritten = fwrite(buffer, sizeof(unsigned char), result, _out);
         if (result != numWritten) {
             ALog(@"Unable to write to the output file.");
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Unable to write to the output file: \"%@\"", _secureURLOut.path]};
@@ -593,31 +598,30 @@ NSString * const kFileExtension = @"mp3";
         }
         
         return YES;
-	}
-	
-	@finally {
-		for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
-			free(channelBuffers[channel]);
-		}
-		free(channelBuffers);
-		free(buffer);
-	}
+    }
+    
+    @finally {
+        for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
+            free(channelBuffers[channel]);
+        }
+        free(channelBuffers);
+        free(buffer);
+    }
 }
-
 - (BOOL)finishEncodeWithError:(NSError * __autoreleasing *)error {
-	
+    
     unsigned char	*buf;
-	int				bufSize;
-	
-	int				result;
-	size_t			numWritten;
-	
-	@try {
-		buf = NULL;
-		
-		// Allocate the MP3 buffer using LAME guide for size
-		bufSize		= 7200;
-		buf			= (unsigned char *) calloc(bufSize, sizeof(unsigned char));
+    int				bufSize;
+    
+    int				result;
+    size_t			numWritten;
+    
+    @try {
+        buf = NULL;
+        
+        // Allocate the MP3 buffer using LAME guide for size
+        bufSize		= 7200;
+        buf			= (unsigned char *) calloc(bufSize, sizeof(unsigned char));
         if (buf == NULL) {
             ALog(@"Unable to allocate memory.");
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: @"Unable to allocate memory."};
@@ -625,9 +629,9 @@ NSString * const kFileExtension = @"mp3";
             if (error != NULL) *error = newError;
             return NO;
         }
-		
-		// Flush the mp3 buffer
-		result = lame_encode_flush(_gfp, buf, bufSize);
+        
+        // Flush the mp3 buffer
+        result = lame_encode_flush(_gfp, buf, bufSize);
         if (result == -1) {
             ALog(@"LAME was unable to flush the buffers.");
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"LAME was unable to flush the buffers for file: \"%@\".", _secureURLIn.path]};
@@ -635,9 +639,9 @@ NSString * const kFileExtension = @"mp3";
             if (error != NULL) *error = newError;
             return NO;
         }
-
-		// And write any frames it returns
-		numWritten = fwrite(buf, sizeof(unsigned char), result, _out);
+        
+        // And write any frames it returns
+        numWritten = fwrite(buf, sizeof(unsigned char), result, _out);
         if (result != numWritten) {
             ALog(@"Unable to write to the output file.");
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Unable to write to the output file: \"%@\".", _secureURLOut.path]};
@@ -647,20 +651,20 @@ NSString * const kFileExtension = @"mp3";
         }
         return YES;
     }
-        
-	@finally {
-		free(buf);
-	}
+    
+    @finally {
+        free(buf);
+    }
 }
-
 - (BOOL)touchOutputFile:(NSURL *)outputURL {
     
     NSNumber		*permissions	= [NSNumber numberWithUnsignedLong:S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH];
     NSDictionary	*attributes		= [NSDictionary dictionaryWithObject:permissions forKey:NSFilePosixPermissions];
     BOOL result = [[NSFileManager defaultManager] createFileAtPath:outputURL.path
-                                                         contents:nil
-                                                       attributes:attributes];
+                                                          contents:nil
+                                                        attributes:attributes];
     return result;
 }
 
+#pragma mark -
 @end

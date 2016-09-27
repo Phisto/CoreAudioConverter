@@ -24,7 +24,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- These constants defines the Core Audio Converter error domain.
+ These constant defines the Core Audio Converter error domain.
  */
 extern NSString *CoreAudioConverterErrorDomain;
 

@@ -1,7 +1,8 @@
 /*
- *  $Id$
+ *  CircularBuffer.h
+ *  CoreAudioConverter
  *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright © 2015-2016 Simon Gaus <simon.cay.gaus@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,34 +21,43 @@
 
 @import Foundation;
 
-NS_ASSUME_NONNULL_BEGIN
 /**
+ 
  A simple implementation of a circular (AKA ring) buffer
- */
-@interface CircularBuffer : NSObject
-/*
  
  */
-- (void)reset;
-/*
- @return
+
+NS_ASSUME_NONNULL_BEGIN
+
+@interface CircularBuffer : NSObject
+/**
+ 
+ Returns the number of bytes available.
+ 
+ @return The number of bytes available.
+ 
  */
 - (NSUInteger)bytesAvailable;
-/*
- @return
+/**
+ 
+ Returns the free space in bytes.
+ 
+ @return The Free space in bytes.
+ 
  */
 - (NSUInteger)freeSpaceAvailable;
-/*
+/**
+ 
  @param buffer
  @param byteCount
  @return
  */
 - (NSUInteger)getData:(void *)buffer byteCount:(NSUInteger)byteCount;
-/*
- 
+/**
+ @return
  */
 - (nullable void *)exposeBufferForWriting;
-/*
+/**
  @param byteCount
  */
 - (void)wroteBytes:(NSUInteger)byteCount;

@@ -24,11 +24,13 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
+ 
  The quality setting for the MP3Encoder.
  
  This variable is used by lame to select a algorithm.
  
  True quality is determined by the bitrate but this variable will effect quality by selecting expensive or cheap algorithms.
+ 
  */
 typedef NS_ENUM(NSUInteger, LAME_QUALITY) {
     
@@ -60,17 +62,19 @@ typedef NS_ENUM(NSUInteger, CONSTANT_BITRATE) {
 };
 
 /**
+ 
  The delegate of a MP3Encoder object must adopt the MP3EncoderDelegate protocol.
  
  Required methods of the protocol allow the delegate to decide on the quality and bitrate to use for encoding and to indicate if the encoding should cancel.
+ 
  */
 @protocol MP3EncoderDelegate <NSObject>
+@required
 
 ///------------------------
 /// @name Required Methodes
 ///------------------------
 
-@required
 /**
  
  This variable is used by lame to select an algorithm.

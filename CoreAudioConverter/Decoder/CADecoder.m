@@ -192,28 +192,20 @@
 
 - (UInt32)readAudio:(AudioBufferList *)bufferList frameCount:(UInt32)frameCount {
     
-    //NSParameterAssert(NULL != bufferList);
     if (bufferList == NULL) {
         ALog(@"An error occured during decoding.");
         return 0;
     }
-    //NSParameterAssert(0 < bufferList->mNumberBuffers);
     if (bufferList->mNumberBuffers <= 0) {
         ALog(@"An error occured during decoding.");
         return 0;
     }
-    //NSParameterAssert(0 < frameCount);
-    if (frameCount <= 0) {
-        //NSLog(@"%@", _fileUrl.lastPathComponent);
-        //ALog(@"An error occured during decoding.");
-        return 0;
-    }
+    if (frameCount <= 0) { return 0; }
     
     UInt32		framesRead		= 0;
     UInt32		byteCount		= frameCount * self.pcmFormat.mBytesPerPacket;
     UInt32		bytesRead		= 0;
     
-    //NSParameterAssert(bufferList->mBuffers[0].mDataByteSize >= byteCount);
     if (byteCount > bufferList->mBuffers[0].mDataByteSize) {
         ALog(@"An error occured during decoding.");
         return 0;
@@ -252,7 +244,7 @@
     
     dataSize		= sizeof(frameCount);
     result			= ExtAudioFileGetProperty(_extAudioFile, kExtAudioFileProperty_FileLengthFrames, &dataSize, &frameCount);
-    //NSAssert1(noErr == result, @"ExtAudioFileGetProperty(kExtAudioFileProperty_FileLengthFrames) failed: %@", UTCreateStringForOSType(result));
+    
     if (result != noErr) {
         CFStringRef descr = UTCreateStringForOSType(result);
         ALog(@"AudioFileGetProperty failed: %@", descr);
@@ -284,8 +276,6 @@
     frameCount								= bufferList.mBuffers[0].mDataByteSize / self.pcmFormat.mBytesPerFrame;
     result									= ExtAudioFileRead(_extAudioFile, &frameCount, &bufferList);
     
-    
-    //NSAssert1(noErr == result, @"ExtAudioFileRead failed: %@", UTCreateStringForOSType(result));
     if (result != noErr) {
         CFStringRef descr = UTCreateStringForOSType(result);
         ALog(@"ExtAudioFileRead failed: %@", descr);
@@ -293,7 +283,6 @@
         return NO;
     }
     
-    //NSAssert(frameCount * self.pcmFormat.mBytesPerFrame == bufferList.mBuffers[0].mDataByteSize, @"mismatch");
     if ((bufferList.mBuffers[0].mDataByteSize) != (frameCount * self.pcmFormat.mBytesPerFrame)) {
         ALog(@"mismatch");
         return NO;

@@ -1,7 +1,8 @@
 /*
- *  $Id$
+ *  CircularBuffer.m
+ *  CoreAudioConverter
  *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright © 2015-2016 Simon Gaus <simon.cay.gaus@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -40,9 +41,12 @@
 @implementation CircularBuffer
 #pragma mark - Object creation
 
+
 - (nullable instancetype)init {
 	return [self initWithSize:10 * 1024];
 }
+
+
 - (nullable instancetype)initWithSize:(NSUInteger)size {
     
     if (size <= 0) {
@@ -67,21 +71,23 @@
 	return self;
 }
 
+
 #pragma mark - Methode Implementation
 
-- (void)reset { _readPtr = _writePtr = _buffer; }
 
 - (NSUInteger)size { return _bufsize; }
+
 
 - (NSUInteger)bytesAvailable {
 	return (_writePtr >= _readPtr ? (NSUInteger)(_writePtr - _readPtr) : [self size] - (NSUInteger)(_readPtr - _writePtr));
 }
 
+
 - (NSUInteger)freeSpaceAvailable { return _bufsize - [self bytesAvailable]; }
 
 
 - (NSUInteger)getData:(void *)buffer byteCount:(NSUInteger)byteCount {
-	//NSParameterAssert(NULL != buffer);
+    
     if (buffer == NULL) {
         ALog(@"Failed to get data because the buffer is missing.");
         return 0;
@@ -115,6 +121,7 @@
 	return byteCount;
 }
 
+
 - (void)readBytes:(NSUInteger)byteCount {
 	uint8_t			*limit		= _buffer + _bufsize;
 	
@@ -124,6 +131,7 @@
 		_readPtr = _buffer;
 	}
 }
+
 
 - (void *)exposeBufferForWriting {
     
@@ -135,6 +143,7 @@
 
 }
 
+
 - (void)wroteBytes:(NSUInteger)byteCount {
 	uint8_t			*limit		= _buffer + _bufsize;
 	
@@ -145,18 +154,23 @@
 	}
 }
 
+
 #pragma mark - Private Methode Implementation
+
 
 - (void)dealloc {
     
     free(_buffer);
 }
 
+
 - (BOOL)normalizeBuffer {
     
+    // reset, nothing to do
     if(_writePtr == _readPtr) {
         _writePtr = _readPtr = _buffer;
     }
+    //
     else if(_writePtr > _readPtr) {
         
         NSUInteger	count		= _writePtr - _readPtr;
@@ -203,8 +217,10 @@
         free(chunkA);
         free(chunkB);
     }
+    
     return YES;
 }
+
 
 - (NSUInteger)contiguousBytesAvailable {
     
@@ -213,12 +229,14 @@
     return (_writePtr >= _readPtr ? _writePtr - _readPtr : limit - _readPtr);
 }
 
+
 - (NSUInteger)contiguousFreeSpaceAvailable {
     
     uint8_t			*limit		= _buffer + _bufsize;
     
     return (_writePtr >= _readPtr ? limit - _writePtr : _readPtr - _writePtr);
 }
+
 
 #pragma mark -
 @end

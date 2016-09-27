@@ -24,7 +24,7 @@ enum {
     AAC_QUALITY_LOW = kAudioCodecQuality_Low
 };
 /**
- * @typedef LAME_CONSTANT_BITRATE
+ * @typedef AAC_QUALITY
  * @brief The quality setting for the AAC encoder.
  */
 typedef UInt32 AAC_QUALITY;

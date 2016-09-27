@@ -1,0 +1,3 @@
+module CoreAudioConverter {
+    umbrella header "Headers/CoreAudioConverter.h"
+}

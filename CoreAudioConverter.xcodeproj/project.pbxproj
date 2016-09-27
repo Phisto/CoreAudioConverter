@@ -142,6 +142,7 @@
 		F478E1AB1C7D2E8D00670966 /* CoreAudioConverterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoreAudioConverterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F478E1AF1C7D2E8D00670966 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F47CAFE51D9154BA00CFAB41 /* MP3EncoderDelegateProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MP3EncoderDelegateProtocol.h; path = Protocols/MP3EncoderDelegateProtocol.h; sourceTree = "<group>"; };
+		F48DA44C1D9B172400070708 /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		F49DF7D81BAF8D63003A7C41 /* CoreAudioConverter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreAudioConverter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F49DF7DB1BAF8D63003A7C41 /* CoreAudioConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreAudioConverter.h; sourceTree = "<group>"; };
 		F49DF7DD1BAF8D63003A7C41 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -208,6 +209,7 @@
 				F49DF7DD1BAF8D63003A7C41 /* Info.plist */,
 				F478E19B1C7D249C00670966 /* Localizable.strings */,
 				F478E19D1C7D249C00670966 /* Exceptions.strings */,
+				F48DA44C1D9B172400070708 /* module.modulemap */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -265,9 +267,9 @@
 				F478E1AC1C7D2E8D00670966 /* CoreAudioConverterTests */,
 				F49DF7D91BAF8D63003A7C41 /* Products */,
 				F478E1991C7D09E100670966 /* OptimizationProfiles */,
+				F4ED6ABD1D8F819B001DB076 /* Frameworks */,
 				F4ED6AA61D8F8024001DB076 /* Lame.xcodeproj */,
 				F4ED6AA91D8F8024001DB076 /* AudioFileTagger.xcodeproj */,
-				F4ED6ABD1D8F819B001DB076 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -783,6 +785,7 @@
 				);
 				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MODULEMAP_FILE = "/Users/Simon/Documents/XCode/Mac Apps/Converter - Projekt/CoreAudioConverter/CoreAudioConverter/module.modulemap";
 				PRODUCT_BUNDLE_IDENTIFIER = de.simonsserver.CoreAudioConverter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -815,6 +818,7 @@
 				);
 				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MODULEMAP_FILE = "/Users/Simon/Documents/XCode/Mac Apps/Converter - Projekt/CoreAudioConverter/CoreAudioConverter/module.modulemap";
 				PRODUCT_BUNDLE_IDENTIFIER = de.simonsserver.CoreAudioConverter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

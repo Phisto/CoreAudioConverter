@@ -26,7 +26,13 @@
 
 /**
  
- The Core Audio Decoder can decode audio files with the suffix .aif | .aiff | .m4a | .aac .
+ An CADecoder object can provide audio data from audio files.
+ 
+ Supported file formats:
+
+ - Audio Interchange File Format
+ - Apple Lossless Audio Codec
+ - Advanced Audio Coding
  
  */
 
@@ -34,6 +40,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CADecoder : NSObject
 #pragma mark - Properties
+
+///-----------------
+/// @name Properties
+///-----------------
+
 /**
  The format of PCM data provided by the source file.
  */
@@ -44,41 +55,57 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) SInt64 totalFrames;
 
 #pragma - mark Methodes
+
+///----------------------
+/// @name Inititalization
+///----------------------
+
 /**
  
- Creates and returns a decoder object for a specific audio file.
+ Creates and returns a decoder object for the specified audio file.
  
  Example usage:
- @code
- NSError *error;
- CADecoder *decoder = [CADecoder decoderForFile:fileUrl error:&error];
- if (!decoder) {
-    // Handle error
+ 
+    NSError *error;
+    CADecoder *decoder = [CADecoder decoderForFile:fileUrl error:&error];
+    if (!decoder) {
+        // Handle error
     
- }
- // do stuff with the decoder...
- @endcode
+    }
+    // do stuff with the decoder...
+    AudioStreamBasicDescription audioDescr = decoder.pcmFormat;
  
- @param fileUrl of the file to decode.
  
- @param error The error reference.
+ @param fileUrl The fileURL to the file to decode.
  
- @return instancetype or nil
+ @param error The error that occurred while trying to initialize the decoder.
+ 
+ @return An initialized CADecoder object or nil.
  
  */
 + (nullable instancetype)decoderForFile:(NSURL *)fileUrl error:(NSError **)error;
+
+///------------------------
+/// @name Instance Methodes
+///------------------------
+
 /**
  
- Reads a chunk of PCM input and let the bufferList point to it. Will return Zero(0) on failure.
+ Reads a chunk of PCM input and let the bufferList point to it.
  
- @param AudioBufferList a pointer to hold audio data chunk
+ @param bufferList A pointer to hold audio data chunk
  
- @param UInt32 position in the PCM input
+ @param frameCount Position in the PCM input
  
- @return UInt32
+ @return Will return Zero(0) on failure.
  
  */
 - (UInt32)readAudio:(AudioBufferList *)bufferList frameCount:(UInt32)frameCount;
+
+///---------------------
+/// @name Class Methodes
+///---------------------
+
 /**
  
  Return an array of valid audio file extensions recognized by Core Audio.

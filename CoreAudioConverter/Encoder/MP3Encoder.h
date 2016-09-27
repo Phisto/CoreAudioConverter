@@ -26,29 +26,49 @@
 #import "MP3EncoderDelegateProtocol.h"
 
 /**
- A MP3Encoder object can convert various audio file formats to MPEG-1 and/or MPEG-2 Audio Layer III,
+ 
+ An MP3Encoder object can convert various audio file formats to MPEG Audio Layer III,
  more commonly referred to as MP3.
  
- It takes an EncoderTask as input.
  */
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MP3Encoder : NSObject
+
+///----------------------
+/// @name Inititalization
+///----------------------
+
 /**
  
- @param aDelegate The delegate
+ Returns an MP3Encoder object initialized with a given delegate.
  
- @return
+ This is the designated initializer for MP3Encoder.
+ 
+ @see MP3EncoderDelegate
+ 
+ @param aDelegate The delegate.
+ 
+ @return An MP3Encoder object initialized with aDelegate. If aDelegate is nil or lame coulden't be initialized, returns nil.
  */
-- (nullable instancetype)initWithDelegate:(NSObject<MP3EncoderDelegate> *)aDelegate;
+- (nullable instancetype)initWithDelegate:(NSObject<MP3EncoderDelegate> *)aDelegate NS_DESIGNATED_INITIALIZER;
+
+///------------------------
+/// @name Encoding Methodes
+///------------------------
+
 /**
  
- @param task The tasks
+ Converts an given audio file to the MP3 format.
  
- @param error possible error
+ @see EncoderTask
  
- @return
+ @param task The EncoderTask to process.
+ 
+ @param error The error that occurred while trying to convert the provided EncoderTask.
+ 
+ @return YES if the encoding was successfull, otherwise NO.
  */
 - (BOOL)executeTask:(EncoderTask *)task error:(NSError * _Nullable *)error;
 
