@@ -531,7 +531,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#appledoc Xcode script\n# Start constants\ntarget=\"macosx\";\noutputPath=\"~/Documents/XCode/Mac Apps/Converter - Projekt/Documentation\";\n# End constants\n/usr/local/bin/appledoc \\\n--project-name \"${PROJECT_NAME}\" \\\n--output \"${outputPath}\" \\\n--docset-platform-family \"${target}\" \\\n--ignore \".m\" \\\n--index-desc \"~/Documents/XCode/Mac Apps/Converter - Projekt/Documentation/readme.markdown\" \\\n--logformat xcode \\\n\"${PROJECT_DIR}\"";
+			shellScript = "#appledoc Xcode script\n# Start constants\ntarget=\"macosx\";\noutputPath=\"~/Documents/XCode/Mac Apps/Converter - Projekt/Documentation/CoreAudioConverter\";\n# End constants\n/usr/local/bin/appledoc \\\n--project-name \"${PROJECT_NAME}\" \\\n--output \"${outputPath}\" \\\n--docset-platform-family \"${target}\" \\\n--ignore \".m\" \\\n--index-desc \"~/Documents/XCode/Mac Apps/Converter - Projekt/Documentation/CoreAudioConverter/readme.markdown\" \\\n--logformat xcode \\\n\"${PROJECT_DIR}\"";
 		};
 		F4ED6A981D8F7E61001DB076 /* Increment Build Number */ = {
 			isa = PBXShellScriptBuildPhase;
