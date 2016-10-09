@@ -24,14 +24,18 @@
 // ALog always displays output regardless of the DEBUG setting
 #define ALog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
 
+// default buffer size
 #define BUFFER_INIT_SIZE 10 * 1024
 
 @interface CircularBuffer (/* Private */)
 
+/// the buffer holding the data
 @property (nonatomic, readwrite) uint8_t *buffer;
+/// the size of the buffer
 @property (nonatomic, readwrite) NSUInteger bufsize;
-
+/// start of valid data
 @property (nonatomic, readwrite) uint8_t *readPtr;
+/// end of valid data
 @property (nonatomic, readwrite) uint8_t *writePtr;
 
 @end
@@ -39,17 +43,15 @@
 @implementation CircularBuffer
 #pragma mark - Object creation
 
-
 - (nullable instancetype)init {
-	return [self initWithSize:BUFFER_INIT_SIZE];
+    
+    // call designated initilaizer
+    return [self initWithSize:BUFFER_INIT_SIZE];
 }
 
-
-- (nullable instancetype)initWithSize:(NSUInteger)size /* NS_DESIGNATED_INTITIALIZER */ {
+- (nullable instancetype)initWithSize:(NSUInteger)size {
     
-    if (size <= 0) {
-        return nil;
-    }
+    if (size <= 0) return nil;
 	
     self = [super init];
     
@@ -57,7 +59,6 @@
         
 		_bufsize	= size;
 		_buffer		= (uint8_t *)calloc(_bufsize, sizeof(uint8_t));
-		
         if (_buffer == NULL) { return nil; }
 		
 		_readPtr	= _buffer;

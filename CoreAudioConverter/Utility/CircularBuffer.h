@@ -30,6 +30,27 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CircularBuffer : NSObject
+#pragma mark - Inititalization
+///----------------------
+/// @name Inititalization
+///----------------------
+
+/**
+ 
+ Initializes an CircularBuffer object with a given size.
+ 
+ @param size The size of the buffer.
+ 
+ @return An initialized CircularBuffer object, or nil.
+ 
+ */
+- (nullable instancetype)initWithSize:(NSUInteger)size NS_DESIGNATED_INITIALIZER;
+
+#pragma mark - Methodes
+///---------------
+/// @name Methodes
+///---------------
+
 /**
  
  Returns the number of bytes available.

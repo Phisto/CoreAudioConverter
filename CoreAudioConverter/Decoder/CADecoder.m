@@ -25,9 +25,7 @@
 #import <AudioToolbox/ExtendedAudioFile.h>
 
 #import "CircularBuffer.h"
-
 #import "CoreAudioConverterErrorConstants.h"
-
 
 // ALog always displays output regardless of the DEBUG setting
 #define ALog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
@@ -120,7 +118,7 @@
         result = ExtAudioFileGetProperty(_extAudioFile, kExtAudioFileProperty_FileDataFormat, &dataSize, &_pcmFormat);
         if (result != noErr) {
             CFStringRef descr = UTCreateStringForOSType(result);
-            ALog(@"AudioFileGetProperty failed: %@", descr);
+            //ALog(@"AudioFileGetProperty failed: %@", descr);
             if (descr != NULL) CFRelease(descr);
             NSDictionary *infoDict = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Couldn't detect type for file: \"%@\", the file may be corrupted.", fileUrl.lastPathComponent]};
             NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain
