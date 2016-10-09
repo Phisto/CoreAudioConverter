@@ -29,10 +29,10 @@
 
 @interface CircularBuffer (/* Private */)
 
-/// the buffer holding the data
-@property (nonatomic, readwrite) uint8_t *buffer;
-/// the size of the buffer
+/// the size of the buffer (buffer end in memory)
 @property (nonatomic, readwrite) NSUInteger bufsize;
+/// the buffer holding the data (buffer start in memory)
+@property (nonatomic, readwrite) uint8_t *buffer;
 /// start of valid data
 @property (nonatomic, readwrite) uint8_t *readPtr;
 /// end of valid data
@@ -58,6 +58,7 @@
 	if (self) {
         
 		_bufsize	= size;
+        
 		_buffer		= (uint8_t *)calloc(_bufsize, sizeof(uint8_t));
         if (_buffer == NULL) { return nil; }
 		
@@ -76,7 +77,15 @@
 
 
 - (NSUInteger)bytesAvailable {
-	return (_writePtr >= _readPtr ? (NSUInteger)(_writePtr - _readPtr) : [self size] - (NSUInteger)(_readPtr - _writePtr));
+    
+            // if write pointer is bigger/equal to read pointer
+	return (_writePtr >= _readPtr
+            ?
+            // if equal, the buffer is full (zero bytes available)
+            (NSUInteger)(_writePtr - _readPtr)
+            :
+            // if 
+            [self size] - (NSUInteger)(_readPtr - _writePtr));
 }
 
 
