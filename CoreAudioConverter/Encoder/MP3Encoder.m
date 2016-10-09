@@ -13,12 +13,18 @@
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
 #import "MP3Encoder.h"
 
 // frameworks
-#import <AudioFileTagger/AudioFileTagger.h> // for MP3Tagger
+//#import <AudioFileTagger/AudioFileTagger.h> // for MP3Tagger
+@import AudioFileTagger; // for MP3Tagger
+
 #import <LAME/lame.h>   // for lame
 
 // classes
@@ -337,8 +343,11 @@ NSString * const kFileExtension = @"mp3";
         // the file was properly encoded
         if (self.fileProperlyEncoded) {
          
-            MP3Tagger *tagger = [MP3Tagger taggerForFile:_secureURLIn];
-            if (tagger) {
+            
+            Metadata *meta = [[Metadata alloc] initWithMetadataFromFile:_secureURLIn];
+            if (meta) {
+                
+                MP3Tagger *tagger = [MP3Tagger taggerWithMetadata:meta];
                 
                 if (![tagger tagFile:_secureURLOut]) {
                     
@@ -347,7 +356,7 @@ NSString * const kFileExtension = @"mp3";
             } else {
                 
                 
-                NSLog(@"Failed to create tagger for file: %@", _secureURLIn.lastPathComponent);
+                NSLog(@"Failed to extract metadata from file: %@", _secureURLIn.lastPathComponent);
                 
             }
         }

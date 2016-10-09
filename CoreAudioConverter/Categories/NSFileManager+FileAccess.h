@@ -13,6 +13,10 @@
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
 @import Foundation;
@@ -41,7 +45,7 @@ typedef NS_OPTIONS(NSInteger, AccessKind) {
  The FileAccess categorie adds the capability to check for file access to the NSFileManager.
  
  ## Discussion
- This is implemented in a sandboxing friendly manor, the sandbox won't be triggered if the calling application checks a file outside of it's sandbox.
+ This is implemented in a sandboxing friendly way, the sandbox won't be triggered if the calling application checks a file outside of it's sandbox.
  
  */
 @interface NSFileManager (FileAccess)

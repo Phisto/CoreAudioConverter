@@ -9,10 +9,10 @@
 @import AVFoundation;
 
 #import <XCTest/XCTest.h>
-#import <CoreAudioConverter/CoreAudioConverter.h>
+@import CoreAudioConverter;
 
 #define TEST_AUDIO NO
-#define TEST_AUDIO_EXTENSIVE NO
+#define TEST_AUDIO_EXTENSIVE YES
 
 @interface MP3EncondingTests : XCTestCase <MP3EncoderDelegate>
 
