@@ -33,48 +33,12 @@ The AudioFileTagger framework is licensed under the GNU Lesser General Public Li
 
 For more information on AudioFileTagger visit http://stack...
 
+## Credits
+
+I used a lot of code from this repo: https://github.com/sbooth/Max
+
 ##License
 
 Core Audio Converter is released under the GNU Lesser General Public License (LGPL). 
 
 See <http://www.gnu.org/licenses/> for details.
-
-
-# CoreAudioConverter
-This is a framework to convert various audio file formats (aif | aiff | aac | m4a) to the mp3 format using LAME.
-
-I used a lot of code from this repo: https://github.com/sbooth/Max
-
-Don't use this in your productive code, or at least double check my source!
-
-More informations about the LAME Project can be found here: http://lame.sourceforge.net/
-
-IMPORTANT
-
-Too use the code you have to add the lame library by hand:
-
-- Install lame on your machine (i used homebrew: http://brew.sh/)
-- add lame.h and libmp3lame.a to the project 
-
-when using homebrew you can find this files in
-
-    /usr/local/cellar/lame/<version>/lib
-    /usr/local/cellar/lame/<version>/include/lame
-
-USE
-
-    NSError *error = nil;
-
-    MP3Encoder *converter = [MP3Encoder encoderForFile:sourceUrl error:&error];
-
-    if (!converter) {
-
-        NSLog(@"converter init failed: %@", error.localizedDescription);
-  
-    }
-
-    converter.delegate = self; // the delegate need to implement the <MP3EncoderDelegate> protocol
-
-    [converter encodeToUrl:outputUrl];
-    
-    
