@@ -138,6 +138,7 @@
 		F478E1AB1C7D2E8D00670966 /* CoreAudioConverterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoreAudioConverterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F478E1AF1C7D2E8D00670966 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F47BC41A1DAC468B003DD71F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
+		F47BC41E1DAC4CCB003DD71F /* LICENSE.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = LICENSE.rtf; sourceTree = SOURCE_ROOT; };
 		F47CAFE51D9154BA00CFAB41 /* MP3EncoderDelegateProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MP3EncoderDelegateProtocol.h; path = Protocols/MP3EncoderDelegateProtocol.h; sourceTree = "<group>"; };
 		F48DA44C1D9B172400070708 /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		F48DA44D1D9B1FBE00070708 /* module.private.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.private.modulemap; sourceTree = "<group>"; };
@@ -204,6 +205,7 @@
 		F43B34831D5FB3F800CF9C12 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				F47BC41E1DAC4CCB003DD71F /* LICENSE.rtf */,
 				F47BC41A1DAC468B003DD71F /* README.md */,
 				F49DF7DD1BAF8D63003A7C41 /* Info.plist */,
 				F48DA44C1D9B172400070708 /* module.modulemap */,
