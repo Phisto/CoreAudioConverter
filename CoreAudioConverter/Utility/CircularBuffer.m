@@ -35,7 +35,7 @@
 @property (nonatomic, readwrite) uint8_t *buffer;
 /// start of valid data
 @property (nonatomic, readwrite) uint8_t *readPtr;
-/// end of valid data
+/// end of valid data + 1
 @property (nonatomic, readwrite) uint8_t *writePtr;
 
 @end
@@ -78,41 +78,60 @@
 
 - (NSUInteger)bytesAvailable {
     
-            // if write pointer is bigger/equal to read pointer
-	return (_writePtr >= _readPtr
+    return (_writePtr >= _readPtr
             ?
-            // if equal, the buffer is full (zero bytes available)
+            // read             read
+            // |                 |
+            // v                 v
+            //+----------+      +----------+
+            //|xxxxxxx   |  OR  |          |
+            //+----------+      +----------+
+            //        ^          ^
+            //        |          |
+            //       write      write
+            //
             (NSUInteger)(_writePtr - _readPtr)
             :
-            // if 
+            // write
+            //  |
+            //  v
+            //+----------+
+            //|x      xxx|
+            //+----------+
+            //        ^
+            //        |
+            //       read
+            //
             [self size] - (NSUInteger)(_readPtr - _writePtr));
 }
 
 
-- (NSUInteger)freeSpaceAvailable { return _bufsize - [self bytesAvailable]; }
+- (NSUInteger)freeSpaceAvailable {
+    
+    return _bufsize - [self bytesAvailable];
+}
 
 
 - (NSUInteger)getData:(void *)buffer byteCount:(NSUInteger)byteCount {
     
-    if (buffer == NULL) {
-        ALog(@"Failed to get data because the buffer is missing.");
-        return 0;
-    }
+    // forgot to pass a buffer to hold the data ?
+    if (buffer == NULL) return 0;
 
-	// Do nothing!
+	// you want zero bytes you get zero bytes
 	if(0 == byteCount) {
 		return 0;
 	}
 	
-	// Attempt to return some data, if possible
+	// more bytes are requested than available
 	if(byteCount > [self bytesAvailable]) {
 		byteCount = [self bytesAvailable];
 	}
-
+    // no wrapp needed
 	if([self contiguousBytesAvailable] >= byteCount) {
 		memcpy(buffer, _readPtr, byteCount);
 		_readPtr += byteCount;
 	}
+    // buffer needs to wrap
 	else {
 		NSUInteger	blockSize		= [self contiguousBytesAvailable];
 		NSUInteger	wrapSize		= byteCount - blockSize;
@@ -143,10 +162,9 @@
     
     BOOL erfolg = [self normalizeBuffer];
     if (!erfolg) {
-        return nil;
+        return NULL;
     }
     return _writePtr;
-
 }
 
 
@@ -191,6 +209,7 @@
         
         NSUInteger		chunkASize	= [self contiguousBytesAvailable];
         NSUInteger		chunkBSize	= [self bytesAvailable] - [self contiguousBytesAvailable];
+        
         uint8_t			*chunkA		= NULL;
         uint8_t			*chunkB		= NULL;
         
@@ -232,7 +251,32 @@
     
     uint8_t	*limit = _buffer + _bufsize;
     
-    return (_writePtr >= _readPtr ? _writePtr - _readPtr : limit - _readPtr);
+    
+    return (_writePtr >= _readPtr
+            ?
+            // read             read
+            // |                 |
+            // v                 v
+            //+----------+      +----------+
+            //|xxxxxxx   |  OR  |          |
+            //+----------+      +----------+
+            //        ^          ^
+            //        |          |
+            //       write      write
+            //
+            _writePtr - _readPtr
+            :
+            // write
+            //  |
+            //  v
+            //+----------+
+            //|x      xxx|
+            //+----------+
+            //        ^
+            //        |
+            //       read
+            //
+            limit - _readPtr);
 }
 
 

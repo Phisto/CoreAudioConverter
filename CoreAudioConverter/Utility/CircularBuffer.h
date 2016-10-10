@@ -30,6 +30,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CircularBuffer : NSObject
+
 #pragma mark - Inititalization
 ///----------------------
 /// @name Inititalization
@@ -53,7 +54,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  
- Returns the number of bytes available.
+ Returns the number of bytes with valid data in the CircularBuffer. 
+ 
+ Max. value is the size of the CircularBuffer.
  
  @return The number of bytes available.
  
@@ -61,25 +64,53 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSUInteger)bytesAvailable;
 /**
  
- Returns the free space in bytes.
+ Returns the number of bytes that can be written to the buffer before its full.
  
- @return The Free space in bytes.
+ @return The free space in bytes.
  
  */
 - (NSUInteger)freeSpaceAvailable;
+
+#pragma mark - Read
+///-----------
+/// @name Read
+///-----------
+
 /**
  
- @param buffer
- @param byteCount
- @return
+ This method will copy as many bytes from the CircularBuffer into the buffer as available, with a maximum size specified by byteCount, and return the number of bytes copied to the buffer.
+ 
+ @param buffer The buffer to hold the data that was read from the CircularBuffer.
+ 
+ @param byteCount The size (in bytes) of the data to fetch from the CircularBuffer.
+ 
+ @return The number of bytes copied to the buffer.
+ 
  */
 - (NSUInteger)getData:(void *)buffer byteCount:(NSUInteger)byteCount;
+
+#pragma mark - Write
+///------------
+/// @name Write
+///------------
+
 /**
- @return
+ 
+ Returns a buffer
+ 
+ @return Returns a buffer to write to, or nil.
+ 
  */
 - (nullable void *)exposeBufferForWriting;
+
 /**
+ 
+ 
+ 
  @param byteCount
+ 
+ @return void
+ 
  */
 - (void)wroteBytes:(NSUInteger)byteCount;
 

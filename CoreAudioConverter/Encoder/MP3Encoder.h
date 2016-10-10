@@ -54,9 +54,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (nullable instancetype)initWithDelegate:(NSObject<MP3EncoderDelegate> *)aDelegate NS_DESIGNATED_INITIALIZER;
 
-///------------------------
-/// @name Encoding Methodes
-///------------------------
+///-----------------------
+/// @name Encoder Methodes
+///-----------------------
 
 /**
  

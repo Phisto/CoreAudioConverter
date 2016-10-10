@@ -10,6 +10,7 @@
 
 #import <XCTest/XCTest.h>
 @import CoreAudioConverter;
+@import CoreAudioConverter.Private;
 
 #define TEST_AUDIO NO
 #define TEST_AUDIO_EXTENSIVE YES
@@ -197,6 +198,55 @@
     XCTAssertTrue(![MP3Encoder new], @"Init Failed");
     XCTAssertTrue(![[MP3Encoder alloc] init], @"Init Failed");
     XCTAssertTrue([[MP3Encoder alloc] initWithDelegate:(NSObject<MP3EncoderDelegate> *)[NSObject new]], @"Init Failed");
+}
+
+- (void)testCircularBuffer {
+    
+    
+    NSLog(@"\n");
+    NSLog(@"\n");
+    NSLog(@"\n");
+    
+    CircularBuffer *buffer = [[CircularBuffer alloc] initWithSize:10];
+    
+    //NSString *bufferString = [NSString stringWithUTF8String:(char *)buffer.buffer];
+    
+    //NSLog(@"buffer:'%@' rdPtr:'%p' wrtPtr:'%p'", bufferString, buffer.readPtr, buffer.writePtr);
+    NSLog(@"bytesAvailable:%lu freeSpaceAvailable:%lu", [buffer bytesAvailable], [buffer freeSpaceAvailable]);
+    
+
+        uint8_t *data = [buffer exposeBufferForWriting];
+        UInt32 availableSpace = (UInt32)[buffer freeSpaceAvailable];
+        
+        for (int i = 0 ; i < availableSpace ; i++) {
+            
+            if (i == 0) {
+                
+                data[0] = 'a';
+            }
+            else {
+             
+                data[i] = data[i-1]+1;
+            }
+        }
+        
+        [buffer wroteBytes:availableSpace];
+
+    //NSLog(@"buffer:'%@' rdPtr:'%p' wrtPtr:'%p'", bufferString, buffer.readPtr, buffer.writePtr);
+    NSLog(@"bytesAvailable:%lu freeSpaceAvailable:%lu", [buffer bytesAvailable], [buffer freeSpaceAvailable]);
+    
+    NSUInteger bav = [buffer bytesAvailable];
+    uint8_t *someData = (uint8_t *)calloc(bav, sizeof(uint8_t));
+    NSUInteger byteCount = [buffer getData:someData byteCount:bav];
+    for (int i = 0 ; i < bav ; i++) {
+        
+        NSLog(@"byteCount:%lu someData:'%c'", byteCount, someData[i]);
+    }
+
+    
+    NSLog(@"\n");
+    NSLog(@"\n");
+    NSLog(@"\n");
 }
 
 #pragma mark Delegate Methodes
