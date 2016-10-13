@@ -31,7 +31,7 @@ The CoreAudioConverter framework is using the AudioFileTagger framework to tag t
 
 The AudioFileTagger framework is licensed under the GNU Lesser General Public License (LGPL).
 
-For more information on AudioFileTagger visit http://git...
+For more information on AudioFileTagger visit https://github.com/Phisto/AudioFileTagger
 
 ## Credits
 
