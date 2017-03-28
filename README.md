@@ -17,7 +17,7 @@ To use the CoreAudioConverter framework in your project, you must add the CoreAu
 The CoreAudioConverter framework is available for projects targeting macOS 10.10 or above.
 
 
-##LAME
+## LAME
 
 The CoreAudioConverter framework is using LAME to encode files to MP3.
 
@@ -26,7 +26,7 @@ LAME is a high quality MPEG Audio Layer III encoder licensed under the GNU Lesse
 For more information on LAME visit http://lame.sourceforge.net
 
 
-##Audio File Tagger 
+## Audio File Tagger 
 The CoreAudioConverter framework is using the AudioFileTagger framework to tag the encoded MP3 files with ID3v2 tags.
 
 The AudioFileTagger framework is licensed under the GNU Lesser General Public License (LGPL).
@@ -37,7 +37,7 @@ For more information on AudioFileTagger visit https://github.com/Phisto/AudioFil
 
 I used a lot of code from this repo: https://github.com/sbooth/Max
 
-##License
+## License
 
 Core Audio Converter is released under the GNU Lesser General Public License (LGPL). 
 
