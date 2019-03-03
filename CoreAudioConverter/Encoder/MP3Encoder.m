@@ -22,8 +22,8 @@
 #import "MP3Encoder.h"
 
 // frameworks
-//#import <AudioFileTagger/AudioFileTagger.h> // for MP3Tagger
-@import AudioFileTagger; // for MP3Tagger
+#import <AudioFileTagger/AudioFileTagger.h> // for MP3Tagger
+//@import AudioFileTagger; // for MP3Tagger
 
 #import <LAME/lame.h>   // for lame
 
