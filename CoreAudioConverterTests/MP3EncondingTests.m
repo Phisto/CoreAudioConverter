@@ -12,8 +12,9 @@
 @import CoreAudioConverter;
 @import CoreAudioConverter.Private;
 
+#warning This will use the computers speaker and can possible be very loud or distorted if the encoding failes...
 #define TEST_AUDIO NO
-#define TEST_AUDIO_EXTENSIVE YES
+#define TEST_AUDIO_EXTENSIVE NO
 
 @interface MP3EncondingTests : XCTestCase <MP3EncoderDelegate>
 
