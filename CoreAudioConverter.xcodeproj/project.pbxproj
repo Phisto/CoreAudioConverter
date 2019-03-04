@@ -720,8 +720,8 @@
 				);
 				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				MODULEMAP_FILE = "$(PRODUCT_NAME:c99extidentifier)/module.modulemap";
-				MODULEMAP_PRIVATE_FILE = "$(PRODUCT_NAME:c99extidentifier)/module.private.modulemap";
+				MODULEMAP_FILE = "";
+				MODULEMAP_PRIVATE_FILE = "";
 				PRODUCT_BUNDLE_IDENTIFIER = de.simonsserver.CoreAudioConverter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -759,8 +759,8 @@
 				);
 				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
-				MODULEMAP_FILE = "$(PRODUCT_NAME:c99extidentifier)/module.modulemap";
-				MODULEMAP_PRIVATE_FILE = "$(PRODUCT_NAME:c99extidentifier)/module.private.modulemap";
+				MODULEMAP_FILE = "";
+				MODULEMAP_PRIVATE_FILE = "";
 				PRODUCT_BUNDLE_IDENTIFIER = de.simonsserver.CoreAudioConverter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
