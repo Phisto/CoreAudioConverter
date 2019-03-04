@@ -40,6 +40,12 @@
 /* Error Constants */
 #import "CoreAudioConverterErrorConstants.h"
 
+/* Logging */
+#import "CACDEBUG.h"
+
+/* Custom Error */
+#import "CDCError.h"
+
 ///----------------------
 /// @name CONSTATNS
 ///----------------------
@@ -48,18 +54,8 @@
 
 /// The file extension of a MP3 file.
 static NSString * const kFileExtension = @"mp3";
-
-
-
-///----------------------
-/// @name DEFINES
-///----------------------
-
-
-// ALog always displays output regardless of the DEBUG setting
-#define ALog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
-// only convert if there are more than 100 MB discspace available ...
-#define kMinFreeDiskSpace 100000000
+/// The number of bits for checking the min. disc space.
+static NSUInteger const kMinFreeDiskSpace = 100000000;
 
 
 
@@ -78,6 +74,8 @@ static NSString * const kFileExtension = @"mp3";
 @property (nonatomic, strong) NSURL *secureURLIn;
 @property (nonatomic, strong) NSURL *secureURLOut;
 @property (nonatomic, readwrite) BOOL fileProperlyEncoded;
+
+@property (nonatomic, readonly) NSFileManager *fileManager;
 
 - (void)parseSettings;
 - (BOOL)encodeChunk:(const AudioBufferList *)chunk frameCount:(UInt32)frameCount error:(NSError **)error;
@@ -123,6 +121,7 @@ static NSString * const kFileExtension = @"mp3";
     return [self initWithDelegate:nil];
 }
 
+
 - (void)dealloc {
     // free lame
     lame_close(_gfp);
@@ -130,6 +129,7 @@ static NSString * const kFileExtension = @"mp3";
 
 
 #pragma mark - API Methodes
+
 
 - (BOOL)executeTask:(EncoderTask *)task error:(NSError * __autoreleasing *)error {
     
@@ -145,35 +145,32 @@ static NSString * const kFileExtension = @"mp3";
     self.fileProperlyEncoded                                        = NO;
     
 	@try {
+        
 		bufferList.mBuffers[0].mData = NULL;
 
         // prepare lame settings
         [self parseSettings];
         
 		// Setup input url
-        _secureURLIn = task.inputURL;
-        _secureURLOut = task.tempURL;
+        self.secureURLIn = task.inputURL;
+        self.secureURLOut = task.tempURL;
         
         // start accessing it
-        if (![_secureURLIn startAccessingSecurityScopedResource] &&
-            ![[NSFileManager defaultManager] path:_secureURLIn.path isAccessibleFor:ReadAccess]){
+        if (![self.secureURLIn startAccessingSecurityScopedResource] &&
+            ![self.fileManager path:self.secureURLIn.path isAccessibleFor:ReadAccess]){
             
-            ALog(@"Can't access source file. %@", NSStringFromSelector(_cmd));
-            NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Can't access source file: \"%@\".", _secureURLIn.path]};
-            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain
-                                                    code:CACErrorInputAccessError
-                                                userInfo:infoDict];
-            if (error != NULL) *error = newError;
+            NSString *filePath = self.secureURLIn.path;
+            NSError *accessError = cdc_error(CDCFilePermissionDenied, filePath);
+            if (error != NULL) *error = accessError;
             return NO;
         }
         
-        if (![self enoughFreeSpaceToConvert:_secureURLOut.URLByDeletingLastPathComponent]) {
-            //ALog(@"Not enough disc space to convert file.");
-            NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"There is not enough free disc space to encode the file: \"%@\".", _secureURLIn.lastPathComponent]};
-            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain
-                                                    code:CACErrorDiskSpaceError
-                                                userInfo:infoDict];
-            if (error != NULL) *error = newError;
+        // check if there is enough disc space to write the output file
+        if (![self enoughFreeSpaceToConvert:self.secureURLOut.URLByDeletingLastPathComponent]) {
+
+            NSString *filePath = self.secureURLIn.lastPathComponen;
+            NSError *discSpaceError = cdc_error(CDCFilePermissionDenied, filePath);
+            if (error != NULL) *error = discSpaceError;
             return NO;
         }
         
@@ -181,13 +178,13 @@ static NSString * const kFileExtension = @"mp3";
         NSError *decoderError = nil;
         CADecoder *decoder = [CADecoder decoderForFile:_secureURLIn error:&decoderError];
         if (!decoder) {
-            //ALog(@"Unable to load decoder.");
+            //CDCELog(@"Unable to load decoder.");
             if (decoderError && error != NULL) *error = decoderError;
             return NO;
         }
 
         if ([decoder pcmFormat].mChannelsPerFrame > 2) {
-            ALog(@"LAME only supports one or two channel input.");
+            CDCELog(@"LAME only supports one or two channel input.");
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"LAME only supports one or two channel input. But \"%@\" has \"%u\" channels.", _secureURLIn.path, (unsigned int)[decoder pcmFormat].mChannelsPerFrame]};
             NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain
                                                     code:CACErrorLameError
@@ -345,7 +342,7 @@ static NSString * const kFileExtension = @"mp3";
     
 	@catch(NSException *exception) {
         
-        ALog(@"Exception during encoding:%@", exception);
+        CDCELog(@"Exception during encoding:%@", exception);
 	}
 	
 	@finally {
@@ -357,7 +354,7 @@ static NSString * const kFileExtension = @"mp3";
 			exception = [NSException exceptionWithName:@"IOException"
 												reason:NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @"") 
 											  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			ALog(@"%@", exception);
+			CDCELog(@"%@", exception);
 		}
 
 		// And close the other output file
@@ -365,7 +362,7 @@ static NSString * const kFileExtension = @"mp3";
 			exception = [NSException exceptionWithName:@"IOException" 
 												reason:NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @"")
 											  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			ALog(@"%@", exception);
+			CDCELog(@"%@", exception);
 		}		
 
         // free buffer
@@ -396,12 +393,16 @@ static NSString * const kFileExtension = @"mp3";
     }
 }
 
+
 #pragma mark - Helper Methodes
+
 
 - (BOOL)enoughFreeSpaceToConvert:(NSURL *)destFolder {
     
     return ([self availableDiscSpace:destFolder] > kMinFreeDiskSpace);
 }
+
+
 - (unsigned long long)availableDiscSpace:(NSURL *)folderPath {
     
     
@@ -430,7 +431,9 @@ static NSString * const kFileExtension = @"mp3";
     return space.unsignedLongLongValue;
 }
 
+
 #pragma mark -
+
 
 - (void)parseSettings {
     // Set encoding properties
@@ -442,6 +445,8 @@ static NSString * const kFileExtension = @"mp3";
     // Target is bitrate
     lame_set_brate(_gfp, [self.delegate bitrate]);
 }
+
+
 - (BOOL)encodeChunk:(const AudioBufferList *)chunk
          frameCount:(UInt32)frameCount
               error:(NSError * __autoreleasing *)error {
@@ -470,7 +475,7 @@ static NSString * const kFileExtension = @"mp3";
         bufferLen	= 1.25 * (chunk->mBuffers[0].mNumberChannels * frameCount) + 7200;
         buffer		= (unsigned char *) calloc(bufferLen, sizeof(unsigned char));
         if (buffer == NULL) {
-            ALog(@"Unable to allocate memory.");
+            CDCELog(@"Unable to allocate memory.");
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: @"Unable to allocate memory."};
             NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
             if (error != NULL) *error = newError;
@@ -480,7 +485,7 @@ static NSString * const kFileExtension = @"mp3";
         // Allocate channel buffers for sample de-interleaving
         channelBuffers = calloc(chunk->mBuffers[0].mNumberChannels, sizeof(void *));
         if (channelBuffers == NULL) {
-            ALog(@"Unable to allocate memory.");
+            CDCELog(@"Unable to allocate memory.");
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: @"Unable to allocate memory."};
             NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
             if (error != NULL) *error = newError;
@@ -502,7 +507,7 @@ static NSString * const kFileExtension = @"mp3";
                     channelBuffers16[channel] = calloc(frameCount, sizeof(short));
                     if (channelBuffers16[channel] == NULL) {
                         
-                        ALog(@"Unable to allocate memory.");
+                        CDCELog(@"Unable to allocate memory.");
                         NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: @"Unable to allocate memory."};
                         NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
                         if (error != NULL) *error = newError;
@@ -529,7 +534,7 @@ static NSString * const kFileExtension = @"mp3";
                     channelBuffers16[channel] = calloc(frameCount, sizeof(short));
                     if (channelBuffers16[channel] == NULL) {
                         
-                        ALog(@"Unable to allocate memory.");
+                        CDCELog(@"Unable to allocate memory.");
                         NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: @"Unable to allocate memory."};
                         NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
                         if (error != NULL) *error = newError;
@@ -555,7 +560,7 @@ static NSString * const kFileExtension = @"mp3";
                     channelBuffers32[channel] = calloc(frameCount, sizeof(long));
                     if (channelBuffers32[channel] == NULL) {
                         
-                        ALog(@"Unable to allocate memory.");
+                        CDCELog(@"Unable to allocate memory.");
                         NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: @"Unable to allocate memory."};
                         NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
                         if (error != NULL) *error = newError;
@@ -587,7 +592,7 @@ static NSString * const kFileExtension = @"mp3";
                 for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
                     channelBuffers32[channel] = calloc(frameCount, sizeof(long));
                     if (channelBuffers32[channel] == NULL) {
-                        ALog(@"Unable to allocate memory.");
+                        CDCELog(@"Unable to allocate memory.");
                         NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: @"Unable to allocate memory."};
                         NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
                         if (error != NULL) *error = newError;
@@ -607,7 +612,7 @@ static NSString * const kFileExtension = @"mp3";
                 break;
                 
             default:
-                ALog(@"Sample size not supported");
+                CDCELog(@"Sample size not supported");
                 NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"LAME only supports sample sizes of 8, 16, 24 and 32. But \"%@\" has a sample size of \"%u\".", _secureURLIn.path, (unsigned int)_sourceBitsPerChannel]};
                 NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
                 if (error != NULL) *error = newError;
@@ -616,7 +621,7 @@ static NSString * const kFileExtension = @"mp3";
         }
         
         if (result == -1) {
-            ALog(@"LAME encoding error.");
+            CDCELog(@"LAME encoding error.");
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"An error occured inside of LAME, while encoding the file: \"%@\".", _secureURLIn.path]};
             NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
             if (error != NULL) *error = newError;
@@ -625,7 +630,7 @@ static NSString * const kFileExtension = @"mp3";
         
         numWritten = fwrite(buffer, sizeof(unsigned char), result, _out);
         if (result != numWritten) {
-            ALog(@"Unable to write to the output file.");
+            CDCELog(@"Unable to write to the output file.");
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Unable to write to the output file: \"%@\"", _secureURLOut.path]};
             NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
             if (error != NULL) *error = newError;
@@ -643,6 +648,8 @@ static NSString * const kFileExtension = @"mp3";
         free(buffer);
     }
 }
+
+
 - (BOOL)finishEncodeWithError:(NSError * __autoreleasing *)error {
     
     unsigned char	*buf;
@@ -658,7 +665,7 @@ static NSString * const kFileExtension = @"mp3";
         bufSize		= 7200;
         buf			= (unsigned char *) calloc(bufSize, sizeof(unsigned char));
         if (buf == NULL) {
-            ALog(@"Unable to allocate memory.");
+            CDCELog(@"Unable to allocate memory.");
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: @"Unable to allocate memory."};
             NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
             if (error != NULL) *error = newError;
@@ -668,7 +675,7 @@ static NSString * const kFileExtension = @"mp3";
         // Flush the mp3 buffer
         result = lame_encode_flush(_gfp, buf, bufSize);
         if (result == -1) {
-            ALog(@"LAME was unable to flush the buffers.");
+            CDCELog(@"LAME was unable to flush the buffers.");
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"LAME was unable to flush the buffers for file: \"%@\".", _secureURLIn.path]};
             NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
             if (error != NULL) *error = newError;
@@ -678,7 +685,7 @@ static NSString * const kFileExtension = @"mp3";
         // And write any frames it returns
         numWritten = fwrite(buf, sizeof(unsigned char), result, _out);
         if (result != numWritten) {
-            ALog(@"Unable to write to the output file.");
+            CDCELog(@"Unable to write to the output file.");
             NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Unable to write to the output file: \"%@\".", _secureURLOut.path]};
             NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
             if (error != NULL) *error = newError;
@@ -691,6 +698,8 @@ static NSString * const kFileExtension = @"mp3";
         free(buf);
     }
 }
+
+
 - (BOOL)touchOutputFile:(NSURL *)outputURL {
     
     NSNumber		*permissions	= [NSNumber numberWithUnsignedLong:S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH];
@@ -700,6 +709,16 @@ static NSString * const kFileExtension = @"mp3";
                                                         attributes:attributes];
     return result;
 }
+
+
+#pragma mark - Lazy/Getter
+
+
+- (NSFileManager *)fileManager {
+    
+    return [NSFileManager defaultManager];
+}
+
 
 #pragma mark -
 @end
