@@ -56,7 +56,6 @@
 		F4D917DB222C4F3A00D4A594 /* Lame.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4D917DA222C4F3A00D4A594 /* Lame.framework */; };
 		F4D917E1222D641500D4A594 /* CDCError.h in Headers */ = {isa = PBXBuildFile; fileRef = F4D917DF222D641500D4A594 /* CDCError.h */; };
 		F4D917E2222D641500D4A594 /* CDCError.m in Sources */ = {isa = PBXBuildFile; fileRef = F4D917E0222D641500D4A594 /* CDCError.m */; };
-		F4D917E4222D8DDC00D4A594 /* Cartfile in Resources */ = {isa = PBXBuildFile; fileRef = F4D917E3222D8DDC00D4A594 /* Cartfile */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -129,7 +128,6 @@
 		F4D917DE222D574D00D4A594 /* CACDEBUG.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CACDEBUG.h; sourceTree = "<group>"; };
 		F4D917DF222D641500D4A594 /* CDCError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDCError.h; sourceTree = "<group>"; };
 		F4D917E0222D641500D4A594 /* CDCError.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDCError.m; sourceTree = "<group>"; };
-		F4D917E3222D8DDC00D4A594 /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = SOURCE_ROOT; };
 		F4ED6AC41D8F83AC001DB076 /* CoreAudioConverter.profdata */ = {isa = PBXFileReference; lastKnownFileType = file; path = CoreAudioConverter.profdata; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -244,7 +242,6 @@
 				F49DF7F81BAF8F25003A7C41 /* Utility */,
 				F45155531D5F6E6D00B6FDEF /* Entities */,
 				F474F0901D5516CE007BF84D /* Categories */,
-				F4D917E3222D8DDC00D4A594 /* Cartfile */,
 				F4D917DD222D570F00D4A594 /* Other */,
 				F478E19B1C7D249C00670966 /* Localizable.strings */,
 				F49DF7DD1BAF8D63003A7C41 /* Info.plist */,
@@ -413,7 +410,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F4D917E4222D8DDC00D4A594 /* Cartfile in Resources */,
 				F4CE0C741D5C7D55009360C6 /* wrong_data.m4a in Resources */,
 				F4CE0C751D5C7D55009360C6 /* wrong_filetype.wma in Resources */,
 				F40F2A7B1CA99E0B00BDCF2B /* AIFF (Linear PCM 16 Bit Big Endian Ganzzahl mit Vorzeichen).aiff in Resources */,
