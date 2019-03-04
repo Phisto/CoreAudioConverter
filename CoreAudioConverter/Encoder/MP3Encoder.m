@@ -22,24 +22,23 @@
 #import "MP3Encoder.h"
 
 // frameworks
-#import <AudioFileTagger/AudioFileTagger.h> // for MP3Tagger
-//@import AudioFileTagger; // for MP3Tagger
+//#import <AudioFileTagger/AudioFileTagger.h> // for MP3Tagger
+@import AudioFileTagger; // for MP3Tagger
 
-#import <LAME/lame.h>   // for lame
+/* LAME encoding */
+#import <LAME/lame.h>
 
-// classes
+/* Encoders Task */
 #import "EncoderTask.h"
+
+/* Core Audio Decoder */
 #import "CADecoder.h"
 
-// categories
+/* Check access rights for files&folders */
 #import "NSFileManager+FileAccess.h"
 
-// Constants
+/* Error Constants */
 #import "CoreAudioConverterErrorConstants.h"
-
-// for low-level api
-#include <sys/stat.h>	// stat
-#include <stdio.h>      // for fopen, fclose
 
 // ALog always displays output regardless of the DEBUG setting
 #define ALog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
@@ -67,7 +66,8 @@ NSString * const kFileExtension = @"mp3";
 @end
 
 @implementation MP3Encoder
-#pragma mark - Initialization / Object life cycle
+#pragma mark - Initializing an encoder object
+
 
 - (nullable instancetype)initWithDelegate:(NSObject<MP3EncoderDelegate> *)aDelegate {
 	
@@ -80,23 +80,25 @@ NSString * const kFileExtension = @"mp3";
         _delegate = aDelegate;
         
 		_gfp = lame_init();
-        if (_gfp == NULL || !aDelegate) {
+        if (_gfp == NULL) {
             return nil;
         }
 	}
 	
 	return self;
 }
+
+
 - (nullable instancetype)init {
     
-    NSObject<MP3EncoderDelegate> *noDelegate;
-    return [self initWithDelegate:noDelegate];
+    return [self initWithDelegate:nil];
 }
 
 - (void)dealloc {
     // free lame
     lame_close(_gfp);
 }
+
 
 #pragma mark - API Methodes
 
