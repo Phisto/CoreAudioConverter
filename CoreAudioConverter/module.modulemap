@@ -1,3 +1,0 @@
-framework module CoreAudioConverter {
-    umbrella header "CoreAudioConverter.h"
-}

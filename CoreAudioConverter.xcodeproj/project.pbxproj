@@ -54,6 +54,8 @@
 		F4CE0C741D5C7D55009360C6 /* wrong_data.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F4CE0C721D5C7D55009360C6 /* wrong_data.m4a */; };
 		F4CE0C751D5C7D55009360C6 /* wrong_filetype.wma in Resources */ = {isa = PBXBuildFile; fileRef = F4CE0C731D5C7D55009360C6 /* wrong_filetype.wma */; };
 		F4D917DB222C4F3A00D4A594 /* Lame.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4D917DA222C4F3A00D4A594 /* Lame.framework */; };
+		F4D917E1222D641500D4A594 /* CDCError.h in Headers */ = {isa = PBXBuildFile; fileRef = F4D917DF222D641500D4A594 /* CDCError.h */; };
+		F4D917E2222D641500D4A594 /* CDCError.m in Sources */ = {isa = PBXBuildFile; fileRef = F4D917E0222D641500D4A594 /* CDCError.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -108,8 +110,6 @@
 		F47BC41A1DAC468B003DD71F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		F47BC41E1DAC4CCB003DD71F /* LICENSE.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = LICENSE.rtf; sourceTree = SOURCE_ROOT; };
 		F47CAFE51D9154BA00CFAB41 /* MP3EncoderDelegateProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MP3EncoderDelegateProtocol.h; path = Protocols/MP3EncoderDelegateProtocol.h; sourceTree = "<group>"; };
-		F48DA44C1D9B172400070708 /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
-		F48DA44D1D9B1FBE00070708 /* module.private.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.private.modulemap; sourceTree = "<group>"; };
 		F49409AE222B8BC700AAB1D5 /* AudioFileTagger.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioFileTagger.framework; path = Carthage/Build/Mac/AudioFileTagger.framework; sourceTree = "<group>"; };
 		F49DF7D81BAF8D63003A7C41 /* CoreAudioConverter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreAudioConverter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F49DF7DB1BAF8D63003A7C41 /* CoreAudioConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreAudioConverter.h; sourceTree = "<group>"; };
@@ -125,6 +125,9 @@
 		F4CE0C731D5C7D55009360C6 /* wrong_filetype.wma */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = wrong_filetype.wma; path = "test-files/wrong_filetype.wma"; sourceTree = "<group>"; };
 		F4D917DA222C4F3A00D4A594 /* Lame.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Lame.framework; path = Carthage/Build/Mac/Lame.framework; sourceTree = "<group>"; };
 		F4D917DC222C508700D4A594 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		F4D917DE222D574D00D4A594 /* CACDEBUG.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CACDEBUG.h; sourceTree = "<group>"; };
+		F4D917DF222D641500D4A594 /* CDCError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDCError.h; sourceTree = "<group>"; };
+		F4D917E0222D641500D4A594 /* CDCError.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDCError.m; sourceTree = "<group>"; };
 		F4ED6AC41D8F83AC001DB076 /* CoreAudioConverter.profdata */ = {isa = PBXFileReference; lastKnownFileType = file; path = CoreAudioConverter.profdata; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -172,8 +175,6 @@
 		F43B34831D5FB3F800CF9C12 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				F48DA44C1D9B172400070708 /* module.modulemap */,
-				F48DA44D1D9B1FBE00070708 /* module.private.modulemap */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -257,6 +258,7 @@
 				F47CAFE41D91549400CFAB41 /* Protocols */,
 				F45155531D5F6E6D00B6FDEF /* Entities */,
 				F474F0901D5516CE007BF84D /* Categories */,
+				F4D917DD222D570F00D4A594 /* Other */,
 				F43B34831D5FB3F800CF9C12 /* Supporting Files */,
 				F478E19B1C7D249C00670966 /* Localizable.strings */,
 				F49DF7DD1BAF8D63003A7C41 /* Info.plist */,
@@ -293,6 +295,16 @@
 			path = Encoder;
 			sourceTree = "<group>";
 		};
+		F4D917DD222D570F00D4A594 /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				F4D917DE222D574D00D4A594 /* CACDEBUG.h */,
+				F4D917DF222D641500D4A594 /* CDCError.h */,
+				F4D917E0222D641500D4A594 /* CDCError.m */,
+			);
+			name = Other;
+			sourceTree = "<group>";
+		};
 		F4ED6ABD1D8F819B001DB076 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -313,6 +325,7 @@
 				F49DF7DC1BAF8D63003A7C41 /* CoreAudioConverter.h in Headers */,
 				F45155561D5F6E9200B6FDEF /* EncoderTask.h in Headers */,
 				F4727BA81D478EA200B15C13 /* MP3Encoder.h in Headers */,
+				F4D917E1222D641500D4A594 /* CDCError.h in Headers */,
 				F49DF8031BAF93DB003A7C41 /* CoreAudioConverterErrorConstants.h in Headers */,
 				F44BC1311D7986B4008D9CF1 /* NSFileManager+FileAccess.h in Headers */,
 				F474F08E1D55154E007BF84D /* NSError+Exceptions.h in Headers */,
@@ -495,6 +508,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F49DF80A1BAF93ED003A7C41 /* CADecoder.m in Sources */,
+				F4D917E2222D641500D4A594 /* CDCError.m in Sources */,
 				F474F08F1D55154E007BF84D /* NSError+Exceptions.m in Sources */,
 				F45155571D5F6E9200B6FDEF /* EncoderTask.m in Sources */,
 				F49DF8061BAF93DB003A7C41 /* CircularBuffer.m in Sources */,
