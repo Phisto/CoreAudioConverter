@@ -109,7 +109,7 @@
 		F478E1AF1C7D2E8D00670966 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F47BC41A1DAC468B003DD71F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		F47BC41E1DAC4CCB003DD71F /* LICENSE.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = LICENSE.rtf; sourceTree = SOURCE_ROOT; };
-		F47CAFE51D9154BA00CFAB41 /* MP3EncoderDelegateProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MP3EncoderDelegateProtocol.h; path = Protocols/MP3EncoderDelegateProtocol.h; sourceTree = "<group>"; };
+		F47CAFE51D9154BA00CFAB41 /* MP3EncoderDelegateProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MP3EncoderDelegateProtocol.h; sourceTree = "<group>"; };
 		F49409AE222B8BC700AAB1D5 /* AudioFileTagger.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioFileTagger.framework; path = Carthage/Build/Mac/AudioFileTagger.framework; sourceTree = "<group>"; };
 		F49DF7D81BAF8D63003A7C41 /* CoreAudioConverter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreAudioConverter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F49DF7DB1BAF8D63003A7C41 /* CoreAudioConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreAudioConverter.h; sourceTree = "<group>"; };
@@ -172,13 +172,6 @@
 			name = "test-files";
 			sourceTree = "<group>";
 		};
-		F43B34831D5FB3F800CF9C12 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 		F45155531D5F6E6D00B6FDEF /* Entities */ = {
 			isa = PBXGroup;
 			children = (
@@ -217,14 +210,6 @@
 			path = CoreAudioConverterTests;
 			sourceTree = "<group>";
 		};
-		F47CAFE41D91549400CFAB41 /* Protocols */ = {
-			isa = PBXGroup;
-			children = (
-				F47CAFE51D9154BA00CFAB41 /* MP3EncoderDelegateProtocol.h */,
-			);
-			name = Protocols;
-			sourceTree = "<group>";
-		};
 		F49DF7CE1BAF8D63003A7C41 = {
 			isa = PBXGroup;
 			children = (
@@ -255,11 +240,9 @@
 				F49DF7F91BAF8F35003A7C41 /* Encoder */,
 				F49DF7F71BAF8F17003A7C41 /* Decoder */,
 				F49DF7F81BAF8F25003A7C41 /* Utility */,
-				F47CAFE41D91549400CFAB41 /* Protocols */,
 				F45155531D5F6E6D00B6FDEF /* Entities */,
 				F474F0901D5516CE007BF84D /* Categories */,
 				F4D917DD222D570F00D4A594 /* Other */,
-				F43B34831D5FB3F800CF9C12 /* Supporting Files */,
 				F478E19B1C7D249C00670966 /* Localizable.strings */,
 				F49DF7DD1BAF8D63003A7C41 /* Info.plist */,
 			);
@@ -291,6 +274,7 @@
 			children = (
 				F4727BA61D478EA200B15C13 /* MP3Encoder.h */,
 				F4727BA51D478EA200B15C13 /* MP3Encoder.m */,
+				F47CAFE51D9154BA00CFAB41 /* MP3EncoderDelegateProtocol.h */,
 			);
 			path = Encoder;
 			sourceTree = "<group>";
