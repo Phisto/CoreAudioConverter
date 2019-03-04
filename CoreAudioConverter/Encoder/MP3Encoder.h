@@ -36,27 +36,27 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MP3Encoder : NSObject
 
-///----------------------
-/// @name Inititalization
-///----------------------
+#pragma mark - Initializing an encoder object
+///------------------------------------------
+/// @name Initializing an encoder object
+///------------------------------------------
 
 /**
  
- Returns an MP3Encoder object initialized with a given delegate.
+ @brief Returns an MP3Encoder object initialized with the given delegate. This is the designated initializer.
  
- This is the designated initializer for MP3Encoder.
+ @param aDelegate The encoders delegate.
  
- @see MP3EncoderDelegate
- 
- @param aDelegate The delegate.
- 
- @return An MP3Encoder object initialized with aDelegate. If aDelegate is nil or lame coulden't be initialized, returns nil.
+ @return A MP3Encoder object initialized with aDelegate. If aDelegate is nil or lame coulden't be initialized, returns nil.
  */
 - (nullable instancetype)initWithDelegate:(NSObject<MP3EncoderDelegate> *)aDelegate NS_DESIGNATED_INITIALIZER;
 
-///-----------------------
-/// @name Encoder Methodes
-///-----------------------
+
+
+#pragma mark - Executing an encoder task
+///-------------------------------------
+/// @name Executing an encoder task
+///-------------------------------------
 
 /**
  
@@ -71,6 +71,8 @@ NS_ASSUME_NONNULL_BEGIN
  @return YES if the encoding was successfull, otherwise NO.
  */
 - (BOOL)executeTask:(EncoderTask *)task error:(NSError * _Nullable *)error;
+
+
 
 @end
 NS_ASSUME_NONNULL_END
