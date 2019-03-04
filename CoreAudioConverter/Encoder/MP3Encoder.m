@@ -168,7 +168,7 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
         // check if there is enough disc space to write the output file
         if (![self enoughFreeSpaceToConvert:self.secureURLOut.URLByDeletingLastPathComponent]) {
 
-            NSString *filePath = self.secureURLIn.lastPathComponen;
+            NSString *filePath = self.secureURLIn.lastPathComponent;
             NSError *discSpaceError = cdc_error(CDCFilePermissionDenied, filePath);
             if (error != NULL) *error = discSpaceError;
             return NO;
