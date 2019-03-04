@@ -40,13 +40,34 @@
 /* Error Constants */
 #import "CoreAudioConverterErrorConstants.h"
 
+///----------------------
+/// @name CONSTATNS
+///----------------------
+
+
+
+/// The file extension of a MP3 file.
+static NSString * const kFileExtension = @"mp3";
+
+
+
+///----------------------
+/// @name DEFINES
+///----------------------
+
+
 // ALog always displays output regardless of the DEBUG setting
 #define ALog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
-
-NSString * const kFileExtension = @"mp3";
-
 // only convert if there are more than 100 MB discspace available ...
 #define kMinFreeDiskSpace 100000000
+
+
+
+///----------------------
+/// @name CATEGORIES
+///----------------------
+
+
 
 @interface MP3Encoder (/* Private */)
 
@@ -64,6 +85,14 @@ NSString * const kFileExtension = @"mp3";
 - (BOOL)touchOutputFile:(NSURL *)outputURL;
 
 @end
+
+
+
+///----------------------
+/// @name IMPLEMENTATION
+///----------------------
+
+
 
 @implementation MP3Encoder
 #pragma mark - Initializing an encoder object

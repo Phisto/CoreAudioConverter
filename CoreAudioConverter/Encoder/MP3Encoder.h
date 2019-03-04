@@ -60,15 +60,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  
- Converts an given audio file to the MP3 format.
+ @brief Executes the given encoder task.
  
- @see EncoderTask
+ @param task The encoder task to execute.
  
- @param task The EncoderTask to process.
+ @param error May contain an error, desccribing the failure reason.
  
- @param error The error that occurred while trying to convert the provided EncoderTask.
- 
- @return YES if the encoding was successfull, otherwise NO.
+ @return YES if the executing was successfull, otherwise NO.
  */
 - (BOOL)executeTask:(EncoderTask *)task error:(NSError * _Nullable *)error;
 
