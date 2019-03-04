@@ -1,0 +1,2 @@
+github "Phisto/AudioFileTagger" ~> 1.0
+github "Phisto/LAME" ~> 3.0
