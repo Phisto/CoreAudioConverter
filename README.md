@@ -8,14 +8,14 @@ more commonly referred to as MP3.
 
 ## Supported Audio Formats
 
-  - Audio Interchange File Format (AIFF)
-  - Apple Lossless Audio Codec (ALAC)
-  - Advanced Audio Coding (ACC)
+- Audio Interchange File Format (AIFF)
+- Apple Lossless Audio Codec (ALAC)
+- Advanced Audio Coding (ACC)
 
 ## Requirements
 
-  - macOS 10.10+
-  - Xcode 10.1+
+- macOS 10.10+
+- Xcode 10.1+
   
 ## Installation
 
