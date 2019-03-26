@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/7a1bf52905a74059a2f59cc5a4c0ab80)](https://app.codacy.com/app/Phisto/CoreAudioConverter?utm_source=github.com&utm_medium=referral&utm_content=Phisto/CoreAudioConverter&utm_campaign=Badge_Grade_Dashboard)
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![License](https://img.shields.io/github/license/phisto/CoreAudioConverter.svg)](https://github.com/Phisto/CoreAudioConverter)
 
