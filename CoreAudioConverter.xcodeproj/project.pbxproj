@@ -34,30 +34,28 @@
 		F40F2A7D1CA99E0B00BDCF2B /* about.rtf in Resources */ = {isa = PBXBuildFile; fileRef = F40F2A731CA99E0B00BDCF2B /* about.rtf */; };
 		F40F2A7E1CA99E0B00BDCF2B /* AAC 44.100 Hz Stereo 320 kbits:s.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F40F2A741CA99E0B00BDCF2B /* AAC 44.100 Hz Stereo 320 kbits:s.m4a */; };
 		F40F2A7F1CA99E0B00BDCF2B /* AAC 44.100 Hz Stereo 80 kbits:s (HE).m4a in Resources */ = {isa = PBXBuildFile; fileRef = F40F2A751CA99E0B00BDCF2B /* AAC 44.100 Hz Stereo 80 kbits:s (HE).m4a */; };
-		F44BC1311D7986B4008D9CF1 /* NSFileManager+FileAccess.h in Headers */ = {isa = PBXBuildFile; fileRef = F44BC12F1D7986B4008D9CF1 /* NSFileManager+FileAccess.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		F44BC1311D7986B4008D9CF1 /* NSFileManager+FileAccess.h in Headers */ = {isa = PBXBuildFile; fileRef = F44BC12F1D7986B4008D9CF1 /* NSFileManager+FileAccess.h */; };
 		F44BC1321D7986B4008D9CF1 /* NSFileManager+FileAccess.m in Sources */ = {isa = PBXBuildFile; fileRef = F44BC1301D7986B4008D9CF1 /* NSFileManager+FileAccess.m */; };
 		F45155561D5F6E9200B6FDEF /* EncoderTask.h in Headers */ = {isa = PBXBuildFile; fileRef = F45155541D5F6E9200B6FDEF /* EncoderTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F45155571D5F6E9200B6FDEF /* EncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = F45155551D5F6E9200B6FDEF /* EncoderTask.m */; };
 		F4727BA71D478EA200B15C13 /* MP3Encoder.m in Sources */ = {isa = PBXBuildFile; fileRef = F4727BA51D478EA200B15C13 /* MP3Encoder.m */; };
 		F4727BA81D478EA200B15C13 /* MP3Encoder.h in Headers */ = {isa = PBXBuildFile; fileRef = F4727BA61D478EA200B15C13 /* MP3Encoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F474F08E1D55154E007BF84D /* NSError+Exceptions.h in Headers */ = {isa = PBXBuildFile; fileRef = F474F08C1D55154E007BF84D /* NSError+Exceptions.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		F474F08E1D55154E007BF84D /* NSError+Exceptions.h in Headers */ = {isa = PBXBuildFile; fileRef = F474F08C1D55154E007BF84D /* NSError+Exceptions.h */; };
 		F474F08F1D55154E007BF84D /* NSError+Exceptions.m in Sources */ = {isa = PBXBuildFile; fileRef = F474F08D1D55154E007BF84D /* NSError+Exceptions.m */; };
 		F47CAFE71D9154BA00CFAB41 /* MP3EncoderDelegateProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = F47CAFE51D9154BA00CFAB41 /* MP3EncoderDelegateProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F49409AF222B8BC700AAB1D5 /* AudioFileTagger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F49409AE222B8BC700AAB1D5 /* AudioFileTagger.framework */; };
 		F49DF7DC1BAF8D63003A7C41 /* CoreAudioConverter.h in Headers */ = {isa = PBXBuildFile; fileRef = F49DF7DB1BAF8D63003A7C41 /* CoreAudioConverter.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F49DF8031BAF93DB003A7C41 /* CoreAudioConverterErrorConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = F49DF7FF1BAF93DB003A7C41 /* CoreAudioConverterErrorConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F49DF8041BAF93DB003A7C41 /* CoreAudioConverterErrorConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = F49DF8001BAF93DB003A7C41 /* CoreAudioConverterErrorConstants.m */; };
-		F49DF8051BAF93DB003A7C41 /* CircularBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = F49DF8011BAF93DB003A7C41 /* CircularBuffer.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		F49DF8051BAF93DB003A7C41 /* CircularBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = F49DF8011BAF93DB003A7C41 /* CircularBuffer.h */; };
 		F49DF8061BAF93DB003A7C41 /* CircularBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = F49DF8021BAF93DB003A7C41 /* CircularBuffer.m */; };
-		F49DF8091BAF93ED003A7C41 /* CADecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = F49DF8071BAF93ED003A7C41 /* CADecoder.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		F49DF8091BAF93ED003A7C41 /* CADecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = F49DF8071BAF93ED003A7C41 /* CADecoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F49DF80A1BAF93ED003A7C41 /* CADecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = F49DF8081BAF93ED003A7C41 /* CADecoder.m */; };
 		F4CE0C621D5C6FF3009360C6 /* CoreAudioConverter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F49DF7D81BAF8D63003A7C41 /* CoreAudioConverter.framework */; };
 		F4CE0C711D5C7AB7009360C6 /* WAV Microsoft (Signed 16 bit PCM).wav in Resources */ = {isa = PBXBuildFile; fileRef = F4CE0C701D5C7AB7009360C6 /* WAV Microsoft (Signed 16 bit PCM).wav */; };
 		F4CE0C741D5C7D55009360C6 /* wrong_data.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F4CE0C721D5C7D55009360C6 /* wrong_data.m4a */; };
 		F4CE0C751D5C7D55009360C6 /* wrong_filetype.wma in Resources */ = {isa = PBXBuildFile; fileRef = F4CE0C731D5C7D55009360C6 /* wrong_filetype.wma */; };
 		F4D917DB222C4F3A00D4A594 /* Lame.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4D917DA222C4F3A00D4A594 /* Lame.framework */; };
-		F4D917E1222D641500D4A594 /* CDCError.h in Headers */ = {isa = PBXBuildFile; fileRef = F4D917DF222D641500D4A594 /* CDCError.h */; };
-		F4D917E2222D641500D4A594 /* CDCError.m in Sources */ = {isa = PBXBuildFile; fileRef = F4D917E0222D641500D4A594 /* CDCError.m */; };
+		F4D917E1222D641500D4A594 /* CACError.h in Headers */ = {isa = PBXBuildFile; fileRef = F4D917DF222D641500D4A594 /* CACError.h */; };
+		F4D917E2222D641500D4A594 /* CACError.m in Sources */ = {isa = PBXBuildFile; fileRef = F4D917E0222D641500D4A594 /* CACError.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +71,7 @@
 /* Begin PBXFileReference section */
 		4A24129723A4E7D600B43215 /* CACDebug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CACDebug.h; path = Utility/CACDebug.h; sourceTree = "<group>"; };
 		4A24129823A4E7D600B43215 /* CACDebug.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CACDebug.m; sourceTree = "<group>"; };
+		4A24129C23A4F73000B43215 /* .bartycrouch.toml */ = {isa = PBXFileReference; lastKnownFileType = text; path = .bartycrouch.toml; sourceTree = "<group>"; };
 		F40F2A671CA99DE900BDCF2B /* MP3EncondingTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MP3EncondingTests.m; sourceTree = "<group>"; };
 		F40F2A6C1CA99E0B00BDCF2B /* test-cover.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "test-cover.jpg"; path = "test-files/test-cover.jpg"; sourceTree = "<group>"; };
 		F40F2A6D1CA99E0B00BDCF2B /* Apple MPEG-4-Audio (AAC).m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Apple MPEG-4-Audio (AAC).m4a"; path = "test-files/Apple MPEG-4-Audio (AAC).m4a"; sourceTree = "<group>"; };
@@ -105,8 +104,6 @@
 		F49DF7D81BAF8D63003A7C41 /* CoreAudioConverter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreAudioConverter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F49DF7DB1BAF8D63003A7C41 /* CoreAudioConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreAudioConverter.h; sourceTree = "<group>"; };
 		F49DF7DD1BAF8D63003A7C41 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F49DF7FF1BAF93DB003A7C41 /* CoreAudioConverterErrorConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreAudioConverterErrorConstants.h; sourceTree = "<group>"; };
-		F49DF8001BAF93DB003A7C41 /* CoreAudioConverterErrorConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreAudioConverterErrorConstants.m; sourceTree = "<group>"; };
 		F49DF8011BAF93DB003A7C41 /* CircularBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircularBuffer.h; sourceTree = "<group>"; };
 		F49DF8021BAF93DB003A7C41 /* CircularBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircularBuffer.m; sourceTree = "<group>"; };
 		F49DF8071BAF93ED003A7C41 /* CADecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CADecoder.h; sourceTree = "<group>"; };
@@ -116,8 +113,8 @@
 		F4CE0C731D5C7D55009360C6 /* wrong_filetype.wma */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = wrong_filetype.wma; path = "test-files/wrong_filetype.wma"; sourceTree = "<group>"; };
 		F4D917DA222C4F3A00D4A594 /* Lame.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Lame.framework; path = Carthage/Build/Mac/Lame.framework; sourceTree = "<group>"; };
 		F4D917DC222C508700D4A594 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		F4D917DF222D641500D4A594 /* CDCError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDCError.h; sourceTree = "<group>"; };
-		F4D917E0222D641500D4A594 /* CDCError.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDCError.m; sourceTree = "<group>"; };
+		F4D917DF222D641500D4A594 /* CACError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CACError.h; sourceTree = "<group>"; };
+		F4D917E0222D641500D4A594 /* CACError.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CACError.m; sourceTree = "<group>"; };
 		F4ED6AC41D8F83AC001DB076 /* CoreAudioConverter.profdata */ = {isa = PBXFileReference; lastKnownFileType = file; path = CoreAudioConverter.profdata; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -190,26 +187,27 @@
 			path = OptimizationProfiles;
 			sourceTree = "<group>";
 		};
-		F478E1AC1C7D2E8D00670966 /* CoreAudioConverterTests */ = {
+		F478E1AC1C7D2E8D00670966 /* Integration Test */ = {
 			isa = PBXGroup;
 			children = (
 				F40F2A6B1CA99DFF00BDCF2B /* test-files */,
 				F478E1AF1C7D2E8D00670966 /* Info.plist */,
 				F40F2A671CA99DE900BDCF2B /* MP3EncondingTests.m */,
 			);
-			path = CoreAudioConverterTests;
+			path = "Integration Test";
 			sourceTree = "<group>";
 		};
 		F49DF7CE1BAF8D63003A7C41 = {
 			isa = PBXGroup;
 			children = (
 				F49DF7DA1BAF8D63003A7C41 /* CoreAudioConverter */,
-				F478E1AC1C7D2E8D00670966 /* CoreAudioConverterTests */,
+				F478E1AC1C7D2E8D00670966 /* Integration Test */,
 				F49DF7D91BAF8D63003A7C41 /* Products */,
 				F478E1991C7D09E100670966 /* OptimizationProfiles */,
 				F4ED6ABD1D8F819B001DB076 /* Frameworks */,
 				F47BC41E1DAC4CCB003DD71F /* LICENSE */,
 				F47BC41A1DAC468B003DD71F /* README.md */,
+				4A24129C23A4F73000B43215 /* .bartycrouch.toml */,
 				F4D917DC222C508700D4A594 /* .gitignore */,
 			);
 			sourceTree = "<group>";
@@ -251,8 +249,6 @@
 		F49DF7F81BAF8F25003A7C41 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
-				F49DF7FF1BAF93DB003A7C41 /* CoreAudioConverterErrorConstants.h */,
-				F49DF8001BAF93DB003A7C41 /* CoreAudioConverterErrorConstants.m */,
 				F49DF8011BAF93DB003A7C41 /* CircularBuffer.h */,
 				F49DF8021BAF93DB003A7C41 /* CircularBuffer.m */,
 			);
@@ -274,8 +270,8 @@
 			children = (
 				4A24129723A4E7D600B43215 /* CACDebug.h */,
 				4A24129823A4E7D600B43215 /* CACDebug.m */,
-				F4D917DF222D641500D4A594 /* CDCError.h */,
-				F4D917E0222D641500D4A594 /* CDCError.m */,
+				F4D917DF222D641500D4A594 /* CACError.h */,
+				F4D917E0222D641500D4A594 /* CACError.m */,
 			);
 			name = Other;
 			sourceTree = "<group>";
@@ -297,16 +293,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				F47CAFE71D9154BA00CFAB41 /* MP3EncoderDelegateProtocol.h in Headers */,
+				F45155561D5F6E9200B6FDEF /* EncoderTask.h in Headers */,
 				F49DF7DC1BAF8D63003A7C41 /* CoreAudioConverter.h in Headers */,
 				4A24129923A4E7D600B43215 /* CACDebug.h in Headers */,
-				F45155561D5F6E9200B6FDEF /* EncoderTask.h in Headers */,
+				F49DF8091BAF93ED003A7C41 /* CADecoder.h in Headers */,
+				F49DF8051BAF93DB003A7C41 /* CircularBuffer.h in Headers */,
 				F4727BA81D478EA200B15C13 /* MP3Encoder.h in Headers */,
-				F4D917E1222D641500D4A594 /* CDCError.h in Headers */,
-				F49DF8031BAF93DB003A7C41 /* CoreAudioConverterErrorConstants.h in Headers */,
+				F4D917E1222D641500D4A594 /* CACError.h in Headers */,
 				F44BC1311D7986B4008D9CF1 /* NSFileManager+FileAccess.h in Headers */,
 				F474F08E1D55154E007BF84D /* NSError+Exceptions.h in Headers */,
-				F49DF8051BAF93DB003A7C41 /* CircularBuffer.h in Headers */,
-				F49DF8091BAF93ED003A7C41 /* CADecoder.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -335,6 +330,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F49DF7E01BAF8D63003A7C41 /* Build configuration list for PBXNativeTarget "CoreAudioConverter" */;
 			buildPhases = (
+				4A24129B23A4F6E200B43215 /* Update Localization */,
 				F49DF7D31BAF8D63003A7C41 /* Sources */,
 				F49DF7D41BAF8D63003A7C41 /* Frameworks */,
 				F49DF7D51BAF8D63003A7C41 /* Headers */,
@@ -421,6 +417,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		4A24129B23A4F6E200B43215 /* Update Localization */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Update Localization";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which bartycrouch > /dev/null; then\nbartycrouch update -x\nbartycrouch lint -x\nelse\necho \"warning: BartyCrouch not installed, download it from https://github.com/Flinesoft/BartyCrouch\"\nfi\n";
+		};
 		F47CAFDF1D91454A00CFAB41 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -484,12 +498,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				F49DF80A1BAF93ED003A7C41 /* CADecoder.m in Sources */,
-				F4D917E2222D641500D4A594 /* CDCError.m in Sources */,
+				F4D917E2222D641500D4A594 /* CACError.m in Sources */,
 				F474F08F1D55154E007BF84D /* NSError+Exceptions.m in Sources */,
 				F45155571D5F6E9200B6FDEF /* EncoderTask.m in Sources */,
 				F49DF8061BAF93DB003A7C41 /* CircularBuffer.m in Sources */,
 				F4727BA71D478EA200B15C13 /* MP3Encoder.m in Sources */,
-				F49DF8041BAF93DB003A7C41 /* CoreAudioConverterErrorConstants.m in Sources */,
 				4A24129A23A4E7D600B43215 /* CACDebug.m in Sources */,
 				F44BC1321D7986B4008D9CF1 /* NSFileManager+FileAccess.m in Sources */,
 			);
@@ -530,7 +543,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				INFOPLIST_FILE = CoreAudioConverterTests/Info.plist;
+				INFOPLIST_FILE = "Integration Test/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -551,7 +564,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				INFOPLIST_FILE = CoreAudioConverterTests/Info.plist;
+				INFOPLIST_FILE = "Integration Test/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

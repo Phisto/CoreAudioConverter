@@ -1,12 +1,12 @@
 //
-//  CDCError.m
+//  CACError.m
 //  CoreAudioConverter
 //
 //  Created by Simon Gaus on 04.03.19.
 //  Copyright © 2019 Simon Gaus. All rights reserved.
 //
 
-#import "CDCError.h"
+#import "CACError.h"
 
 #pragma mark - Constants
 
@@ -17,29 +17,29 @@ static NSString * const kCoreAudioConverterIdentifier = @"de.simonsserver.CoreAu
 #pragma mark - HUSync Error Domain
 
 
-NSString * const CDCCoreAudioErrorDomain = @"de.simonsserver.CoreAudioConverter.error";
+NSString * const CoreAudioConverterErrorDomain = @"de.simonsserver.CoreAudioConverter.error";
 
 
 #pragma mark - Funktion Prototypes
 
 
-NSString * cdc_errorDescription( CDCErrorCode code, NSString * _Nullable userinfo);
-NSString * cdc_systemErrorDescription(NSInteger code );
+NSString * cac_errorDescription( CACErrorCode code, NSString * _Nullable userinfo);
+NSString * cac_systemErrorDescription(NSInteger code );
 
 
 #pragma mark - Convenient Error Creation
 
 
-NSError * cdc_error( CDCErrorCode code, NSString * _Nullable __unused userInfo ) {
+NSError * cac_error( CACErrorCode code, NSString * _Nullable __unused userInfo ) {
     
-    NSString *errorDomain = CDCCoreAudioErrorDomain;
-    NSString *description = cdc_errorDescription(code, userInfo);
+    NSString *errorDomain = CoreAudioConverterErrorDomain;
+    NSString *description = cac_errorDescription(code, userInfo);
     
     // try to find a matching system error
     if (!description) {
         
         errorDomain = NSCocoaErrorDomain;
-        description = cdc_systemErrorDescription(code);
+        description = cac_systemErrorDescription(code);
     }
     
     NSError *error = [NSError errorWithDomain:errorDomain
@@ -49,13 +49,13 @@ NSError * cdc_error( CDCErrorCode code, NSString * _Nullable __unused userInfo )
 }
 
 
-inline NSString * cdc_errorDescription( CDCErrorCode code , NSString * _Nullable userinfo) {
+inline NSString * cac_errorDescription( CACErrorCode code , NSString * _Nullable userinfo) {
     
     NSString *descr = nil;
     
     switch (code) {
             
-        case CDCFilePermissionDenied: {
+        case CACFilePermissionDenied: {
             NSString *locFormatString = NSLocalizedStringFromTableInBundle(@"The process is not allowed to access the requested file at path '%@'.",
                                                                            @"Localizable",
                                                                            [NSBundle bundleWithIdentifier:kCoreAudioConverterIdentifier],
@@ -64,11 +64,119 @@ inline NSString * cdc_errorDescription( CDCErrorCode code , NSString * _Nullable
             break;
         }
             
-        case CDCNotEnoughDiscSpace: {
+        case CACNotEnoughDiscSpace: {
             NSString *locFormatString = NSLocalizedStringFromTableInBundle(@"There is not enough disc space to encode the file at path '%@'.",
                                                                            @"Localizable",
                                                                            [NSBundle bundleWithIdentifier:kCoreAudioConverterIdentifier],
                                                                            @"Error description - Returned if there is not enough disc space to encode the file");
+            descr = [NSString stringWithFormat:locFormatString, userinfo];
+            break;
+        }
+            
+        case CACTooMayChannels: {
+            NSString *locFormatString = NSLocalizedStringFromTableInBundle(@"LAME only supports one or two channel input. %@.",
+                                                                           @"Localizable",
+                                                                           [NSBundle bundleWithIdentifier:kCoreAudioConverterIdentifier],
+                                                                           @"Error description - Returned if a file has more than 2 channels.");
+            descr = [NSString stringWithFormat:locFormatString, userinfo];
+            break;
+        }
+            
+            
+        case CACLameSettingsInitFailed: {
+            NSString *locFormatString = NSLocalizedStringFromTableInBundle(@"Unable to initialize the LAME settings. Failed with code: %@",
+                                                                           @"Localizable",
+                                                                           [NSBundle bundleWithIdentifier:kCoreAudioConverterIdentifier],
+                                                                           @"Error description - Returned if the lame settings couldent be set.");
+            descr = [NSString stringWithFormat:locFormatString, userinfo];
+            break;
+        }
+            
+        case CACOutputAccessFailed: {
+            NSString *locFormatString = NSLocalizedStringFromTableInBundle(@"Unable to open the output file: '%@'.",
+                                                                           @"Localizable",
+                                                                           [NSBundle bundleWithIdentifier:kCoreAudioConverterIdentifier],
+                                                                           @"Error description - Returned if the output file could not be opened.");
+            descr = [NSString stringWithFormat:locFormatString, userinfo];
+            break;
+        }
+            
+        case CACOutputClosingFailed: {
+            NSString *locFormatString = NSLocalizedStringFromTableInBundle(@"Unable to close the output file: '%@'.",
+                                                                           @"Localizable",
+                                                                           [NSBundle bundleWithIdentifier:kCoreAudioConverterIdentifier],
+                                                                           @"Error description - Returned if the output file could not be closed.");
+            descr = [NSString stringWithFormat:locFormatString, userinfo];
+            break;
+        }
+            
+        case CACMemoryAllocationFailed: {
+            descr = NSLocalizedStringFromTableInBundle(@"Unable to allocate memory.",
+                                                       @"Localizable",
+                                                       [NSBundle bundleWithIdentifier:kCoreAudioConverterIdentifier],
+                                                       @"Error description - Returned if the output file could not be closed.");
+            break;
+        }
+            
+        case CACUnsupportedSampleSize: {
+            NSString *locFormatString = NSLocalizedStringFromTableInBundle(@"LAME only supports sample sizes of 8, 16, 24 and 32. %@.",
+                                                                           @"Localizable",
+                                                                           [NSBundle bundleWithIdentifier:kCoreAudioConverterIdentifier],
+                                                                           @"Error description - Returned if a file has an unsupported sample size.");
+            descr = [NSString stringWithFormat:locFormatString, userinfo];
+            break;
+        }
+            
+        case CACUnknownLAMEError: {
+            NSString *locFormatString = NSLocalizedStringFromTableInBundle(@"An error occurred inside of LAME, while encoding the file: '%@'.",
+                                                                           @"Localizable",
+                                                                           [NSBundle bundleWithIdentifier:kCoreAudioConverterIdentifier],
+                                                                           @"Error description - Returned if an unknown error occurred inside of LAME.");
+            descr = [NSString stringWithFormat:locFormatString, userinfo];
+            break;
+        }
+            
+        case CACLameBufferFlushFailed: {
+            NSString *locFormatString = NSLocalizedStringFromTableInBundle(@"LAME was unable to flush the buffers for file: '%@'.",
+                                                                           @"Localizable",
+                                                                           [NSBundle bundleWithIdentifier:kCoreAudioConverterIdentifier],
+                                                                           @"Error description - Returned if LAME was unable to flush the buffer for a file.");
+            descr = [NSString stringWithFormat:locFormatString, userinfo];
+            break;
+        }
+            
+        case CACFailedToOpenInputFile: {
+            NSString *locFormatString = NSLocalizedStringFromTableInBundle(@"Couldn't open the file '%@', the file may be corrupted.",
+                                                                           @"Localizable",
+                                                                           [NSBundle bundleWithIdentifier:kCoreAudioConverterIdentifier],
+                                                                           @"Error description - Returned if the input file couldent be opened.");
+            descr = [NSString stringWithFormat:locFormatString, userinfo];
+            break;
+        }
+            
+        case CACUnknownFileType: {
+            NSString *locFormatString = NSLocalizedStringFromTableInBundle(@"Couldn't detect type for file: '%@', the file may be corrupted.",
+                                                                           @"Localizable",
+                                                                           [NSBundle bundleWithIdentifier:kCoreAudioConverterIdentifier],
+                                                                           @"Error description - Returned if the file type of the input file couldent be detected.");
+            descr = [NSString stringWithFormat:locFormatString, userinfo];
+            break;
+        }
+            
+        case CACFailedToCreateDecoder: {
+            NSString *locFormatString = NSLocalizedStringFromTableInBundle(@"Couldn't create decoder for file: '%@'.",
+                                                                           @"Localizable",
+                                                                           [NSBundle bundleWithIdentifier:kCoreAudioConverterIdentifier],
+                                                                           @"Error description - Returned if the decoder for the given file could not be create.");
+            descr = [NSString stringWithFormat:locFormatString, userinfo];
+            break;
+        }
+            
+        case CACFileFormatNotSupported: {
+            NSString *locFormatString = NSLocalizedStringFromTableInBundle(@"File format not supported for file: '%@'",
+                                                                           @"Localizable",
+                                                                           [NSBundle bundleWithIdentifier:kCoreAudioConverterIdentifier],
+                                                                           @"Error description - Returned if the file format is not supported.");
             descr = [NSString stringWithFormat:locFormatString, userinfo];
             break;
         }
@@ -81,9 +189,9 @@ inline NSString * cdc_errorDescription( CDCErrorCode code , NSString * _Nullable
 #pragma mark - System Errors
 
 
-NSError * cdc_OSStatusError( OSStatus code ) {
+NSError * cac_OSStatusError( OSStatus code ) {
     
-    NSString *description = cdc_systemErrorDescription(code);
+    NSString *description = cac_systemErrorDescription(code);
     NSError *error = [NSError errorWithDomain:NSCocoaErrorDomain
                                          code:code
                                      userInfo:@{ NSLocalizedDescriptionKey : description }];
@@ -91,12 +199,12 @@ NSError * cdc_OSStatusError( OSStatus code ) {
 }
 
 
-NSString * cdc_systemErrorDescription(NSInteger code ) {
+NSString * cac_systemErrorDescription(NSInteger code ) {
     
-    NSString *descr = NSLocalizedStringFromTableInBundle(@"An unknown error occured.",
+    NSString *descr = NSLocalizedStringFromTableInBundle(@"An unknown error occurred.",
                                                          @"Localizable",
                                                          [NSBundle bundleWithIdentifier:kCoreAudioConverterIdentifier],
-                                                         @"Error description - Returned if an unknown error occured.");
+                                                         @"Error description - Returned if an unknown error occurred.");
     
     /* Defined in <CoreServices/CarbonCore/MacErrors.h> */
     
@@ -130,7 +238,7 @@ NSString * cdc_systemErrorDescription(NSInteger code ) {
             descr = NSLocalizedStringFromTableInBundle(@"Beim lesen/schreiben ist ein Fehler aufgetreten.",
                                                        @"Localizable",
                                                        [NSBundle bundleWithIdentifier:kCoreAudioConverterIdentifier],
-                                                       @"Error description - Returned if an I/O error occured.");
+                                                       @"Error description - Returned if an I/O error occurred.");
         }
             break;
             
@@ -211,7 +319,7 @@ NSString * cdc_systemErrorDescription(NSInteger code ) {
             descr = NSLocalizedStringFromTableInBundle(@"Es ist ein unbekannter Fehler im Core Foundation Framework aufgetreten.",
                                                        @"Localizable",
                                                        [NSBundle bundleWithIdentifier:kCoreAudioConverterIdentifier],
-                                                       @"Error description - Returned if there occured an unknown Core Foundation error.");
+                                                       @"Error description - Returned if there occurred an unknown Core Foundation error.");
         }
             break;
     }

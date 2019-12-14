@@ -1,0 +1,23 @@
+[update]
+tasks = ["code"]
+
+[update.code]
+codePath = "CoreAudioConverter/"
+localizablePath = "."
+defaultToKeys = false
+additive = true
+unstripped = false
+
+[update.transform]
+codePath = "."
+localizablePath = "."
+transformer = "foundation"
+supportedLanguageEnumPath = "."
+typeName = "BartyCrouch"
+translateMethodName = "translate"
+
+[lint]
+path = "."
+duplicateKeys = true
+emptyValues = true
+exclude = [".git/", "Carthage/", "Integration Test/"]

@@ -27,6 +27,7 @@
 
 @implementation MP3EncondingTests
 
+
 - (void)setUp {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -34,6 +35,7 @@
     [self.opQueue setMaxConcurrentOperationCount:[[NSProcessInfo processInfo] processorCount]];
     [self.opQueue setQualityOfService:NSQualityOfServiceUserInitiated];
 }
+
 
 - (void)tearDown {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
@@ -53,6 +55,7 @@
     
     [super tearDown];
 }
+
 
 - (void)testMP3Encoding {
     
@@ -158,7 +161,7 @@
                                             error:&encError];
             if (!erfolg) {
                 if (encError) NSLog(@"%@", encError);
-                else NSLog(@"Encoding of file \"%@\"failed without error.", task.inputURL.lastPathComponent);
+                else NSLog(@"Encoding of file '%@'failed without error.", task.inputURL.lastPathComponent);
             }
         }
 
@@ -203,14 +206,18 @@
 
 #pragma mark Delegate Methodes
 
+
 - (void)encodingFinished:(NSDictionary *)dict {
     
     NSLog(@"%@", dict);
 }
+
+
 - (void)encodingFinishedwithErrors:(NSArray *)errorArray {
     
     if (errorArray.count > 0) NSLog(@"%@", errorArray);
 }
+
 
 #pragma mark -
 @end

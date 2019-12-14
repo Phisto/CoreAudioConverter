@@ -2,7 +2,7 @@
  *  MP3Encoder.m
  *  CoreAudioConverter
  *
- *  Copyright © 2016 Simon Gaus <simon.cay.gaus@gmail.com>
+ *  Copyright © 2016-2019 Simon Gaus <simon.cay.gaus@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -35,14 +35,11 @@
 /* Check access rights for files&folders */
 #import "NSFileManager+FileAccess.h"
 
-/* Error Constants */
-#import "CoreAudioConverterErrorConstants.h"
-
 /* Logging */
 #import "CACDebug.h"
 
 /* Custom Error */
-#import "CDCError.h"
+#import "CACError.h"
 
 #pragma mark - CONSTANTS
 ///---------------------------------
@@ -117,9 +114,10 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
 }
 
 
-- (nullable instancetype)init {
+- (instancetype)init {
     
-    return [self initWithDelegate:nil];
+    NSAssert(false, @"Unavailable, use `-initWithDelegate:` instead.");
+    return [self initWithDelegate:(NSObject<MP3EncoderDelegate> *)[NSObject new]];
 }
 
 
@@ -161,7 +159,7 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
             ![self.fileManager path:self.secureURLIn.path isAccessibleFor:ReadAccess]){
             
             NSString *filePath = self.secureURLIn.path;
-            NSError *accessError = cdc_error(CDCFilePermissionDenied, filePath);
+            NSError *accessError = cac_error(CACFilePermissionDenied, filePath);
             if (error != NULL) *error = accessError;
             return NO;
         }
@@ -170,7 +168,7 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
         if (![self enoughFreeSpaceToConvert:self.secureURLOut.URLByDeletingLastPathComponent]) {
 
             NSString *filePath = self.secureURLIn.lastPathComponent;
-            NSError *discSpaceError = cdc_error(CDCFilePermissionDenied, filePath);
+            NSError *discSpaceError = cac_error(CACFilePermissionDenied, filePath);
             if (error != NULL) *error = discSpaceError;
             return NO;
         }
@@ -186,11 +184,8 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
 
         if ([decoder pcmFormat].mChannelsPerFrame > 2) {
             CACLog(CACDebugLevelError, @"LAME only supports one or two channel input.");
-            NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"LAME only supports one or two channel input. But \"%@\" has \"%u\" channels.", _secureURLIn.path, (unsigned int)[decoder pcmFormat].mChannelsPerFrame]};
-            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain
-                                                    code:CACErrorLameError
-                                                userInfo:infoDict];
-            if (error != NULL) *error = newError;
+            NSString *userInfo = [NSString stringWithFormat:@"File:%@|Channels:%u", _secureURLIn.path, (unsigned int)[decoder pcmFormat].mChannelsPerFrame];
+            if (error != NULL) *error = cac_error(CACTooMayChannels, userInfo);
             return NO;
         }
         
@@ -224,13 +219,8 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
 				break;
 				
             default: {
-                NSString *locString = NSLocalizedString(@"LAME only supports sample sizes of 8, 16, 24 and 32. \"%@\" has a sample size of \"%u\".", @"Error message if the sample size is not suitable for lame.");
-                locString = [NSString stringWithFormat:locString, _secureURLIn.lastPathComponent, (unsigned int)[decoder pcmFormat].mBitsPerChannel];
-                NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: locString};
-                
-                NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain
-                                                        code:CACErrorLameError
-                                                    userInfo:infoDict];
+                NSString *userInfo = [NSString stringWithFormat:@"File:%@|SampleSize:%u", _secureURLIn.lastPathComponent, (unsigned int)[decoder pcmFormat].mBitsPerChannel];
+                NSError *newError = cac_error(CACUnsupportedSampleSize, userInfo);
                 if (error != NULL) *error = newError;
                 return NO;
             }
@@ -238,10 +228,7 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
 		
 		bufferByteSize = bufferList.mBuffers[0].mDataByteSize;
         if (bufferList.mBuffers[0].mData == NULL) {
-            NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: @"Unable to allocate memory."};
-            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain
-                                                    code:CACErrorMemoryError
-                                                userInfo:infoDict];
+            NSError *newError = cac_error(CACMemoryAllocationFailed, nil);
             if (error != NULL) *error = newError;
             return NO;
         }
@@ -252,12 +239,8 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
 		
 		result = lame_init_params(_gfp);
         if (result != noErr) {
-            NSString *locString = NSLocalizedString(@"Unable to initialize the LAME settings. Failed with code: %i", @"Error message when the lame settings couldent be set.");
-            locString = [NSString stringWithFormat:locString, result];
-            NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: locString };
-            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain
-                                                    code:CACErrorLameError
-                                                userInfo:infoDict];
+            NSString *userInfo = [NSString stringWithFormat:@"%i", result];
+            NSError *newError = cac_error(CACLameSettingsInitFailed, userInfo);
             if (error != NULL) *error = newError;
             return NO;
         }
@@ -268,10 +251,8 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
 		// Open the output file
 		_out = fopen(_secureURLOut.fileSystemRepresentation, "w");
         if (_out == NULL) {
-            NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Unable to open the output file: \"%s\".", _secureURLOut.fileSystemRepresentation]};
-            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain
-                                                    code:CACErrorOutputAccessError
-                                                userInfo:infoDict];
+            NSString *userInfo = [NSString stringWithFormat:@"%s", _secureURLOut.fileSystemRepresentation];
+            NSError *newError = cac_error(CACOutputAccessFailed, userInfo);
             if (error != NULL) *error = newError;
             return NO;
         }
@@ -314,10 +295,7 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
 		// Close the output file
 		result = fclose(_out);
         if (result != noErr) {
-            NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Unable to close the output file: \"%@\".", _secureURLOut.path]};
-            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain
-                                                    code:CACErrorUnknown
-                                                userInfo:infoDict];
+            NSError *newError = cac_error(CACOutputClosingFailed, [_secureURLOut.path copy]);
             if (error != NULL) *error = newError;
             return NO;
         }
@@ -326,10 +304,8 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
 		// Write the Xing VBR tag
 		file = fopen(_secureURLOut.fileSystemRepresentation, "r+");
         if (file == NULL) {
-            NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Unable to open the output file: \"%@\".", _secureURLOut.path]};
-            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain
-                                                    code:CACErrorOutputAccessError
-                                                userInfo:infoDict];
+            
+            NSError *newError = cac_error(CACOutputAccessFailed, _secureURLOut.path);
             if (error != NULL) *error = newError;
             return NO;
         }
@@ -440,10 +416,10 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
     lame_set_mode(_gfp, JOINT_STEREO);
     
     // quality
-    lame_set_quality(_gfp, [self.delegate quality]);
+    lame_set_quality(_gfp, (int)[self.delegate quality]);
     
     // Target is bitrate
-    lame_set_brate(_gfp, [self.delegate bitrate]);
+    lame_set_brate(_gfp, (int)[self.delegate bitrate]);
 }
 
 
@@ -476,8 +452,7 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
         buffer		= (unsigned char *) calloc(bufferLen, sizeof(unsigned char));
         if (buffer == NULL) {
             CACLog(CACDebugLevelError, @"Unable to allocate memory.");
-            NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: @"Unable to allocate memory."};
-            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
+            NSError *newError = cac_error(CACMemoryAllocationFailed, nil);
             if (error != NULL) *error = newError;
             return NO;
         }
@@ -486,8 +461,7 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
         channelBuffers = calloc(chunk->mBuffers[0].mNumberChannels, sizeof(void *));
         if (channelBuffers == NULL) {
             CACLog(CACDebugLevelError, @"Unable to allocate memory.");
-            NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: @"Unable to allocate memory."};
-            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
+            NSError *newError = cac_error(CACMemoryAllocationFailed, nil);
             if (error != NULL) *error = newError;
             return NO;
         }
@@ -508,8 +482,7 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
                     if (channelBuffers16[channel] == NULL) {
                         
                         CACLog(CACDebugLevelError, @"Unable to allocate memory.");
-                        NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: @"Unable to allocate memory."};
-                        NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
+                        NSError *newError = cac_error(CACMemoryAllocationFailed, nil);
                         if (error != NULL) *error = newError;
                         return NO;
                     }
@@ -535,8 +508,7 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
                     if (channelBuffers16[channel] == NULL) {
                         
                         CACLog(CACDebugLevelError, @"Unable to allocate memory.");
-                        NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: @"Unable to allocate memory."};
-                        NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
+                        NSError *newError = cac_error(CACMemoryAllocationFailed, nil);
                         if (error != NULL) *error = newError;
                         return NO;
                     }
@@ -561,8 +533,7 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
                     if (channelBuffers32[channel] == NULL) {
                         
                         CACLog(CACDebugLevelError, @"Unable to allocate memory.");
-                        NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: @"Unable to allocate memory."};
-                        NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
+                        NSError *newError = cac_error(CACMemoryAllocationFailed, nil);
                         if (error != NULL) *error = newError;
                         return NO;
                     }
@@ -593,8 +564,7 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
                     channelBuffers32[channel] = calloc(frameCount, sizeof(long));
                     if (channelBuffers32[channel] == NULL) {
                         CACLog(CACDebugLevelError, @"Unable to allocate memory.");
-                        NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: @"Unable to allocate memory."};
-                        NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
+                        NSError *newError = cac_error(CACMemoryAllocationFailed, nil);
                         if (error != NULL) *error = newError;
                         return NO;
                     }
@@ -613,8 +583,8 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
                 
             default:
                 CACLog(CACDebugLevelError, @"Sample size not supported");
-                NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"LAME only supports sample sizes of 8, 16, 24 and 32. But \"%@\" has a sample size of \"%u\".", _secureURLIn.path, (unsigned int)_sourceBitsPerChannel]};
-                NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
+                NSString *userInfo = [NSString stringWithFormat:@"File:%@|SampleSize:%u", _secureURLIn.path, (unsigned int)_sourceBitsPerChannel];
+                NSError *newError = cac_error(CACUnsupportedSampleSize, userInfo);
                 if (error != NULL) *error = newError;
                 return NO;
                 break;
@@ -622,8 +592,7 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
         
         if (result == -1) {
             CACLog(CACDebugLevelError, @"LAME encoding error.");
-            NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"An error occured inside of LAME, while encoding the file: \"%@\".", _secureURLIn.path]};
-            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
+            NSError *newError = cac_error(CACUnknownLAMEError, _secureURLIn.path);
             if (error != NULL) *error = newError;
             return NO;
         }
@@ -631,8 +600,7 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
         numWritten = fwrite(buffer, sizeof(unsigned char), result, _out);
         if (result != numWritten) {
             CACLog(CACDebugLevelError, @"Unable to write to the output file.");
-            NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Unable to write to the output file: \"%@\"", _secureURLOut.path]};
-            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
+            NSError *newError = cac_error(CACOutputAccessFailed, _secureURLOut.path);
             if (error != NULL) *error = newError;
             return NO;
         }
@@ -666,8 +634,7 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
         buf			= (unsigned char *) calloc(bufSize, sizeof(unsigned char));
         if (buf == NULL) {
             CACLog(CACDebugLevelError, @"Unable to allocate memory.");
-            NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: @"Unable to allocate memory."};
-            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
+            NSError *newError = cac_error(CACMemoryAllocationFailed, nil);
             if (error != NULL) *error = newError;
             return NO;
         }
@@ -676,8 +643,7 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
         result = lame_encode_flush(_gfp, buf, bufSize);
         if (result == -1) {
             CACLog(CACDebugLevelError, @"LAME was unable to flush the buffers.");
-            NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"LAME was unable to flush the buffers for file: \"%@\".", _secureURLIn.path]};
-            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
+            NSError *newError = cac_error(CACLameBufferFlushFailed, _secureURLIn.path);
             if (error != NULL) *error = newError;
             return NO;
         }
@@ -686,8 +652,7 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
         numWritten = fwrite(buf, sizeof(unsigned char), result, _out);
         if (result != numWritten) {
             CACLog(CACDebugLevelError, @"Unable to write to the output file.");
-            NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Unable to write to the output file: \"%@\".", _secureURLOut.path]};
-            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain code:CACErrorUnknown userInfo:infoDict];
+            NSError *newError = cac_error(CACOutputAccessFailed, _secureURLOut.path);
             if (error != NULL) *error = newError;
             return NO;
         }

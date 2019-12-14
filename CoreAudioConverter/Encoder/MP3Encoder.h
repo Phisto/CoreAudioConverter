@@ -2,7 +2,7 @@
  *  MP3Encoder.h
  *  CoreAudioConverter
  *
- *  Copyright © 2016 Simon Gaus <simon.cay.gaus@gmail.com>
+ *  Copyright © 2016-2019 Simon Gaus <simon.cay.gaus@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -37,9 +37,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MP3Encoder : NSObject
 
 #pragma mark - Initializing an encoder object
-///------------------------------------------
+///-------------------------------------------------------------------
 /// @name Initializing an encoder object
-///------------------------------------------
+///-------------------------------------------------------------------
 
 /**
  
@@ -54,9 +54,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 #pragma mark - Executing an encoder task
-///-------------------------------------
+///-----------------------------------------------------------
 /// @name Executing an encoder task
-///-------------------------------------
+///-----------------------------------------------------------
 
 /**
  

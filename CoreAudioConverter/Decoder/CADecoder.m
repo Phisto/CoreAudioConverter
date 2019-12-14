@@ -24,11 +24,14 @@
 @import AudioToolbox.AudioFormat;
 @import AudioToolbox.ExtendedAudioFile;
 
+/* Circular Buffer */
 #import "CircularBuffer.h"
-#import "CoreAudioConverterErrorConstants.h"
 
-// ALog always displays output regardless of the DEBUG setting
-#define ALog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+/* Logging */
+#import "CACDebug.h"
+
+/* Custom Error */
+#import "CACError.h"
 
 #pragma mark - CONSTANTS
 ///---------------------------------
@@ -75,10 +78,7 @@
         if (!result) {
             
             if (!error) {
-                NSDictionary *infoDict = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Couldn't create decoder for file: \"%@\".", fileUrl]};
-                NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain
-                                                        code:CACErrorUnknown
-                                                    userInfo:infoDict];
+                NSError *newError = cac_error(CACFailedToCreateDecoder, fileUrl.lastPathComponent);
                 if (error != NULL) *error = newError;
             }
             
@@ -87,11 +87,7 @@
     }
     // format not supported
     else {
-        
-        NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"File format not supported for file: \"%@\".", fileUrl.lastPathComponent] };
-        NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain
-                                                code:CACErrorFileFormatNotSupported
-                                            userInfo:infoDict];
+        NSError *newError = cac_error(CACFileFormatNotSupported, fileUrl.lastPathComponent);
         if (error != NULL) *error = newError;
     }
     
@@ -109,10 +105,7 @@
         
         _pcmBuffer = [[CircularBuffer alloc] init];
         if (!_pcmBuffer) {
-            NSDictionary *infoDict = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Couldn't allocate memory for the ring buffer."]};
-            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain
-                                                    code:CACErrorUnknown
-                                                userInfo:infoDict];
+            NSError *newError = cac_error(CACMemoryAllocationFailed, nil);
             if (error != NULL) *error = newError;
             return nil;
         }
@@ -121,12 +114,10 @@
         __unused OSStatus result = ExtAudioFileOpenURL((__bridge CFURLRef _Nonnull)(fileUrl), &_extAudioFile);
         if (result != noErr) {
             CFStringRef descr = UTCreateStringForOSType(result);
-            //ALog(@"ExtAudioFileOpen failed: %@", descr);
-            NSDictionary *infoDict = @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Couldn't open the file \"%@\", the file may be corrupted. Underlying failure reason: %@ failure code: %d", fileUrl.lastPathComponent, descr, (int)result]};
+            CACLog(CACDebugLevelError, @"ExtAudioFileOpen failed: %@", descr);
             if (descr != NULL) CFRelease(descr);
-            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain
-                                                    code:CACErrorUnknown
-                                                userInfo:infoDict];
+            
+            NSError *newError = cac_error(CACFailedToOpenInputFile, fileUrl.lastPathComponent);
             if (error != NULL) *error = newError;
             return nil;
         }
@@ -136,12 +127,10 @@
         result = ExtAudioFileGetProperty(_extAudioFile, kExtAudioFileProperty_FileDataFormat, &dataSize, &_pcmFormat);
         if (result != noErr) {
             CFStringRef descr = UTCreateStringForOSType(result);
-            //ALog(@"AudioFileGetProperty failed: %@", descr);
+            CACLog(CACDebugLevelError, @"AudioFileGetProperty failed: %@", descr);
             if (descr != NULL) CFRelease(descr);
-            NSDictionary *infoDict = @{NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Couldn't detect type for file: \"%@\", the file may be corrupted.", fileUrl.lastPathComponent]};
-            NSError *newError = [NSError errorWithDomain:CoreAudioConverterErrorDomain
-                                                    code:CACErrorUnknown
-                                                userInfo:infoDict];
+
+            NSError *newError = cac_error(CACUnknownFileType, fileUrl.lastPathComponent);
             if (error != NULL) *error = newError;
             return nil;
         }
@@ -182,7 +171,7 @@
         if (result != noErr) {
             
             CFStringRef descr = UTCreateStringForOSType(result);
-            ALog(@"ExtAudioFileSetProperty failed: %@", descr);
+            CACLog(CACDebugLevelError, @"ExtAudioFileSetProperty failed: %@", descr);
             if (descr != NULL) CFRelease(descr);
             return nil;
         }
@@ -198,7 +187,7 @@
         OSStatus result = ExtAudioFileDispose(_extAudioFile);
         if (result != noErr) {
             CFStringRef descr = UTCreateStringForOSType(result);
-            ALog(@"ExtAudioFileDispose failed: %@", descr);
+            CACLog(CACDebugLevelError, @"ExtAudioFileDispose failed: %@", descr);
             if (descr != NULL) CFRelease(descr);
         }
     }
@@ -211,11 +200,11 @@
 - (UInt32)readAudio:(AudioBufferList *)bufferList frameCount:(UInt32)frameCount {
     
     if (bufferList == NULL) {
-        ALog(@"An error occured during decoding.");
+        CACLog(CACDebugLevelError, @"An error occurred during decoding.");
         return 0;
     }
     if (bufferList->mNumberBuffers <= 0) {
-        ALog(@"An error occured during decoding.");
+        CACLog(CACDebugLevelError, @"An error occurred during decoding.");
         return 0;
     }
     if (frameCount <= 0) { return 0; }
@@ -225,7 +214,7 @@
     UInt32		bytesRead		= 0;
     
     if (byteCount > bufferList->mBuffers[0].mDataByteSize) {
-        ALog(@"An error occured during decoding.");
+        CACLog(CACDebugLevelError, @"An error occurred during decoding.");
         return 0;
     }
     
@@ -234,7 +223,7 @@
         
         BOOL erfolg = [self fillPCMBuffer];
         if (!erfolg) {
-            ALog(@"An error occured during decoding.");
+            CACLog(CACDebugLevelError, @"An error occurred during decoding.");
             return 0;
         }
     }
@@ -266,7 +255,7 @@
     
     if (result != noErr) {
         CFStringRef descr = UTCreateStringForOSType(result);
-        ALog(@"AudioFileGetProperty failed: %@", descr);
+        CACLog(CACDebugLevelError, @"AudioFileGetProperty failed: %@", descr);
         if (descr != NULL) CFRelease(descr);
         return 0;
     }
@@ -287,7 +276,7 @@
     // type is spezified return type in circular buffer
     uint8_t *data = [buffer exposeBufferForWriting];
     if (data == nil) {
-        ALog(@"Failed to expose buffer for writing.");
+        CACLog(CACDebugLevelError, @"Failed to expose buffer for writing.");
         return NO;
     }
     bufferList.mBuffers[0].mData			= data;
@@ -298,13 +287,13 @@
     
     if (result != noErr) {
         CFStringRef descr = UTCreateStringForOSType(result);
-        ALog(@"ExtAudioFileRead failed: %@", descr);
+        CACLog(CACDebugLevelError, @"ExtAudioFileRead failed: %@", descr);
         if (descr != NULL) CFRelease(descr);
         return NO;
     }
     
     if ((bufferList.mBuffers[0].mDataByteSize) != (frameCount * self.pcmFormat.mBytesPerFrame)) {
-        ALog(@"mismatch");
+        CACLog(CACDebugLevelError, @"mismatch");
         return NO;
     }
     
@@ -325,7 +314,7 @@
     if (err != noErr) {
         
         CFStringRef descr = UTCreateStringForOSType(err);
-        ALog(@"Failed to get supported Core Audio Extensions. Failure reason: %@", descr);
+        CACLog(CACDebugLevelError, @"Failed to get supported Core Audio Extensions. Failure reason: %@", descr);
         if (descr != NULL) CFRelease(descr);
     }
     return coreAudioExtensions;
