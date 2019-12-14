@@ -198,8 +198,6 @@
 
 - (void)testMP3EncoderInit {
     
-    XCTAssertTrue(![MP3Encoder new], @"Init Failed");
-    XCTAssertTrue(![[MP3Encoder alloc] init], @"Init Failed");
     XCTAssertTrue([[MP3Encoder alloc] initWithDelegate:(NSObject<MP3EncoderDelegate> *)[NSObject new]], @"Init Failed");
 }
 
