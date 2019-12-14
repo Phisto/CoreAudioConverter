@@ -2,7 +2,7 @@
  *  NSError+Exceptions.h
  *  CoreAudioConverter
  *
- *  Copyright © 2015-2016 Simon Gaus <simon.cay.gaus@gmail.com>
+ *  Copyright © 2015-2019 Simon Gaus <simon.cay.gaus@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -30,10 +30,10 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface NSError (Exception)
-
-///---------------------
-/// @name Methodes
-///---------------------
+#pragma mark - Create an error
+///-------------------------------------------
+/// @name Create an error
+///-------------------------------------------
 
 /**
  
@@ -49,6 +49,8 @@ NS_ASSUME_NONNULL_BEGIN
  
  */
 + (instancetype)errorWithException:(NSException *)exception domain:(NSString *)domain code:(NSInteger)code;
+
+
 
 @end
 NS_ASSUME_NONNULL_END

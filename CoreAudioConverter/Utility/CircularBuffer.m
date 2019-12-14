@@ -2,7 +2,7 @@
  *  CircularBuffer.m
  *  CoreAudioConverter
  *
- *  Copyright © 2015-2016 Simon Gaus <simon.cay.gaus@gmail.com>
+ *  Copyright © 2015-2019 Simon Gaus <simon.cay.gaus@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -21,11 +21,27 @@
 
 #import "CircularBuffer.h"
 
-// ALog always displays output regardless of the DEBUG setting
-#define ALog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+/* Debug */
+#import "CACDebug.h"
+
+#pragma mark - CONSTANTS
+///---------------------------------
+/// @name CONSTANTS
+///---------------------------------
+
+
 
 // default buffer size
-#define BUFFER_INIT_SIZE 10 * 1024
+static NSUInteger const BUFFER_INIT_SIZE = 10 * 1024;
+
+
+
+#pragma mark - CATEGORIES
+///-----------------------------------
+/// @name CATEGORIES
+///-----------------------------------
+
+
 
 @interface CircularBuffer (/* Private */)
 
@@ -40,14 +56,25 @@
 
 @end
 
+
+
+#pragma mark - IMPLEMENTATION
+///-----------------------------------------
+/// @name IMPLEMENTATION
+///-----------------------------------------
+
+
+
 @implementation CircularBuffer
 #pragma mark - Object creation
+
 
 - (nullable instancetype)init {
     
     // call designated initilaizer
     return [self initWithSize:BUFFER_INIT_SIZE];
 }
+
 
 - (nullable instancetype)initWithSize:(NSUInteger)size {
     
@@ -216,7 +243,7 @@
         chunkA = (uint8_t *)calloc(chunkASize, sizeof(uint8_t));
         //NSAssert1(NULL != chunkA, @"Unable to allocate memory: %s", strerror(errno));
         if (chunkA == NULL) {
-            ALog(@"Unable to allocate memory: %s", strerror(errno));
+            CACLog(CACDebugLevelError, @"Unable to allocate memory: %s", strerror(errno));
             return NO;
         }
         memcpy(chunkA, _readPtr, chunkASize);
@@ -225,7 +252,7 @@
             chunkB = (uint8_t *)calloc(chunkBSize, sizeof(uint8_t));
             //NSAssert1(NULL != chunkA, @"Unable to allocate memory: %s", strerror(errno));
             if (chunkB == NULL) {
-                ALog(@"Unable to allocate memory: %s", strerror(errno));
+                CACLog(CACDebugLevelError, @"Unable to allocate memory: %s", strerror(errno));
                 free(chunkA);
                 return NO;
             }

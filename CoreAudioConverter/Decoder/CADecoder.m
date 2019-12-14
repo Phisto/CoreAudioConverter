@@ -2,7 +2,7 @@
  *  CADecoder.m
  *  CoreAudioConverter
  *
- *  Copyright © 2015-2016 Simon Gaus <simon.cay.gaus@gmail.com>
+ *  Copyright © 2015-2019 Simon Gaus <simon.cay.gaus@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -21,8 +21,8 @@
 
 #import "CADecoder.h"
 
-#import <AudioToolbox/AudioFormat.h>
-#import <AudioToolbox/ExtendedAudioFile.h>
+@import AudioToolbox.AudioFormat;
+@import AudioToolbox.ExtendedAudioFile;
 
 #import "CircularBuffer.h"
 #import "CoreAudioConverterErrorConstants.h"
@@ -30,8 +30,14 @@
 // ALog always displays output regardless of the DEBUG setting
 #define ALog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
 
-@interface CADecoder (/* Private */)
+#pragma mark - CONSTANTS
+///---------------------------------
+/// @name CONSTANTS
+///---------------------------------
 
+
+
+@interface CADecoder (/* Private */)
 
 @property (nonatomic, readwrite) SInt64 currentFrame;
 @property (nonatomic, strong) CircularBuffer *pcmBuffer;
@@ -41,8 +47,18 @@
 
 @end
 
+
+
+#pragma mark - IMPLEMENTATION
+///-----------------------------------------
+/// @name IMPLEMENTATION
+///-----------------------------------------
+
+
+
 @implementation CADecoder
-#pragma mark Object creation
+#pragma mark - Object creation
+
 
 + (nullable instancetype)decoderForFile:(NSURL *)fileUrl error:(NSError * __autoreleasing *)error {
     
@@ -81,6 +97,8 @@
     
     return result;
 }
+
+
 - (nullable instancetype)initWithFile:(NSURL *)fileUrl error:(NSError * __autoreleasing *)error {
 
     if (!fileUrl) return nil;
@@ -173,6 +191,7 @@
     return self;
 }
 
+
 - (void)dealloc {
     
     if (_extAudioFile) {
@@ -185,8 +204,9 @@
     }
 }
 
-#pragma mark -
-#pragma mark Main Methodes
+
+#pragma mark - Main Methodes
+
 
 - (UInt32)readAudio:(AudioBufferList *)bufferList frameCount:(UInt32)frameCount {
     
@@ -234,6 +254,7 @@
     return framesRead;
 }
 
+
 - (SInt64)totalFrames {
     
     __unused OSStatus	result;
@@ -252,6 +273,7 @@
     
     return frameCount;
 }
+
 
 - (BOOL)fillPCMBuffer {
     
@@ -290,8 +312,9 @@
     return YES;
 }
 
-#pragma mark -
-#pragma mark Helper Methodes
+
+#pragma mark - Helper Methodes
+
 
 + (NSArray<NSString *> *)supportedAudioExtensions {
     
@@ -307,6 +330,7 @@
     }
     return coreAudioExtensions;
 }
+
 
 #pragma mark -
 @end

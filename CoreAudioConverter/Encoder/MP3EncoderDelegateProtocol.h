@@ -103,5 +103,6 @@ typedef NS_ENUM(NSUInteger, CONSTANT_BITRATE) {
 - (BOOL)cancel;
 
 
+
 @end
 NS_ASSUME_NONNULL_END

@@ -10,10 +10,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-#pragma mark - Defining the error domain
-///-------------------------------------
-/// @name Defining the error domain
-///-------------------------------------
+#pragma mark - Error domain
+///--------------------------------------
+/// @name Error domain
+///--------------------------------------
 
 
 
@@ -22,10 +22,10 @@ FOUNDATION_EXPORT NSString * const CDCCoreAudioErrorDomain;
 
 
 
-#pragma mark - CoreAudioConverter specific error codes
-///---------------------------------------------------
-/// @name CoreAudioConverter specific error codes
-///---------------------------------------------------
+#pragma mark - Error codes
+///-------------------------------------
+/// @name Error codes
+///-------------------------------------
 
 /**
  
@@ -43,10 +43,10 @@ typedef NS_ENUM(NSUInteger, CDCErrorCode) {
 
 
 
-#pragma mark - Convenient funktions for creating errors
-///----------------------------------------------------
-/// @name Convenient funktions for creating errors
-///----------------------------------------------------
+#pragma mark - Creating errors
+///-------------------------------------------
+/// @name Creating errors
+///-------------------------------------------
 
 /**
  
@@ -59,6 +59,7 @@ typedef NS_ENUM(NSUInteger, CDCErrorCode) {
  @return The newly created error object.
  
  */
+
 __attribute__((annotate("returns_localized_nsstring")))
 NSError * cdc_error( CDCErrorCode code, NSString * _Nullable __unused userInfo );
 

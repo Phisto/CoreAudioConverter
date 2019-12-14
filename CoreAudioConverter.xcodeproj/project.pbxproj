@@ -21,6 +21,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		4A24129923A4E7D600B43215 /* CACDebug.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A24129723A4E7D600B43215 /* CACDebug.h */; };
+		4A24129A23A4E7D600B43215 /* CACDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A24129823A4E7D600B43215 /* CACDebug.m */; };
 		F40F2A681CA99DE900BDCF2B /* MP3EncondingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F40F2A671CA99DE900BDCF2B /* MP3EncondingTests.m */; };
 		F40F2A761CA99E0B00BDCF2B /* test-cover.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F40F2A6C1CA99E0B00BDCF2B /* test-cover.jpg */; };
 		F40F2A771CA99E0B00BDCF2B /* Apple MPEG-4-Audio (AAC).m4a in Resources */ = {isa = PBXBuildFile; fileRef = F40F2A6D1CA99E0B00BDCF2B /* Apple MPEG-4-Audio (AAC).m4a */; };
@@ -68,20 +70,9 @@
 		};
 /* End PBXContainerItemProxy section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		F42913B91BBE61CA0027FC28 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 12;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
+		4A24129723A4E7D600B43215 /* CACDebug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CACDebug.h; path = Utility/CACDebug.h; sourceTree = "<group>"; };
+		4A24129823A4E7D600B43215 /* CACDebug.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CACDebug.m; sourceTree = "<group>"; };
 		F40F2A671CA99DE900BDCF2B /* MP3EncondingTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MP3EncondingTests.m; sourceTree = "<group>"; };
 		F40F2A6C1CA99E0B00BDCF2B /* test-cover.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "test-cover.jpg"; path = "test-files/test-cover.jpg"; sourceTree = "<group>"; };
 		F40F2A6D1CA99E0B00BDCF2B /* Apple MPEG-4-Audio (AAC).m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Apple MPEG-4-Audio (AAC).m4a"; path = "test-files/Apple MPEG-4-Audio (AAC).m4a"; sourceTree = "<group>"; };
@@ -125,7 +116,6 @@
 		F4CE0C731D5C7D55009360C6 /* wrong_filetype.wma */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = wrong_filetype.wma; path = "test-files/wrong_filetype.wma"; sourceTree = "<group>"; };
 		F4D917DA222C4F3A00D4A594 /* Lame.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Lame.framework; path = Carthage/Build/Mac/Lame.framework; sourceTree = "<group>"; };
 		F4D917DC222C508700D4A594 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		F4D917DE222D574D00D4A594 /* CACDEBUG.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CACDEBUG.h; sourceTree = "<group>"; };
 		F4D917DF222D641500D4A594 /* CDCError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDCError.h; sourceTree = "<group>"; };
 		F4D917E0222D641500D4A594 /* CDCError.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDCError.m; sourceTree = "<group>"; };
 		F4ED6AC41D8F83AC001DB076 /* CoreAudioConverter.profdata */ = {isa = PBXFileReference; lastKnownFileType = file; path = CoreAudioConverter.profdata; sourceTree = "<group>"; };
@@ -282,7 +272,8 @@
 		F4D917DD222D570F00D4A594 /* Other */ = {
 			isa = PBXGroup;
 			children = (
-				F4D917DE222D574D00D4A594 /* CACDEBUG.h */,
+				4A24129723A4E7D600B43215 /* CACDebug.h */,
+				4A24129823A4E7D600B43215 /* CACDebug.m */,
 				F4D917DF222D641500D4A594 /* CDCError.h */,
 				F4D917E0222D641500D4A594 /* CDCError.m */,
 			);
@@ -307,6 +298,7 @@
 			files = (
 				F47CAFE71D9154BA00CFAB41 /* MP3EncoderDelegateProtocol.h in Headers */,
 				F49DF7DC1BAF8D63003A7C41 /* CoreAudioConverter.h in Headers */,
+				4A24129923A4E7D600B43215 /* CACDebug.h in Headers */,
 				F45155561D5F6E9200B6FDEF /* EncoderTask.h in Headers */,
 				F4727BA81D478EA200B15C13 /* MP3Encoder.h in Headers */,
 				F4D917E1222D641500D4A594 /* CDCError.h in Headers */,
@@ -346,7 +338,6 @@
 				F49DF7D31BAF8D63003A7C41 /* Sources */,
 				F49DF7D41BAF8D63003A7C41 /* Frameworks */,
 				F49DF7D51BAF8D63003A7C41 /* Headers */,
-				F42913B91BBE61CA0027FC28 /* Embed Frameworks */,
 				F49409AD222B89E400AAB1D5 /* Carthage */,
 				F4ED6A981D8F7E61001DB076 /* Increment Build Number */,
 			);
@@ -388,6 +379,7 @@
 			developmentRegion = Germany;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				Germany,
 				de,
 				fr,
 				en,
@@ -474,7 +466,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "buildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$INFOPLIST_FILE\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"$INFOPLIST_FILE\"";
+			shellScript = "buildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$INFOPLIST_FILE\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"$INFOPLIST_FILE\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -498,6 +490,7 @@
 				F49DF8061BAF93DB003A7C41 /* CircularBuffer.m in Sources */,
 				F4727BA71D478EA200B15C13 /* MP3Encoder.m in Sources */,
 				F49DF8041BAF93DB003A7C41 /* CoreAudioConverterErrorConstants.m in Sources */,
+				4A24129A23A4E7D600B43215 /* CACDebug.m in Sources */,
 				F44BC1321D7986B4008D9CF1 /* NSFileManager+FileAccess.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

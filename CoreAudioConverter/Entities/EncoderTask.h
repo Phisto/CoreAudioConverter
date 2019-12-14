@@ -34,10 +34,10 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface EncoderTask : NSObject
-
-///---------------------
+#pragma mark - Properties
+///-----------------------------------
 /// @name Properties
-///---------------------
+///-----------------------------------
 
 /**
  
@@ -66,9 +66,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, readonly) NSURL *tempURL;
 
-///---------------------
-/// @name Initialization
-///---------------------
+
+
+#pragma mark - Create a task
+///----------------------------------------
+/// @name Create a task
+///----------------------------------------
 
 /**
  
@@ -88,6 +91,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (nullable instancetype)taskWithInputURL:(NSURL *)inputURL
                                 outputURL:(NSURL *)outputURL
                              temporaryURL:(nullable NSURL *)tempURL;
+
+
 
 @end
 NS_ASSUME_NONNULL_END

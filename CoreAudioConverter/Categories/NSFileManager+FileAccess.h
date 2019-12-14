@@ -2,7 +2,7 @@
  *  NSFileManager+FileAccess.h
  *  CoreAudioConverter
  *
- *  Copyright © 2015-2016 Simon Gaus <simon.cay.gaus@gmail.com>
+ *  Copyright © 2015-2019 Simon Gaus <simon.cay.gaus@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -30,13 +30,13 @@ NS_ASSUME_NONNULL_BEGIN
  
  */
 typedef NS_OPTIONS(NSInteger, AccessKind) {
-    /// test for read permission (1<<2)
+    /// Test for read permission (1<<2)
     ReadAccess = R_OK,
-    /// test for write permission (1<<1)
+    /// Test for write permission (1<<1)
     WriteAccess = W_OK,
-    /// test for execute or search permission (1<<0)
+    /// Test for execute or search permission (1<<0)
     ExecuteAccess = X_OK,
-    /// test for existence of file (0)
+    /// Test for existence of file (0)
     PathExists = F_OK
 };
 
@@ -49,10 +49,10 @@ typedef NS_OPTIONS(NSInteger, AccessKind) {
  
  */
 @interface NSFileManager (FileAccess)
-
-///---------------------
-/// @name Methodes
-///---------------------
+#pragma mark - Check file access
+///----------------------------------------------
+/// @name Check file access
+///----------------------------------------------
 
 /**
  
@@ -68,6 +68,8 @@ typedef NS_OPTIONS(NSInteger, AccessKind) {
  
  */
 - (BOOL)path:(NSString *)path isAccessibleFor:(AccessKind)mode;
+
+
 
 @end
 NS_ASSUME_NONNULL_END

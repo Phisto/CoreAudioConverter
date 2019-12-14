@@ -2,7 +2,7 @@
  *  CADecoder.h
  *  CoreAudioConverter
  *
- *  Copyright © 2015-2016 Simon Gaus <simon.cay.gaus@gmail.com>
+ *  Copyright © 2015-2019 Simon Gaus <simon.cay.gaus@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -40,10 +40,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CADecoder : NSObject
 #pragma mark - Properties
-
-///-----------------
+///-----------------------------------
 /// @name Properties
-///-----------------
+///-----------------------------------
 
 /**
  The format of PCM data provided by the source file.
@@ -54,11 +53,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, readonly) SInt64 totalFrames;
 
-#pragma - mark Methodes
 
-///----------------------
+
+#pragma mark - Inititalization
+///-------------------------------------------
 /// @name Inititalization
-///----------------------
+///-------------------------------------------
 
 /**
  
@@ -85,9 +85,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (nullable instancetype)decoderForFile:(NSURL *)fileUrl error:(NSError **)error;
 
-///------------------------
+
+
+#pragma mark - Instance Methodes
+///----------------------------------------------
 /// @name Instance Methodes
-///------------------------
+///----------------------------------------------
 
 /**
  
@@ -102,9 +105,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (UInt32)readAudio:(AudioBufferList *)bufferList frameCount:(UInt32)frameCount;
 
-///---------------------
+
+
+#pragma mark - Class Methodes
+///-----------------------------------------
 /// @name Class Methodes
-///---------------------
+///-----------------------------------------
 
 /**
  
@@ -114,6 +120,8 @@ NS_ASSUME_NONNULL_BEGIN
 
  */
 + (nullable NSArray<NSString *> *)supportedAudioExtensions;
+
+
 
 @end
 NS_ASSUME_NONNULL_END
