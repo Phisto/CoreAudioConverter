@@ -99,7 +99,7 @@
 		F478E1AB1C7D2E8D00670966 /* CoreAudioConverterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoreAudioConverterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F478E1AF1C7D2E8D00670966 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F47BC41A1DAC468B003DD71F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
-		F47BC41E1DAC4CCB003DD71F /* LICENSE.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = LICENSE.rtf; sourceTree = SOURCE_ROOT; };
+		F47BC41E1DAC4CCB003DD71F /* LICENSE */ = {isa = PBXFileReference; explicitFileType = text; fileEncoding = 4; path = LICENSE; sourceTree = SOURCE_ROOT; };
 		F47CAFE51D9154BA00CFAB41 /* MP3EncoderDelegateProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MP3EncoderDelegateProtocol.h; sourceTree = "<group>"; };
 		F49409AE222B8BC700AAB1D5 /* AudioFileTagger.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioFileTagger.framework; path = Carthage/Build/Mac/AudioFileTagger.framework; sourceTree = "<group>"; };
 		F49DF7D81BAF8D63003A7C41 /* CoreAudioConverter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreAudioConverter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -208,7 +208,7 @@
 				F49DF7D91BAF8D63003A7C41 /* Products */,
 				F478E1991C7D09E100670966 /* OptimizationProfiles */,
 				F4ED6ABD1D8F819B001DB076 /* Frameworks */,
-				F47BC41E1DAC4CCB003DD71F /* LICENSE.rtf */,
+				F47BC41E1DAC4CCB003DD71F /* LICENSE */,
 				F47BC41A1DAC468B003DD71F /* README.md */,
 				F4D917DC222C508700D4A594 /* .gitignore */,
 			);
