@@ -29,18 +29,28 @@ NS_ASSUME_NONNULL_BEGIN
  */
 typedef NS_ENUM(NSUInteger, LAME_QUALITY) {
     
-    /// max. quality, slow
-    LAME_QUALITY_MAX = 0,
+    LAME_QUALITY_0          = 0,
+    LAME_QUALITY_1          = 1,
+    LAME_QUALITY_2          = 2,
+    LAME_QUALITY_3          = 3,
+    LAME_QUALITY_4          = 4,
+    LAME_QUALITY_5          = 5,
+    LAME_QUALITY_6          = 6,
+    LAME_QUALITY_7          = 7,
+    LAME_QUALITY_8          = 8,
+    LAME_QUALITY_9          = 9,
+    /// max. quality, slowest
+    LAME_QUALITY_MAX        = LAME_QUALITY_0,
     /// very high quality, slow
-    LAME_QUALITY_VERY_HIGH = 1,
+    LAME_QUALITY_VERY_HIGH  = LAME_QUALITY_1,
     /// near-best quality, not too slow
-    LAME_QUALITY_HIGH = 2,
+    LAME_QUALITY_HIGH       = LAME_QUALITY_2,
     /// good quality, fast
-    LAME_QUALITY_GOOD = 5,
+    LAME_QUALITY_GOOD       = LAME_QUALITY_5,
     /// ok quality, really fast
-    LAME_QUALITY_LOW = 7,
-    /// min quality, really fast
-    LAME_QUALITY_MIN = 9
+    LAME_QUALITY_LOW        = LAME_QUALITY_7,
+    /// min quality, fastest
+    LAME_QUALITY_MIN        = LAME_QUALITY_9
 };
 
 /**
