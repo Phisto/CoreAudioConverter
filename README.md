@@ -1,6 +1,8 @@
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![License](https://img.shields.io/github/license/phisto/CoreAudioConverter.svg)](https://github.com/Phisto/CoreAudioConverter)
 
+# CoreAudioConverter
+
 ## Overview
 
 The CoreAudioConverter framework provides facilities for converting various audio file formats to MPEG Audio Layer III, 
