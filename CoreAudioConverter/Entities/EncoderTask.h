@@ -34,6 +34,23 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface EncoderTask : NSObject
+#pragma mark - Create a task
+///----------------------------------------
+/// @name Create a task
+///----------------------------------------
+
+/**
+ @brief Creates and returns an EncoderTask object initialized with the provided input, output and temporary file URL.
+ @warning The encoders will use the tempURL as destination for the encoded file. If this is initialized with nil, tempURL will return outputURL.
+ @param inputURL The fileURL to the file that should be converted.
+ @param outputURL The fileURL to the output file.
+ @param tempURL The URL to a temporary location for the output file.
+ @return An initialized EncoderTask object or nil.
+ */
++ (nullable instancetype)taskWithInputURL:(NSURL *)inputURL
+                                outputURL:(NSURL *)outputURL
+                             temporaryURL:(nullable NSURL *)tempURL;
+
 #pragma mark - Properties
 ///-----------------------------------
 /// @name Properties
@@ -55,24 +72,6 @@ NS_ASSUME_NONNULL_BEGIN
  @warning If this is set to nil in +taskWithInputURL:outputURL:temporaryURL: this property will return outputURL.
  */
 @property (nonatomic, readonly) NSURL *tempURL;
-
-
-#pragma mark - Create a task
-///----------------------------------------
-/// @name Create a task
-///----------------------------------------
-
-/**
- @brief Creates and returns an EncoderTask object initialized with the provided input, output and temporary file URL.
- @warning The encoders will use the tempURL as destination for the encoded file. If this is initialized with nil, tempURL will return outputURL.
- @param inputURL The fileURL to the file that should be converted.
- @param outputURL The fileURL to the output file.
- @param tempURL The URL to a temporary location for the output file.
- @return An initialized EncoderTask object or nil.
- */
-+ (nullable instancetype)taskWithInputURL:(NSURL *)inputURL
-                                outputURL:(NSURL *)outputURL
-                             temporaryURL:(nullable NSURL *)tempURL;
 
 
 @end

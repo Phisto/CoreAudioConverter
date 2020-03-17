@@ -2,7 +2,7 @@
  *  NSError+Exceptions.m
  *  CoreAudioConverter
  *
- *  Copyright © 2015-2019 Simon Gaus <simon.cay.gaus@gmail.com>
+ *  Copyright © 2015-2020 Simon Gaus <simon.cay.gaus@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -24,7 +24,6 @@
 @implementation NSError (Exception)
 #pragma mark - Create an error
 
-
 + (instancetype)errorWithException:(NSException *)exception domain:(NSString *)domain code:(NSInteger)code {
     
     NSMutableDictionary * info = [NSMutableDictionary dictionary];
@@ -38,7 +37,6 @@
                                       code:code
                                   userInfo:[info copy]];
 }
-
 
 #pragma mark -
 @end

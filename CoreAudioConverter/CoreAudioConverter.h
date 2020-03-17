@@ -2,7 +2,7 @@
 *  CoreAudioConverter.h
 *  CoreAudioConverter
 *
-*  Copyright © 2015-2019 Simon Gaus <simon.cay.gaus@gmail.com>
+*  Copyright © 2015-2020 Simon Gaus <simon.cay.gaus@gmail.com>
 *
 *  This program is free software; you can redistribute it and/or modify
 *  it under the terms of the GNU Lesser General Public License as published by

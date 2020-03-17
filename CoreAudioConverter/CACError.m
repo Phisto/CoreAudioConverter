@@ -10,25 +10,18 @@
 
 #pragma mark - Constants
 
-
 static NSString * const kCoreAudioConverterIdentifier = @"de.simonsserver.CoreAudioConverter";
-
 
 #pragma mark - HUSync Error Domain
 
-
 NSString * const CoreAudioConverterErrorDomain = @"de.simonsserver.CoreAudioConverter.error";
 
-
 #pragma mark - Funktion Prototypes
-
 
 NSString * cac_errorDescription( CACErrorCode code, NSString * _Nullable userinfo);
 NSString * cac_systemErrorDescription(NSInteger code );
 
-
 #pragma mark - Convenient Error Creation
-
 
 NSError * cac_error( CACErrorCode code, NSString * _Nullable __unused userInfo ) {
     
@@ -47,7 +40,6 @@ NSError * cac_error( CACErrorCode code, NSString * _Nullable __unused userInfo )
                                      userInfo:@{ NSLocalizedDescriptionKey : description }];
     return error;
 }
-
 
 inline NSString * cac_errorDescription( CACErrorCode code , NSString * _Nullable userinfo) {
     
@@ -185,9 +177,7 @@ inline NSString * cac_errorDescription( CACErrorCode code , NSString * _Nullable
     return descr;
 }
 
-
 #pragma mark - System Errors
-
 
 NSError * cac_OSStatusError( OSStatus code ) {
     
@@ -197,7 +187,6 @@ NSError * cac_OSStatusError( OSStatus code ) {
                                      userInfo:@{ NSLocalizedDescriptionKey : description }];
     return error;
 }
-
 
 NSString * cac_systemErrorDescription(NSInteger code ) {
     
@@ -326,6 +315,5 @@ NSString * cac_systemErrorDescription(NSInteger code ) {
     
     return descr;
 }
-
 
 #pragma mark -

@@ -20,6 +20,8 @@
  */
 
 #import "EncoderTask.h"
+#pragma mark - CATEGORIES
+
 
 @interface EncoderTask (/* Private */)
 
@@ -29,7 +31,12 @@
 
 @end
 
+
+#pragma mark - IMPLEMENTATION
+
+
 @implementation EncoderTask
+#pragma mark - Create a task
 
 + (nullable instancetype)taskWithInputURL:(NSURL *)inputURL
                                 outputURL:(NSURL *)outputURL
@@ -40,34 +47,31 @@
                                      temporaryURL:tempURL];
 }
 
-
 - (instancetype)initWithInputURL:(NSURL *)inputURL
                        outputURL:(NSURL *)outputURL
                     temporaryURL:(nullable NSURL *)tempURL {
     
     if (!inputURL || !outputURL) {
-        
         NSLog(@"Called %@ with nil argument.", NSStringFromSelector(_cmd));
         return nil;
     }
     
     self = [super init];
-    
     if (self) {
         
         _inputURL = inputURL;
         _outputURL = outputURL;
         _tempURL = tempURL;
-
     }
-    
     return self;
 }
 
+#pragma mark - Properties
+
 - (NSURL *)tempURL {
-    
     // if tempURL isnt set, just return outputURL.
     return (_tempURL) ? _tempURL : self.outputURL;
 }
 
+#pragma mark -
 @end

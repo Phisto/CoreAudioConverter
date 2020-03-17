@@ -2,7 +2,7 @@
  *  CADecoder.m
  *  CoreAudioConverter
  *
- *  Copyright © 2015-2019 Simon Gaus <simon.cay.gaus@gmail.com>
+ *  Copyright © 2015-2020 Simon Gaus <simon.cay.gaus@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -33,11 +33,7 @@
 /* Custom Error */
 #import "CACError.h"
 
-#pragma mark - CONSTANTS
-///---------------------------------
-/// @name CONSTANTS
-///---------------------------------
-
+#pragma mark - CATEGORIES
 
 
 @interface CADecoder (/* Private */)
@@ -51,17 +47,11 @@
 @end
 
 
-
 #pragma mark - IMPLEMENTATION
-///-----------------------------------------
-/// @name IMPLEMENTATION
-///-----------------------------------------
-
 
 
 @implementation CADecoder
 #pragma mark - Object creation
-
 
 + (nullable instancetype)decoderForFile:(NSURL *)fileUrl error:(NSError * __autoreleasing *)error {
     
@@ -93,7 +83,6 @@
     
     return result;
 }
-
 
 - (nullable instancetype)initWithFile:(NSURL *)fileUrl error:(NSError * __autoreleasing *)error {
 
@@ -180,7 +169,6 @@
     return self;
 }
 
-
 - (void)dealloc {
     
     if (_extAudioFile) {
@@ -193,9 +181,7 @@
     }
 }
 
-
 #pragma mark - Main Methodes
-
 
 - (UInt32)readAudio:(AudioBufferList *)bufferList frameCount:(UInt32)frameCount {
     
@@ -243,7 +229,6 @@
     return framesRead;
 }
 
-
 - (SInt64)totalFrames {
     
     __unused OSStatus	result;
@@ -262,7 +247,6 @@
     
     return frameCount;
 }
-
 
 - (BOOL)fillPCMBuffer {
     
@@ -301,9 +285,7 @@
     return YES;
 }
 
-
 #pragma mark - Helper Methodes
-
 
 + (NSArray<NSString *> *)supportedAudioExtensions {
     
@@ -319,7 +301,6 @@
     }
     return coreAudioExtensions;
 }
-
 
 #pragma mark -
 @end

@@ -2,7 +2,7 @@
  *  CircularBuffer.m
  *  CoreAudioConverter
  *
- *  Copyright © 2015-2019 Simon Gaus <simon.cay.gaus@gmail.com>
+ *  Copyright © 2015-2020 Simon Gaus <simon.cay.gaus@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -25,22 +25,12 @@
 #import "CACDebug.h"
 
 #pragma mark - CONSTANTS
-///---------------------------------
-/// @name CONSTANTS
-///---------------------------------
-
-
 
 // default buffer size
 static NSUInteger const BUFFER_INIT_SIZE = 10 * 1024;
 
 
-
 #pragma mark - CATEGORIES
-///-----------------------------------
-/// @name CATEGORIES
-///-----------------------------------
-
 
 
 @interface CircularBuffer (/* Private */)
@@ -57,24 +47,17 @@ static NSUInteger const BUFFER_INIT_SIZE = 10 * 1024;
 @end
 
 
-
 #pragma mark - IMPLEMENTATION
-///-----------------------------------------
-/// @name IMPLEMENTATION
-///-----------------------------------------
-
 
 
 @implementation CircularBuffer
 #pragma mark - Object creation
-
 
 - (nullable instancetype)init {
     
     // call designated initilaizer
     return [self initWithSize:BUFFER_INIT_SIZE];
 }
-
 
 - (nullable instancetype)initWithSize:(NSUInteger)size {
     
@@ -96,12 +79,9 @@ static NSUInteger const BUFFER_INIT_SIZE = 10 * 1024;
 	return self;
 }
 
-
 #pragma mark - Methode Implementation
 
-
 - (NSUInteger)size { return _bufsize; }
-
 
 - (NSUInteger)bytesAvailable {
     
@@ -132,12 +112,10 @@ static NSUInteger const BUFFER_INIT_SIZE = 10 * 1024;
             [self size] - (NSUInteger)(_readPtr - _writePtr));
 }
 
-
 - (NSUInteger)freeSpaceAvailable {
     
     return _bufsize - [self bytesAvailable];
 }
-
 
 - (NSUInteger)getData:(void *)buffer byteCount:(NSUInteger)byteCount {
     
@@ -173,7 +151,6 @@ static NSUInteger const BUFFER_INIT_SIZE = 10 * 1024;
 	return byteCount;
 }
 
-
 - (void)readBytes:(NSUInteger)byteCount {
 	uint8_t			*limit		= _buffer + _bufsize;
 	
@@ -184,7 +161,6 @@ static NSUInteger const BUFFER_INIT_SIZE = 10 * 1024;
 	}
 }
 
-
 - (void *)exposeBufferForWriting {
     
     BOOL erfolg = [self normalizeBuffer];
@@ -193,7 +169,6 @@ static NSUInteger const BUFFER_INIT_SIZE = 10 * 1024;
     }
     return _writePtr;
 }
-
 
 - (void)wroteBytes:(NSUInteger)byteCount {
 	uint8_t			*limit		= _buffer + _bufsize;
@@ -205,15 +180,11 @@ static NSUInteger const BUFFER_INIT_SIZE = 10 * 1024;
 	}
 }
 
-
 #pragma mark - Private Methode Implementation
 
-
 - (void)dealloc {
-    
     free(_buffer);
 }
-
 
 - (BOOL)normalizeBuffer {
     
@@ -273,7 +244,6 @@ static NSUInteger const BUFFER_INIT_SIZE = 10 * 1024;
     return YES;
 }
 
-
 - (NSUInteger)contiguousBytesAvailable {
     
     uint8_t	*limit = _buffer + _bufsize;
@@ -306,14 +276,11 @@ static NSUInteger const BUFFER_INIT_SIZE = 10 * 1024;
             limit - _readPtr);
 }
 
-
 - (NSUInteger)contiguousFreeSpaceAvailable {
     
     uint8_t			*limit		= _buffer + _bufsize;
-    
     return (_writePtr >= _readPtr ? limit - _writePtr : _readPtr - _writePtr);
 }
-
 
 #pragma mark -
 @end

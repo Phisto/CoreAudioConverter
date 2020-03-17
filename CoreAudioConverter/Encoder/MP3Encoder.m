@@ -42,10 +42,6 @@
 #import "CACError.h"
 
 #pragma mark - CONSTANTS
-///---------------------------------
-/// @name CONSTANTS
-///---------------------------------
-
 
 
 /// The file extension of a MP3 file.
@@ -54,12 +50,7 @@ static NSString * const kFileExtension = @"mp3";
 static NSUInteger const kMinFreeDiskSpace = 100000000;
 
 
-
 #pragma mark - CATEGORIES
-///-----------------------------------
-/// @name CATEGORIES
-///-----------------------------------
-
 
 
 @interface MP3Encoder (/* Private */)
@@ -71,28 +62,16 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
 @property (nonatomic, strong) NSURL *secureURLIn;
 @property (nonatomic, strong) NSURL *secureURLOut;
 @property (nonatomic, readwrite) BOOL fileProperlyEncoded;
-
 @property (nonatomic, readonly) NSFileManager *fileManager;
-
-- (void)parseSettings;
-- (BOOL)encodeChunk:(const AudioBufferList *)chunk frameCount:(UInt32)frameCount error:(NSError **)error;
-- (BOOL)finishEncodeWithError:(NSError **)error;
-- (BOOL)touchOutputFile:(NSURL *)outputURL;
 
 @end
 
 
-
 #pragma mark - IMPLEMENTATION
-///-----------------------------------------
-/// @name IMPLEMENTATION
-///-----------------------------------------
-
 
 
 @implementation MP3Encoder
 #pragma mark - Initializing an encoder object
-
 
 - (nullable instancetype)initWithDelegate:(NSObject<MP3EncoderDelegate> *)aDelegate {
 	
@@ -113,22 +92,17 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
 	return self;
 }
 
-
 - (instancetype)init {
-    
     NSAssert(false, @"Unavailable, use `-initWithDelegate:` instead.");
     return [self initWithDelegate:(NSObject<MP3EncoderDelegate> *)[NSObject new]];
 }
-
 
 - (void)dealloc {
     // free lame
     lame_close(_gfp);
 }
 
-
 #pragma mark - API Methodes
-
 
 - (BOOL)executeTask:(EncoderTask *)task error:(NSError * __autoreleasing *)error {
     
@@ -369,15 +343,11 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
     }
 }
 
-
 #pragma mark - Helper Methodes
 
-
 - (BOOL)enoughFreeSpaceToConvert:(NSURL *)destFolder {
-    
     return ([self availableDiscSpace:destFolder] > kMinFreeDiskSpace);
 }
-
 
 - (unsigned long long)availableDiscSpace:(NSURL *)folderPath {
     
@@ -407,9 +377,7 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
     return space.unsignedLongLongValue;
 }
 
-
 #pragma mark -
-
 
 - (void)parseSettings {
     // Set encoding properties
@@ -421,7 +389,6 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
     // Target is bitrate
     lame_set_brate(_gfp, (int)[self.delegate bitrate]);
 }
-
 
 - (BOOL)encodeChunk:(const AudioBufferList *)chunk
          frameCount:(UInt32)frameCount
@@ -617,7 +584,6 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
     }
 }
 
-
 - (BOOL)finishEncodeWithError:(NSError * __autoreleasing *)error {
     
     unsigned char	*buf;
@@ -664,7 +630,6 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
     }
 }
 
-
 - (BOOL)touchOutputFile:(NSURL *)outputURL {
     
     NSNumber		*permissions	= [NSNumber numberWithUnsignedLong:S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH];
@@ -675,15 +640,11 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
     return result;
 }
 
-
 #pragma mark - Lazy/Getter
 
-
 - (NSFileManager *)fileManager {
-    
     return [NSFileManager defaultManager];
 }
-
 
 #pragma mark -
 @end
