@@ -74,8 +74,6 @@
 		4A24129C23A4F73000B43215 /* .bartycrouch.toml */ = {isa = PBXFileReference; lastKnownFileType = text; path = .bartycrouch.toml; sourceTree = "<group>"; };
 		4AC69CD023A53F12008E0532 /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		4AC69CD823A54BF3008E0532 /* AudioFileTagger.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioFileTagger.framework; path = Carthage/Build/Mac/AudioFileTagger.framework; sourceTree = "<group>"; };
-		4AC69CDB23A54C41008E0532 /* 4B6D56D8-D501-4ED8-B29D-04F5701862D1-33846.profraw */ = {isa = PBXFileReference; lastKnownFileType = file; path = "4B6D56D8-D501-4ED8-B29D-04F5701862D1-33846.profraw"; sourceTree = "<group>"; };
-		4AC69CDC23A54C41008E0532 /* Coverage.profdata */ = {isa = PBXFileReference; lastKnownFileType = file; path = Coverage.profdata; sourceTree = "<group>"; };
 		F40F2A671CA99DE900BDCF2B /* MP3EncondingTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MP3EncondingTests.m; sourceTree = "<group>"; };
 		F40F2A6C1CA99E0B00BDCF2B /* test-cover.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "test-cover.jpg"; path = "test-files/test-cover.jpg"; sourceTree = "<group>"; };
 		F40F2A6D1CA99E0B00BDCF2B /* Apple MPEG-4-Audio (AAC).m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Apple MPEG-4-Audio (AAC).m4a"; path = "test-files/Apple MPEG-4-Audio (AAC).m4a"; sourceTree = "<group>"; };
@@ -142,16 +140,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4AC69CDA23A54C41008E0532 /* A213FAA9-BED7-5FEE-BD9F-270343EF927E */ = {
-			isa = PBXGroup;
-			children = (
-				4AC69CDB23A54C41008E0532 /* 4B6D56D8-D501-4ED8-B29D-04F5701862D1-33846.profraw */,
-				4AC69CDC23A54C41008E0532 /* Coverage.profdata */,
-			);
-			name = "A213FAA9-BED7-5FEE-BD9F-270343EF927E";
-			path = "../../../../Library/Developer/Xcode/DerivedData/CoreAudioConverter-adtyfnuvlvkexdfzvqayhrgoccsx/Build/Intermediates.noindex/PGO/ProfileData/A213FAA9-BED7-5FEE-BD9F-270343EF927E";
-			sourceTree = "<group>";
-		};
 		F40F2A6B1CA99DFF00BDCF2B /* test-files */ = {
 			isa = PBXGroup;
 			children = (
@@ -214,7 +202,6 @@
 				F47BC41A1DAC468B003DD71F /* README.md */,
 				4A24129C23A4F73000B43215 /* .bartycrouch.toml */,
 				F4D917DC222C508700D4A594 /* .gitignore */,
-				4AC69CDA23A54C41008E0532 /* A213FAA9-BED7-5FEE-BD9F-270343EF927E */,
 			);
 			sourceTree = "<group>";
 		};
