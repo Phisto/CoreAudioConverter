@@ -2,7 +2,7 @@
  *  CADecoder.h
  *  CoreAudioConverter
  *
- *  Copyright © 2015-2019 Simon Gaus <simon.cay.gaus@gmail.com>
+ *  Copyright © 2015-2020 Simon Gaus <simon.cay.gaus@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -39,6 +39,32 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CADecoder : NSObject
+#pragma mark - Initialize a decoder
+///---------------------------------------------------
+/// @name Initialize a decoder
+///---------------------------------------------------
+
+/**
+ @brief Creates and returns a decoder object for the specified audio file.
+ 
+ Example usage:
+ 
+    NSError *error;
+    CADecoder *decoder = [CADecoder decoderForFile:fileUrl error:&error];
+    if (!decoder) {
+        // Handle error
+    
+    }
+    // do stuff with the decoder...
+    AudioStreamBasicDescription audioDescr = decoder.pcmFormat;
+ 
+ @param fileUrl The fileURL to the file to decode.
+ @param error The error that occurred while trying to initialize the decoder.
+ @return An initialized CADecoder object or nil.
+ */
++ (nullable instancetype)decoderForFile:(NSURL *)fileUrl error:(NSError **)error;
+
+
 #pragma mark - Properties
 ///-----------------------------------
 /// @name Properties
@@ -54,74 +80,32 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) SInt64 totalFrames;
 
 
-
-#pragma mark - Inititalization
-///-------------------------------------------
-/// @name Inititalization
-///-------------------------------------------
-
-/**
- 
- Creates and returns a decoder object for the specified audio file.
- 
- Example usage:
- 
-    NSError *error;
-    CADecoder *decoder = [CADecoder decoderForFile:fileUrl error:&error];
-    if (!decoder) {
-        // Handle error
-    
-    }
-    // do stuff with the decoder...
-    AudioStreamBasicDescription audioDescr = decoder.pcmFormat;
- 
- 
- @param fileUrl The fileURL to the file to decode.
- 
- @param error The error that occurred while trying to initialize the decoder.
- 
- @return An initialized CADecoder object or nil.
- 
- */
-+ (nullable instancetype)decoderForFile:(NSURL *)fileUrl error:(NSError **)error;
-
-
-
-#pragma mark - Instance Methodes
-///----------------------------------------------
-/// @name Instance Methodes
-///----------------------------------------------
+#pragma mark - Reading audio into a buffer
+///--------------------------------------------------------------
+/// @name Reading audio into a buffer
+///--------------------------------------------------------------
 
 /**
- 
- Reads a chunk of PCM input and let the bufferList point to it.
- 
+ @brief Reads a chunk of PCM input and let the bufferList point to it.
  @param bufferList A pointer to hold audio data chunk
- 
  @param frameCount Position in the PCM input
- 
  @return Will return Zero(0) on failure.
- 
  */
 - (UInt32)readAudio:(AudioBufferList *)bufferList frameCount:(UInt32)frameCount;
 
 
-
-#pragma mark - Class Methodes
-///-----------------------------------------
-/// @name Class Methodes
-///-----------------------------------------
+#pragma mark - Supported Audio Extensions
+///-------------------------------------------------------------
+/// @name Supported Audio Extensions
+///-------------------------------------------------------------
 
 /**
- 
- Return an array of valid audio file extensions recognized by Core Audio.
- 
+ @brief Return an array of valid audio file extensions recognized by Core Audio.
  @return The supported audio extensions as strings, or nil if an error occures.
-
  */
 + (nullable NSArray<NSString *> *)supportedAudioExtensions;
 
 
-
 @end
+
 NS_ASSUME_NONNULL_END

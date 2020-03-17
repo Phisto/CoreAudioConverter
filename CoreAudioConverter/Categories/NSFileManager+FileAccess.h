@@ -2,7 +2,7 @@
  *  NSFileManager+FileAccess.h
  *  CoreAudioConverter
  *
- *  Copyright © 2015-2019 Simon Gaus <simon.cay.gaus@gmail.com>
+ *  Copyright © 2015-2020 Simon Gaus <simon.cay.gaus@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -24,10 +24,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- 
- ## Overview
- These constants defines the different file access kinds. The values are taken from <unistd.h>.
- 
+ @brief These constants defines the different file access kinds. The values are taken from <unistd.h>.
  */
 typedef NS_OPTIONS(NSInteger, AccessKind) {
     /// Test for read permission (1<<2)
@@ -55,21 +52,15 @@ typedef NS_OPTIONS(NSInteger, AccessKind) {
 ///----------------------------------------------
 
 /**
- 
- Determine whether a file or folder can be accessed.
- 
+ @brief Determine whether a file or folder can be accessed.
  @see AccessKind enum for possible values for mode.
- 
  @param path The path to the file or folder.
- 
  @param mode The access mode to check for.
- 
  @return Yes if the file or folder is accessible for the specified access mode, otherwise NO.
- 
  */
 - (BOOL)path:(NSString *)path isAccessibleFor:(AccessKind)mode;
 
 
-
 @end
+
 NS_ASSUME_NONNULL_END

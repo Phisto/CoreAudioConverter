@@ -2,7 +2,7 @@
  *  NSError+Exceptions.h
  *  CoreAudioConverter
  *
- *  Copyright © 2015-2019 Simon Gaus <simon.cay.gaus@gmail.com>
+ *  Copyright © 2015-2020 Simon Gaus <simon.cay.gaus@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -36,21 +36,15 @@ NS_ASSUME_NONNULL_BEGIN
 ///-------------------------------------------
 
 /**
- 
- Creates and initializes an NSError object for a given domain and code the user info will be extracted from a given excepction.
- 
+ @brief Creates and initializes an NSError object for a given domain and code the user info will be extracted from a given excepction.
  @param exception The exception to use for the error userInfo.
- 
  @param domain The error domain.
- 
  @param code The error code for the error.
- 
  @return An NSError object for domain with the specified error code and the dictionary of arbitrary data userInfo extracted from the exeption.
- 
  */
 + (instancetype)errorWithException:(NSException *)exception domain:(NSString *)domain code:(NSInteger)code;
 
 
-
 @end
+
 NS_ASSUME_NONNULL_END

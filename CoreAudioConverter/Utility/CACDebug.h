@@ -2,7 +2,7 @@
 *  CACDebug.h
 *  CoreAudioConverter
 *
-*  Copyright © 2015-2019 Simon Gaus <simon.cay.gaus@gmail.com>
+*  Copyright © 2015-2020 Simon Gaus <simon.cay.gaus@gmail.com>
 *
 *  This program is free software; you can redistribute it and/or modify
 *  it under the terms of the Lesser General Public License (LGPL) as published by
@@ -49,22 +49,14 @@ typedef NS_ENUM(NSUInteger, CACDebugLevel) {
 };
 
 
-
 /**
- 
  @brief Prints the given message according to the defined DEBUG_LEVEL and the given debugLevel.
- 
  @discussion This funktion will only log the message in DEBUG builds.
- 
  @param debugLevel The debug level of the message.
- 
  @param format The format string used to printing the format string.
- 
  @param ... The arguments for the format sting.
- 
  */
 FOUNDATION_EXPORT void CACLog(CACDebugLevel debugLevel, NSString *format, ...) NS_FORMAT_FUNCTION(2,3) NS_NO_TAIL_CALL;
-
 
 
 NS_ASSUME_NONNULL_END

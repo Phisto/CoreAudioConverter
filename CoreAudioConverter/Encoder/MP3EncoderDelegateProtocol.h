@@ -24,13 +24,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- 
- The quality setting for the MP3Encoder.
- 
- This variable is used by lame to select a algorithm.
- 
- True quality is determined by the bitrate but this variable will effect quality by selecting expensive or cheap algorithms.
- 
+ @brief The quality setting for the MP3Encoder.
+ @discussion This variable is used by lame to select a algorithm. True quality is determined by the bitrate but this variable will effect quality by selecting expensive or cheap algorithms.
  */
 typedef NS_ENUM(NSUInteger, LAME_QUALITY) {
     
@@ -43,10 +38,9 @@ typedef NS_ENUM(NSUInteger, LAME_QUALITY) {
     /// ok quality, really fast
     LAME_QUALITY_LOW = 7
 };
+
 /**
- 
- The constant bitrate we should use to encode the output file.
- 
+ @brief The constant bitrate we should use to encode the output file.
  */
 typedef NS_ENUM(NSUInteger, CONSTANT_BITRATE) {
     /// 320 kbit/s
@@ -70,39 +64,31 @@ typedef NS_ENUM(NSUInteger, CONSTANT_BITRATE) {
  */
 @protocol MP3EncoderDelegate <NSObject>
 @required
-
-///------------------------
+#pragma mark - Required Methodes
+///----------------------------------------------
 /// @name Required Methodes
-///------------------------
+///----------------------------------------------
 
 /**
- 
- This variable is used by lame to select an algorithm.
- 
- True quality is determined by the bitrate but this variable will effect the quality by selecting expensive or cheap algorithms.
- 
+ @brief This variable is used by lame to select an algorithm.
+ @discussion True quality is determined by the bitrate but this variable will effect the quality by selecting expensive or cheap algorithms.
  @return The LAME_QUALITY for the MP3Encoder.
- 
  */
 - (LAME_QUALITY)quality;
+
 /**
- 
- This variable is used by lame to select the constant bitrate.
- 
+ @brief This variable is used by lame to select the constant bitrate.
  @return The CONSTANT_BITRATE the MP3Encoder should use for encoding.
- 
  */
 - (CONSTANT_BITRATE)bitrate;
+
 /**
- 
- This variable is used to check if the encoder should cancle the encoding.
- 
+ @brief This variable is used to check if the encoder should cancle the encoding.
  @return Yes if the encoding should be stopped, otherwise NO.
- 
  */
 - (BOOL)cancel;
 
 
-
 @end
+
 NS_ASSUME_NONNULL_END
