@@ -321,7 +321,6 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
         ///!!!: Implement tagger failing handling ...
         // the file was properly encoded
         if (self.fileProperlyEncoded) {
-         
             
             Metadata *meta = [[Metadata alloc] initWithMetadataFromFile:_secureURLIn];
             if (meta) {
@@ -329,12 +328,9 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
                 MP3Tagger *tagger = [MP3Tagger taggerWithMetadata:meta];
                 
                 if (![tagger tagFile:_secureURLOut]) {
-                    
                     NSLog(@"Failed to tag file: %@", _secureURLOut.lastPathComponent);
                 }
             } else {
-                
-                
                 NSLog(@"Failed to extract metadata from file: %@", _secureURLIn.lastPathComponent);
             }
         }
@@ -350,7 +346,6 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
 }
 
 - (unsigned long long)availableDiscSpace:(NSURL *)folderPath {
-    
     
     NSString *path = folderPath.path;
     if (!path) {
@@ -382,10 +377,8 @@ static NSUInteger const kMinFreeDiskSpace = 100000000;
 - (void)parseSettings {
     // Set encoding properties
     lame_set_mode(_gfp, JOINT_STEREO);
-    
     // quality
     lame_set_quality(_gfp, (int)[self.delegate quality]);
-    
     // Target is bitrate
     lame_set_brate(_gfp, (int)[self.delegate bitrate]);
 }
