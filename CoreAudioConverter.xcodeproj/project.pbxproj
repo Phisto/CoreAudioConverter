@@ -49,7 +49,7 @@
 		F49DF8061BAF93DB003A7C41 /* CircularBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = F49DF8021BAF93DB003A7C41 /* CircularBuffer.m */; };
 		F49DF8091BAF93ED003A7C41 /* CADecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = F49DF8071BAF93ED003A7C41 /* CADecoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F49DF80A1BAF93ED003A7C41 /* CADecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = F49DF8081BAF93ED003A7C41 /* CADecoder.m */; };
-		F4CE0C621D5C6FF3009360C6 /* CoreAudioConverter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F49DF7D81BAF8D63003A7C41 /* CoreAudioConverter.framework */; };
+		F4CE0C621D5C6FF3009360C6 /* CoreAudioConverter macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F49DF7D81BAF8D63003A7C41 /* CoreAudioConverter macOS.framework */; };
 		F4CE0C711D5C7AB7009360C6 /* WAV Microsoft (Signed 16 bit PCM).wav in Resources */ = {isa = PBXBuildFile; fileRef = F4CE0C701D5C7AB7009360C6 /* WAV Microsoft (Signed 16 bit PCM).wav */; };
 		F4CE0C741D5C7D55009360C6 /* wrong_data.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F4CE0C721D5C7D55009360C6 /* wrong_data.m4a */; };
 		F4CE0C751D5C7D55009360C6 /* wrong_filetype.wma in Resources */ = {isa = PBXBuildFile; fileRef = F4CE0C731D5C7D55009360C6 /* wrong_filetype.wma */; };
@@ -102,7 +102,7 @@
 		F47BC41A1DAC468B003DD71F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		F47BC41E1DAC4CCB003DD71F /* LICENSE */ = {isa = PBXFileReference; explicitFileType = text; fileEncoding = 4; path = LICENSE; sourceTree = SOURCE_ROOT; };
 		F47CAFE51D9154BA00CFAB41 /* MP3EncoderDelegateProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MP3EncoderDelegateProtocol.h; sourceTree = "<group>"; };
-		F49DF7D81BAF8D63003A7C41 /* CoreAudioConverter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreAudioConverter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F49DF7D81BAF8D63003A7C41 /* CoreAudioConverter macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "CoreAudioConverter macOS.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F49DF7DB1BAF8D63003A7C41 /* CoreAudioConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreAudioConverter.h; sourceTree = "<group>"; };
 		F49DF7DD1BAF8D63003A7C41 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F49DF8011BAF93DB003A7C41 /* CircularBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircularBuffer.h; sourceTree = "<group>"; };
@@ -124,7 +124,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F4CE0C621D5C6FF3009360C6 /* CoreAudioConverter.framework in Frameworks */,
+				F4CE0C621D5C6FF3009360C6 /* CoreAudioConverter macOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -208,7 +208,7 @@
 		F49DF7D91BAF8D63003A7C41 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F49DF7D81BAF8D63003A7C41 /* CoreAudioConverter.framework */,
+				F49DF7D81BAF8D63003A7C41 /* CoreAudioConverter macOS.framework */,
 				F478E1AB1C7D2E8D00670966 /* CoreAudioConverterTests.xctest */,
 			);
 			name = Products;
@@ -320,9 +320,9 @@
 			productReference = F478E1AB1C7D2E8D00670966 /* CoreAudioConverterTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		F49DF7D71BAF8D63003A7C41 /* CoreAudioConverter */ = {
+		F49DF7D71BAF8D63003A7C41 /* CoreAudioConverter macOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F49DF7E01BAF8D63003A7C41 /* Build configuration list for PBXNativeTarget "CoreAudioConverter" */;
+			buildConfigurationList = F49DF7E01BAF8D63003A7C41 /* Build configuration list for PBXNativeTarget "CoreAudioConverter macOS" */;
 			buildPhases = (
 				4A24129B23A4F6E200B43215 /* Update Localization */,
 				F49DF7D31BAF8D63003A7C41 /* Sources */,
@@ -335,9 +335,9 @@
 			);
 			dependencies = (
 			);
-			name = CoreAudioConverter;
+			name = "CoreAudioConverter macOS";
 			productName = CoreAudioConverter;
-			productReference = F49DF7D81BAF8D63003A7C41 /* CoreAudioConverter.framework */;
+			productReference = F49DF7D81BAF8D63003A7C41 /* CoreAudioConverter macOS.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -380,7 +380,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				F49DF7D71BAF8D63003A7C41 /* CoreAudioConverter */,
+				F49DF7D71BAF8D63003A7C41 /* CoreAudioConverter macOS */,
 				F478E1AA1C7D2E8D00670966 /* CoreAudioConverterTests */,
 				F47CAFD71D91454400CFAB41 /* Documentation */,
 			);
@@ -507,7 +507,7 @@
 /* Begin PBXTargetDependency section */
 		F408FEE71D52704000440412 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = F49DF7D71BAF8D63003A7C41 /* CoreAudioConverter */;
+			target = F49DF7D71BAF8D63003A7C41 /* CoreAudioConverter macOS */;
 			targetProxy = F408FEE61D52704000440412 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -801,7 +801,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F49DF7E01BAF8D63003A7C41 /* Build configuration list for PBXNativeTarget "CoreAudioConverter" */ = {
+		F49DF7E01BAF8D63003A7C41 /* Build configuration list for PBXNativeTarget "CoreAudioConverter macOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F49DF7E11BAF8D63003A7C41 /* Debug */,

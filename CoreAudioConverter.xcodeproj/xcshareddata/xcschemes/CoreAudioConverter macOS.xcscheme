@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "F49DF7D71BAF8D63003A7C41"
-               BuildableName = "CoreAudioConverter.framework"
-               BlueprintName = "CoreAudioConverter"
+               BuildableName = "CoreAudioConverter macOS.framework"
+               BlueprintName = "CoreAudioConverter macOS"
                ReferencedContainer = "container:CoreAudioConverter.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -61,8 +61,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F49DF7D71BAF8D63003A7C41"
-            BuildableName = "CoreAudioConverter.framework"
-            BlueprintName = "CoreAudioConverter"
+            BuildableName = "CoreAudioConverter macOS.framework"
+            BlueprintName = "CoreAudioConverter macOS"
             ReferencedContainer = "container:CoreAudioConverter.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
