@@ -24,7 +24,7 @@
 @import AudioFileTagger; // for MP3Tagger
 
 /* LAME encoding */
-#import <LAME/lame.h>
+@import Lame;
 
 /* Encoders Task */
 #import "EncoderTask.h"

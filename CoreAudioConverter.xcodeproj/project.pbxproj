@@ -89,8 +89,8 @@
 		F40F2A751CA99E0B00BDCF2B /* AAC 44.100 Hz Stereo 80 kbits:s (HE).m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = "AAC 44.100 Hz Stereo 80 kbits:s (HE).m4a"; path = "test-files/AAC 44.100 Hz Stereo 80 kbits:s (HE).m4a"; sourceTree = "<group>"; };
 		F44BC12F1D7986B4008D9CF1 /* NSFileManager+FileAccess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSFileManager+FileAccess.h"; path = "Categories/NSFileManager+FileAccess.h"; sourceTree = "<group>"; };
 		F44BC1301D7986B4008D9CF1 /* NSFileManager+FileAccess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSFileManager+FileAccess.m"; path = "Categories/NSFileManager+FileAccess.m"; sourceTree = "<group>"; };
-		F45155541D5F6E9200B6FDEF /* EncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EncoderTask.h; path = Entities/EncoderTask.h; sourceTree = "<group>"; };
-		F45155551D5F6E9200B6FDEF /* EncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EncoderTask.m; path = Entities/EncoderTask.m; sourceTree = "<group>"; };
+		F45155541D5F6E9200B6FDEF /* EncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncoderTask.h; sourceTree = "<group>"; };
+		F45155551D5F6E9200B6FDEF /* EncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncoderTask.m; sourceTree = "<group>"; };
 		F4727BA51D478EA200B15C13 /* MP3Encoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MP3Encoder.m; sourceTree = "<group>"; };
 		F4727BA61D478EA200B15C13 /* MP3Encoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MP3Encoder.h; sourceTree = "<group>"; };
 		F474F08C1D55154E007BF84D /* NSError+Exceptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSError+Exceptions.h"; path = "Categories/NSError+Exceptions.h"; sourceTree = "<group>"; };
@@ -172,15 +172,6 @@
 			name = "test-files";
 			sourceTree = "<group>";
 		};
-		F45155531D5F6E6D00B6FDEF /* Entities */ = {
-			isa = PBXGroup;
-			children = (
-				F45155541D5F6E9200B6FDEF /* EncoderTask.h */,
-				F45155551D5F6E9200B6FDEF /* EncoderTask.m */,
-			);
-			name = Entities;
-			sourceTree = "<group>";
-		};
 		F474F0901D5516CE007BF84D /* Categories */ = {
 			isa = PBXGroup;
 			children = (
@@ -240,10 +231,9 @@
 			isa = PBXGroup;
 			children = (
 				F49DF7DB1BAF8D63003A7C41 /* CoreAudioConverter.h */,
-				F49DF7F91BAF8F35003A7C41 /* Encoder */,
-				F49DF7F71BAF8F17003A7C41 /* Decoder */,
+				F49DF7F91BAF8F35003A7C41 /* Encode */,
+				F49DF7F71BAF8F17003A7C41 /* Decode */,
 				F49DF7F81BAF8F25003A7C41 /* Utility */,
-				F45155531D5F6E6D00B6FDEF /* Entities */,
 				F474F0901D5516CE007BF84D /* Categories */,
 				F4D917DD222D570F00D4A594 /* Other */,
 				F478E19B1C7D249C00670966 /* Localizable.strings */,
@@ -252,13 +242,13 @@
 			path = CoreAudioConverter;
 			sourceTree = "<group>";
 		};
-		F49DF7F71BAF8F17003A7C41 /* Decoder */ = {
+		F49DF7F71BAF8F17003A7C41 /* Decode */ = {
 			isa = PBXGroup;
 			children = (
 				F49DF8071BAF93ED003A7C41 /* CADecoder.h */,
 				F49DF8081BAF93ED003A7C41 /* CADecoder.m */,
 			);
-			path = Decoder;
+			path = Decode;
 			sourceTree = "<group>";
 		};
 		F49DF7F81BAF8F25003A7C41 /* Utility */ = {
@@ -270,14 +260,16 @@
 			path = Utility;
 			sourceTree = "<group>";
 		};
-		F49DF7F91BAF8F35003A7C41 /* Encoder */ = {
+		F49DF7F91BAF8F35003A7C41 /* Encode */ = {
 			isa = PBXGroup;
 			children = (
 				F4727BA61D478EA200B15C13 /* MP3Encoder.h */,
 				F4727BA51D478EA200B15C13 /* MP3Encoder.m */,
 				F47CAFE51D9154BA00CFAB41 /* MP3EncoderDelegateProtocol.h */,
+				F45155541D5F6E9200B6FDEF /* EncoderTask.h */,
+				F45155551D5F6E9200B6FDEF /* EncoderTask.m */,
 			);
-			path = Encoder;
+			path = Encode;
 			sourceTree = "<group>";
 		};
 		F4D917DD222D570F00D4A594 /* Other */ = {
@@ -638,6 +630,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -694,6 +687,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
