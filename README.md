@@ -49,7 +49,6 @@ if (!mp3Encoder) {
     <#// handle failure...#>
 }
 
-
 NSError *encodingError = nil;
 BOOL erfolg = [mp3Encoder executeTask:task error:&encodingError];
 if (!erfolg) {
@@ -61,12 +60,12 @@ if (!erfolg) {
 ## LAME
 
 The CoreAudioConverter framework is using [LAME](http://lame.sourceforge.net/) to encode files to MP3.
-
-LAME is a high quality MPEG Audio Layer III encoder licensed under the [GNU Lesser General Public License (LGPL)](https://www.gnu.org/licenses/). 
+*LAME is a high quality MPEG Audio Layer III encoder licensed under the [GNU Lesser General Public License (LGPL)](https://www.gnu.org/licenses/).*
 
 ## Audio File Tagger 
 
 The CoreAudioConverter framework is using the [AudioFileTagger](https://github.com/Phisto/AudioFileTagger) framework to tag the encoded MP3 files with ID3v2 tags.
+*AudioFileTagger is released under the [GNU Lesser General Public License (LGPL)](https://www.gnu.org/licenses/).*
 
 ## Credits
 
