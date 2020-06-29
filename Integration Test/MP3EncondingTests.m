@@ -9,7 +9,7 @@
 @import AVFoundation;
 
 #import <XCTest/XCTest.h>
-@import CoreAudioConverter;
+@import CoreAudioConverter;4
 
 #warning This will use the computers speaker and can possible be very loud or distorted if the encoding failes...
 #define TEST_AUDIO YES
