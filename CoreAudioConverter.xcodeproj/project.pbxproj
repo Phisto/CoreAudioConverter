@@ -23,7 +23,14 @@
 /* Begin PBXBuildFile section */
 		4A24129923A4E7D600B43215 /* CACDebug.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A24129723A4E7D600B43215 /* CACDebug.h */; };
 		4A24129A23A4E7D600B43215 /* CACDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A24129823A4E7D600B43215 /* CACDebug.m */; };
-		4AC69CD923A54BF3008E0532 /* AudioFileTagger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AC69CD823A54BF3008E0532 /* AudioFileTagger.framework */; };
+		4A874B6C24AA9000001E648A /* Lame.framework in Copy Dependent Frameworks */ = {isa = PBXBuildFile; fileRef = F4D917DA222C4F3A00D4A594 /* Lame.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4A874B6D24AA9002001E648A /* AudioFileTagger.framework in Copy Dependent Frameworks */ = {isa = PBXBuildFile; fileRef = 4AC69CD823A54BF3008E0532 /* AudioFileTagger.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4A874B6F24AA90BF001E648A /* TagLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A874B6E24AA90B0001E648A /* TagLib.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		4A874B7224AA9105001E648A /* TagLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A874B6E24AA90B0001E648A /* TagLib.framework */; };
+		4A874B7324AA9108001E648A /* Lame.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4D917DA222C4F3A00D4A594 /* Lame.framework */; };
+		4A874B7424AA9114001E648A /* AudioFileTagger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AC69CD823A54BF3008E0532 /* AudioFileTagger.framework */; };
+		4A874B7524AA912A001E648A /* TagLib.framework in Copy Dependent Frameworks */ = {isa = PBXBuildFile; fileRef = 4A874B6E24AA90B0001E648A /* TagLib.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4AC69CD923A54BF3008E0532 /* AudioFileTagger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AC69CD823A54BF3008E0532 /* AudioFileTagger.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		F40F2A681CA99DE900BDCF2B /* MP3EncondingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F40F2A671CA99DE900BDCF2B /* MP3EncondingTests.m */; };
 		F40F2A761CA99E0B00BDCF2B /* test-cover.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F40F2A6C1CA99E0B00BDCF2B /* test-cover.jpg */; };
 		F40F2A771CA99E0B00BDCF2B /* Apple MPEG-4-Audio (AAC).m4a in Resources */ = {isa = PBXBuildFile; fileRef = F40F2A6D1CA99E0B00BDCF2B /* Apple MPEG-4-Audio (AAC).m4a */; };
@@ -53,7 +60,7 @@
 		F4CE0C711D5C7AB7009360C6 /* WAV Microsoft (Signed 16 bit PCM).wav in Resources */ = {isa = PBXBuildFile; fileRef = F4CE0C701D5C7AB7009360C6 /* WAV Microsoft (Signed 16 bit PCM).wav */; };
 		F4CE0C741D5C7D55009360C6 /* wrong_data.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F4CE0C721D5C7D55009360C6 /* wrong_data.m4a */; };
 		F4CE0C751D5C7D55009360C6 /* wrong_filetype.wma in Resources */ = {isa = PBXBuildFile; fileRef = F4CE0C731D5C7D55009360C6 /* wrong_filetype.wma */; };
-		F4D917DB222C4F3A00D4A594 /* Lame.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4D917DA222C4F3A00D4A594 /* Lame.framework */; };
+		F4D917DB222C4F3A00D4A594 /* Lame.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4D917DA222C4F3A00D4A594 /* Lame.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		F4D917E1222D641500D4A594 /* CACError.h in Headers */ = {isa = PBXBuildFile; fileRef = F4D917DF222D641500D4A594 /* CACError.h */; };
 		F4D917E2222D641500D4A594 /* CACError.m in Sources */ = {isa = PBXBuildFile; fileRef = F4D917E0222D641500D4A594 /* CACError.m */; };
 /* End PBXBuildFile section */
@@ -68,10 +75,27 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		4A874B6B24AA8F3B001E648A /* Copy Dependent Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				4A874B6C24AA9000001E648A /* Lame.framework in Copy Dependent Frameworks */,
+				4A874B6D24AA9002001E648A /* AudioFileTagger.framework in Copy Dependent Frameworks */,
+				4A874B7524AA912A001E648A /* TagLib.framework in Copy Dependent Frameworks */,
+			);
+			name = "Copy Dependent Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		4A24129723A4E7D600B43215 /* CACDebug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CACDebug.h; path = Utility/CACDebug.h; sourceTree = "<group>"; };
 		4A24129823A4E7D600B43215 /* CACDebug.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CACDebug.m; sourceTree = "<group>"; };
 		4A24129C23A4F73000B43215 /* .bartycrouch.toml */ = {isa = PBXFileReference; lastKnownFileType = text; path = .bartycrouch.toml; sourceTree = "<group>"; };
+		4A874B6E24AA90B0001E648A /* TagLib.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TagLib.framework; path = Carthage/Build/Mac/TagLib.framework; sourceTree = "<group>"; };
 		4AC69CD023A53F12008E0532 /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		4AC69CD823A54BF3008E0532 /* AudioFileTagger.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioFileTagger.framework; path = Carthage/Build/Mac/AudioFileTagger.framework; sourceTree = "<group>"; };
 		F40F2A671CA99DE900BDCF2B /* MP3EncondingTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MP3EncondingTests.m; sourceTree = "<group>"; };
@@ -125,6 +149,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				F4CE0C621D5C6FF3009360C6 /* CoreAudioConverter.framework in Frameworks */,
+				4A874B7324AA9108001E648A /* Lame.framework in Frameworks */,
+				4A874B7424AA9114001E648A /* AudioFileTagger.framework in Frameworks */,
+				4A874B7224AA9105001E648A /* TagLib.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,6 +160,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F4D917DB222C4F3A00D4A594 /* Lame.framework in Frameworks */,
+				4A874B6F24AA90BF001E648A /* TagLib.framework in Frameworks */,
 				4AC69CD923A54BF3008E0532 /* AudioFileTagger.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -273,6 +301,7 @@
 		F4ED6ABD1D8F819B001DB076 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4A874B6E24AA90B0001E648A /* TagLib.framework */,
 				4AC69CD823A54BF3008E0532 /* AudioFileTagger.framework */,
 				F4D917DA222C4F3A00D4A594 /* Lame.framework */,
 			);
@@ -308,6 +337,7 @@
 			buildPhases = (
 				F478E1A71C7D2E8D00670966 /* Sources */,
 				F478E1A81C7D2E8D00670966 /* Frameworks */,
+				4A874B6B24AA8F3B001E648A /* Copy Dependent Frameworks */,
 				F478E1A91C7D2E8D00670966 /* Resources */,
 			);
 			buildRules = (
@@ -358,7 +388,7 @@
 					};
 					F49DF7D71BAF8D63003A7C41 = {
 						CreatedOnToolsVersion = 7.0;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -513,14 +543,11 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
 				);
 				INFOPLIST_FILE = "Integration Test/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/CoreAudioConverter",
-				);
+				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = de.simonsserver.CoreAudioConverterTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -534,14 +561,11 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
 				);
 				INFOPLIST_FILE = "Integration Test/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/CoreAudioConverter",
-				);
+				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = de.simonsserver.CoreAudioConverterTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -676,7 +700,7 @@
 			buildSettings = {
 				CLANG_USE_OPTIMIZATION_PROFILE = YES;
 				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
@@ -685,6 +709,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Carthage/Build/Mac",
 				);
 				FRAMEWORK_VERSION = A;
@@ -692,8 +717,8 @@
 				GCC_OPTIMIZATION_LEVEL = s;
 				INFOPLIST_FILE = CoreAudioConverter/Info.plist;
 				INSTALL_PATH = "@rpath";
-				LD_DYLIB_INSTALL_NAME = "@rpath/$(PRODUCT_NAME).$(WRAPPER_EXTENSION)/Versions/A/$(PRODUCT_NAME)";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/Frameworks";
+				LD_DYLIB_INSTALL_NAME = "$(DYLIB_INSTALL_NAME_BASE:standardizepath)/$(EXECUTABLE_PATH)";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/CoreAudioConverter",
@@ -715,7 +740,7 @@
 			buildSettings = {
 				CLANG_USE_OPTIMIZATION_PROFILE = YES;
 				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
@@ -724,6 +749,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Carthage/Build/Mac",
 				);
 				FRAMEWORK_VERSION = A;
@@ -731,8 +757,8 @@
 				GCC_OPTIMIZATION_LEVEL = s;
 				INFOPLIST_FILE = CoreAudioConverter/Info.plist;
 				INSTALL_PATH = "@rpath";
-				LD_DYLIB_INSTALL_NAME = "@rpath/$(PRODUCT_NAME).$(WRAPPER_EXTENSION)/Versions/A/$(PRODUCT_NAME)";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/Frameworks";
+				LD_DYLIB_INSTALL_NAME = "$(DYLIB_INSTALL_NAME_BASE:standardizepath)/$(EXECUTABLE_PATH)";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/CoreAudioConverter",
