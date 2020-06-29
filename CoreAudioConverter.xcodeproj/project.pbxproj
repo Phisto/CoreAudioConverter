@@ -328,7 +328,6 @@
 				F49DF7D31BAF8D63003A7C41 /* Sources */,
 				F49DF7D41BAF8D63003A7C41 /* Frameworks */,
 				F49DF7D51BAF8D63003A7C41 /* Headers */,
-				F49409AD222B89E400AAB1D5 /* Carthage */,
 				F4ED6A981D8F7E61001DB076 /* Increment Build Number */,
 			);
 			buildRules = (
@@ -359,8 +358,7 @@
 					};
 					F49DF7D71BAF8D63003A7C41 = {
 						CreatedOnToolsVersion = 7.0;
-						DevelopmentTeam = N67G6688LK;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -441,26 +439,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "#appledoc Xcode script\n# Start constants\ntarget=\"macosx\";\noutputPath=\"~/Documents/XCode/Mac Apps/Converter - Projekt/Documentation/CoreAudioConverter\";\n# End constants\n/usr/local/bin/appledoc \\\n--project-name \"${PROJECT_NAME}\" \\\n--output \"${outputPath}\" \\\n--docset-platform-family \"${target}\" \\\n--ignore \".m\" \\\n--index-desc \"~/Documents/XCode/Mac Apps/Converter - Projekt/CoreAudioConverter/README.md\" \\\n--logformat xcode \\\n\"${PROJECT_DIR}\"";
-		};
-		F49409AD222B89E400AAB1D5 /* Carthage */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/Mac/AudioFileTagger.framework",
-				"$(SRCROOT)/Carthage/Build/Mac/Lame.framework",
-			);
-			name = Carthage;
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
 		};
 		F4ED6A981D8F7E61001DB076 /* Increment Build Number */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -697,8 +675,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_USE_OPTIMIZATION_PROFILE = YES;
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
@@ -736,8 +714,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_USE_OPTIMIZATION_PROFILE = YES;
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
