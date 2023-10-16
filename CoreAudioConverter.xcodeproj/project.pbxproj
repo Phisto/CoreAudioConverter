@@ -442,6 +442,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		4A24129B23A4F6E200B43215 /* Update Localization */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -473,6 +474,7 @@
 		};
 		F4ED6A981D8F7E61001DB076 /* Increment Build Number */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -554,7 +556,7 @@
 					"@loader_path/../Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = de.simonsserver.CoreAudioConverterTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -577,7 +579,7 @@
 					"@loader_path/../Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = de.simonsserver.CoreAudioConverterTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -735,7 +737,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_MODULE_VERIFIER = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -757,16 +759,19 @@
 					"$(PROJECT_DIR)/CoreAudioConverter",
 				);
 				LLVM_LTO = YES;
-				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MODULEMAP_FILE = "";
 				MODULEMAP_PRIVATE_FILE = "";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu99 gnu++11";
+				OTHER_CFLAGS = "";
+				OTHER_MODULE_VERIFIER_FLAGS = "$(OTHER_CLANG_MODULES_VERIFIER_FLAGS)";
 				PRODUCT_BUNDLE_IDENTIFIER = de.simonsserver.CoreAudioConverter;
 				PRODUCT_NAME = CoreAudioConverter;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "";
+				WARNING_CFLAGS = "";
 			};
 			name = Debug;
 		};
@@ -783,7 +788,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_MODULE_VERIFIER = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -805,16 +810,19 @@
 					"$(PROJECT_DIR)/CoreAudioConverter",
 				);
 				LLVM_LTO = YES;
-				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MODULEMAP_FILE = "";
 				MODULEMAP_PRIVATE_FILE = "";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu99 gnu++11";
+				OTHER_CFLAGS = "";
+				OTHER_MODULE_VERIFIER_FLAGS = "$(OTHER_CLANG_MODULES_VERIFIER_FLAGS)";
 				PRODUCT_BUNDLE_IDENTIFIER = de.simonsserver.CoreAudioConverter;
 				PRODUCT_NAME = CoreAudioConverter;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "";
+				WARNING_CFLAGS = "";
 			};
 			name = Release;
 		};
