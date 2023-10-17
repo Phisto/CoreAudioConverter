@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:CoreAudioConverter.xcodeproj">
+      location = "self:">
    </FileRef>
 </Workspace>

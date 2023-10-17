@@ -23,14 +23,13 @@
 /* Begin PBXBuildFile section */
 		4A24129923A4E7D600B43215 /* CACDebug.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A24129723A4E7D600B43215 /* CACDebug.h */; };
 		4A24129A23A4E7D600B43215 /* CACDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A24129823A4E7D600B43215 /* CACDebug.m */; };
-		4A874B6C24AA9000001E648A /* Lame.framework in Copy Dependent Frameworks */ = {isa = PBXBuildFile; fileRef = F4D917DA222C4F3A00D4A594 /* Lame.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4A874B6D24AA9002001E648A /* AudioFileTagger.framework in Copy Dependent Frameworks */ = {isa = PBXBuildFile; fileRef = 4AC69CD823A54BF3008E0532 /* AudioFileTagger.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4A874B6F24AA90BF001E648A /* TagLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A874B6E24AA90B0001E648A /* TagLib.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		4A874B7224AA9105001E648A /* TagLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A874B6E24AA90B0001E648A /* TagLib.framework */; };
-		4A874B7324AA9108001E648A /* Lame.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4D917DA222C4F3A00D4A594 /* Lame.framework */; };
 		4A874B7424AA9114001E648A /* AudioFileTagger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AC69CD823A54BF3008E0532 /* AudioFileTagger.framework */; };
 		4A874B7524AA912A001E648A /* TagLib.framework in Copy Dependent Frameworks */ = {isa = PBXBuildFile; fileRef = 4A874B6E24AA90B0001E648A /* TagLib.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4AC69CD923A54BF3008E0532 /* AudioFileTagger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AC69CD823A54BF3008E0532 /* AudioFileTagger.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		4AD749502ADE0C81006F48EB /* lame in Frameworks */ = {isa = PBXBuildFile; productRef = 4AD7494F2ADE0C81006F48EB /* lame */; };
 		F40F2A681CA99DE900BDCF2B /* MP3EncondingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F40F2A671CA99DE900BDCF2B /* MP3EncondingTests.m */; };
 		F40F2A761CA99E0B00BDCF2B /* test-cover.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F40F2A6C1CA99E0B00BDCF2B /* test-cover.jpg */; };
 		F40F2A771CA99E0B00BDCF2B /* Apple MPEG-4-Audio (AAC).m4a in Resources */ = {isa = PBXBuildFile; fileRef = F40F2A6D1CA99E0B00BDCF2B /* Apple MPEG-4-Audio (AAC).m4a */; };
@@ -60,7 +59,6 @@
 		F4CE0C711D5C7AB7009360C6 /* WAV Microsoft (Signed 16 bit PCM).wav in Resources */ = {isa = PBXBuildFile; fileRef = F4CE0C701D5C7AB7009360C6 /* WAV Microsoft (Signed 16 bit PCM).wav */; };
 		F4CE0C741D5C7D55009360C6 /* wrong_data.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F4CE0C721D5C7D55009360C6 /* wrong_data.m4a */; };
 		F4CE0C751D5C7D55009360C6 /* wrong_filetype.wma in Resources */ = {isa = PBXBuildFile; fileRef = F4CE0C731D5C7D55009360C6 /* wrong_filetype.wma */; };
-		F4D917DB222C4F3A00D4A594 /* Lame.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4D917DA222C4F3A00D4A594 /* Lame.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		F4D917E1222D641500D4A594 /* CACError.h in Headers */ = {isa = PBXBuildFile; fileRef = F4D917DF222D641500D4A594 /* CACError.h */; };
 		F4D917E2222D641500D4A594 /* CACError.m in Sources */ = {isa = PBXBuildFile; fileRef = F4D917E0222D641500D4A594 /* CACError.m */; };
 /* End PBXBuildFile section */
@@ -82,7 +80,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				4A874B6C24AA9000001E648A /* Lame.framework in Copy Dependent Frameworks */,
 				4A874B6D24AA9002001E648A /* AudioFileTagger.framework in Copy Dependent Frameworks */,
 				4A874B7524AA912A001E648A /* TagLib.framework in Copy Dependent Frameworks */,
 			);
@@ -136,7 +133,6 @@
 		F4CE0C701D5C7AB7009360C6 /* WAV Microsoft (Signed 16 bit PCM).wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = "WAV Microsoft (Signed 16 bit PCM).wav"; path = "test-files/WAV Microsoft (Signed 16 bit PCM).wav"; sourceTree = "<group>"; };
 		F4CE0C721D5C7D55009360C6 /* wrong_data.m4a */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = wrong_data.m4a; path = "test-files/wrong_data.m4a"; sourceTree = "<group>"; };
 		F4CE0C731D5C7D55009360C6 /* wrong_filetype.wma */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = wrong_filetype.wma; path = "test-files/wrong_filetype.wma"; sourceTree = "<group>"; };
-		F4D917DA222C4F3A00D4A594 /* Lame.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Lame.framework; path = Carthage/Build/Mac/Lame.framework; sourceTree = "<group>"; };
 		F4D917DC222C508700D4A594 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		F4D917DF222D641500D4A594 /* CACError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CACError.h; sourceTree = "<group>"; };
 		F4D917E0222D641500D4A594 /* CACError.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CACError.m; sourceTree = "<group>"; };
@@ -149,7 +145,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F4CE0C621D5C6FF3009360C6 /* CoreAudioConverter.framework in Frameworks */,
-				4A874B7324AA9108001E648A /* Lame.framework in Frameworks */,
 				4A874B7424AA9114001E648A /* AudioFileTagger.framework in Frameworks */,
 				4A874B7224AA9105001E648A /* TagLib.framework in Frameworks */,
 			);
@@ -159,9 +154,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F4D917DB222C4F3A00D4A594 /* Lame.framework in Frameworks */,
 				4A874B6F24AA90BF001E648A /* TagLib.framework in Frameworks */,
 				4AC69CD923A54BF3008E0532 /* AudioFileTagger.framework in Frameworks */,
+				4AD749502ADE0C81006F48EB /* lame in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,7 +298,6 @@
 			children = (
 				4A874B6E24AA90B0001E648A /* TagLib.framework */,
 				4AC69CD823A54BF3008E0532 /* AudioFileTagger.framework */,
-				F4D917DA222C4F3A00D4A594 /* Lame.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -365,6 +359,9 @@
 			dependencies = (
 			);
 			name = "CoreAudioConverter macOS";
+			packageProductDependencies = (
+				4AD7494F2ADE0C81006F48EB /* lame */,
+			);
 			productName = CoreAudioConverter;
 			productReference = F49DF7D81BAF8D63003A7C41 /* CoreAudioConverter.framework */;
 			productType = "com.apple.product-type.framework";
@@ -405,6 +402,9 @@
 				Base,
 			);
 			mainGroup = F49DF7CE1BAF8D63003A7C41;
+			packageReferences = (
+				4AD7494E2ADE0C81006F48EB /* XCRemoteSwiftPackageReference "swift-lame" */,
+			);
 			productRefGroup = F49DF7D91BAF8D63003A7C41 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -866,6 +866,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		4AD7494E2ADE0C81006F48EB /* XCRemoteSwiftPackageReference "swift-lame" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Phisto/swift-lame.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.100.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4AD7494F2ADE0C81006F48EB /* lame */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4AD7494E2ADE0C81006F48EB /* XCRemoteSwiftPackageReference "swift-lame" */;
+			productName = lame;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F49DF7CF1BAF8D63003A7C41 /* Project object */;
 }
